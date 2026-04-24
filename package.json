@@ -1,0 +1,40 @@
+{
+  "name": "heartinmotionhk-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "generate:types": "payload generate:types"
+  },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "next": "15.5.15",
+    "payload": "3.33.0",
+    "@payloadcms/next": "3.33.0",
+    "@payloadcms/db-sqlite": "3.33.0",
+    "@payloadcms/richtext-lexical": "3.33.0",
+    "@payloadcms/email-nodemailer": "3.33.0",
+    "@payloadcms/plugin-seo": "3.33.0",
+    "@payloadcms/plugin-form-builder": "3.33.0",
+    "@payloadcms/plugin-redirects": "3.33.0",
+    "@payloadcms/plugin-nested-docs": "3.33.0",
+    "@payloadcms/plugin-search": "3.33.0",
+    "@payloadcms/plugin-import-export": "3.33.0",
+    "nodemailer": "^6.9.16",
+    "sharp": "^0.33.5",
+    "embla-carousel-react": "^8.5.2",
+    "embla-carousel-autoplay": "^8.5.2"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/nodemailer": "^6.4.17",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4"
+  }
+}

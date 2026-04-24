@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand colours */
+  --color-brand-teal: #6dbfb8;
+  --color-brand-teal-light: #a8dbd7;
+  --color-brand-teal-dark: #4a9e97;
+  --color-brand-yellow: #f5e66e;
+  --color-brand-yellow-light: #faf3a8;
+  --color-brand-beige: #fdf6ee;
+  --color-brand-beige-dark: #f5ead8;
+  --color-brand-dark: #2d2d2d;
+  --color-brand-pink: #f7aab8;
+  --color-brand-blue: #a8c8e8;
+
+  /* Typography */
+  --font-display: "Caveat", cursive;
+  --font-body: "Inter", sans-serif;
+
+  /* Spacing extras */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-88: 22rem;
+  --spacing-128: 32rem;
+
+  /* Border radius */
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
+
+  /* Shadows */
+  --shadow-brand: 0 4px 24px -4px rgba(109, 191, 184, 0.35);
+  --shadow-card: 0 2px 16px -2px rgba(45, 45, 45, 0.10);
+}
+
+:root {
+  --background: var(--color-brand-beige);
+  --foreground: var(--color-brand-dark);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+}
