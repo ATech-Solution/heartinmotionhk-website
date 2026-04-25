@@ -31,6 +31,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config) => {
+    // @payloadcms/ui ships .scss alongside its dist JS and imports them directly.
+    // All those styles are already pre-compiled into @payloadcms/ui/dist/styles.css.
+    // Return an empty module for those imports to prevent webpack parse failures.
+    config.module.rules.unshift({
+      test: /\.scss$/,
+      include: /node_modules[\\/]@payloadcms/,
+      use: 'ignore-loader',
+    })
+    return config
+  },
 }
 
 export default withPayload(nextConfig)

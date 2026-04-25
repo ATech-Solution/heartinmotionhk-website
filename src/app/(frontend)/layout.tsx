@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { Caveat, Inter } from 'next/font/google'
 import '@/app/globals.css'
 import { SiteHeader } from '@/components/layout/Header'
@@ -24,11 +25,33 @@ export const metadata: Metadata = {
   description: 'Step Forward with Your Heart',
 }
 
-export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
+export default async function FrontendLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const cookieStore = await cookies()
   const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
+  const hasAdminToken = cookieStore.has('payload-token')
 
   const payload = await getPayload({ config })
+
+  // Maintenance mode check — skip for admin users and the maintenance page itself
+  if (!hasAdminToken && process.env.MAINTENANCE_MODE !== 'true') {
+    try {
+      const maintenance = await payload.findGlobal({
+        slug: 'maintenance-settings',
+        locale,
+      })
+      if ((maintenance as any)?.enabled) {
+        redirect('/maintenance')
+      }
+    } catch {
+      // If check fails, allow through
+    }
+  } else if (!hasAdminToken && process.env.MAINTENANCE_MODE === 'true') {
+    redirect('/maintenance')
+  }
 
   const [header, footer, general] = await Promise.all([
     payload.findGlobal({ slug: 'header', locale }),

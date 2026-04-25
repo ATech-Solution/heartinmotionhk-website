@@ -19,7 +19,6 @@
         "@payloadcms/plugin-search": "3.33.0",
         "@payloadcms/plugin-seo": "3.33.0",
         "@payloadcms/richtext-lexical": "3.33.0",
-        "@payloadcms/ui": "3.33.0",
         "embla-carousel-autoplay": "^8.5.2",
         "embla-carousel-react": "^8.5.2",
         "graphql": "^16.13.2",
@@ -40,7 +39,6 @@
         "@types/react": "19.2.14",
         "@types/react-dom": "^19",
         "autoprefixer": "^10.0.0",
-        "ignore-loader": "^0.1.2",
         "postcss": "^8.0.0",
         "sass": "^1.99.0",
         "tailwindcss": "^4",
@@ -2843,131 +2841,6 @@
         "payload": "3.33.0"
       }
     },
-    "node_modules/@payloadcms/db-sqlite/node_modules/drizzle-orm": {
-      "version": "0.36.1",
-      "resolved": "https://registry.npmjs.org/drizzle-orm/-/drizzle-orm-0.36.1.tgz",
-      "integrity": "sha512-F4hbimnMEhyWzDowQB4xEuVJJWXLHZYD7FYwvo8RImY+N7pStGqsbfmT95jDbec1s4qKmQbiuxEDZY90LRrfIw==",
-      "license": "Apache-2.0",
-      "peerDependencies": {
-        "@aws-sdk/client-rds-data": ">=3",
-        "@cloudflare/workers-types": ">=3",
-        "@electric-sql/pglite": ">=0.2.0",
-        "@libsql/client": ">=0.10.0",
-        "@libsql/client-wasm": ">=0.10.0",
-        "@neondatabase/serverless": ">=0.1",
-        "@op-engineering/op-sqlite": ">=2",
-        "@opentelemetry/api": "^1.4.1",
-        "@planetscale/database": ">=1",
-        "@prisma/client": "*",
-        "@tidbcloud/serverless": "*",
-        "@types/better-sqlite3": "*",
-        "@types/pg": "*",
-        "@types/react": ">=18",
-        "@types/sql.js": "*",
-        "@vercel/postgres": ">=0.8.0",
-        "@xata.io/client": "*",
-        "better-sqlite3": ">=7",
-        "bun-types": "*",
-        "expo-sqlite": ">=13.2.0",
-        "knex": "*",
-        "kysely": "*",
-        "mysql2": ">=2",
-        "pg": ">=8",
-        "postgres": ">=3",
-        "react": ">=18",
-        "sql.js": ">=1",
-        "sqlite3": ">=5"
-      },
-      "peerDependenciesMeta": {
-        "@aws-sdk/client-rds-data": {
-          "optional": true
-        },
-        "@cloudflare/workers-types": {
-          "optional": true
-        },
-        "@electric-sql/pglite": {
-          "optional": true
-        },
-        "@libsql/client": {
-          "optional": true
-        },
-        "@libsql/client-wasm": {
-          "optional": true
-        },
-        "@neondatabase/serverless": {
-          "optional": true
-        },
-        "@op-engineering/op-sqlite": {
-          "optional": true
-        },
-        "@opentelemetry/api": {
-          "optional": true
-        },
-        "@planetscale/database": {
-          "optional": true
-        },
-        "@prisma/client": {
-          "optional": true
-        },
-        "@tidbcloud/serverless": {
-          "optional": true
-        },
-        "@types/better-sqlite3": {
-          "optional": true
-        },
-        "@types/pg": {
-          "optional": true
-        },
-        "@types/react": {
-          "optional": true
-        },
-        "@types/sql.js": {
-          "optional": true
-        },
-        "@vercel/postgres": {
-          "optional": true
-        },
-        "@xata.io/client": {
-          "optional": true
-        },
-        "better-sqlite3": {
-          "optional": true
-        },
-        "bun-types": {
-          "optional": true
-        },
-        "expo-sqlite": {
-          "optional": true
-        },
-        "knex": {
-          "optional": true
-        },
-        "kysely": {
-          "optional": true
-        },
-        "mysql2": {
-          "optional": true
-        },
-        "pg": {
-          "optional": true
-        },
-        "postgres": {
-          "optional": true
-        },
-        "prisma": {
-          "optional": true
-        },
-        "react": {
-          "optional": true
-        },
-        "sql.js": {
-          "optional": true
-        },
-        "sqlite3": {
-          "optional": true
-        }
-      }
-    },
     "node_modules/@payloadcms/drizzle": {
       "version": "3.33.0",
       "resolved": "https://registry.npmjs.org/@payloadcms/drizzle/-/drizzle-3.33.0.tgz",
@@ -2982,131 +2855,6 @@
       },
       "peerDependencies": {
         "payload": "3.33.0"
-      }
-    },
-    "node_modules/@payloadcms/drizzle/node_modules/drizzle-orm": {
-      "version": "0.36.1",
-      "resolved": "https://registry.npmjs.org/drizzle-orm/-/drizzle-orm-0.36.1.tgz",
-      "integrity": "sha512-F4hbimnMEhyWzDowQB4xEuVJJWXLHZYD7FYwvo8RImY+N7pStGqsbfmT95jDbec1s4qKmQbiuxEDZY90LRrfIw==",
-      "license": "Apache-2.0",
-      "peerDependencies": {
-        "@aws-sdk/client-rds-data": ">=3",
-        "@cloudflare/workers-types": ">=3",
-        "@electric-sql/pglite": ">=0.2.0",
-        "@libsql/client": ">=0.10.0",
-        "@libsql/client-wasm": ">=0.10.0",
-        "@neondatabase/serverless": ">=0.1",
-        "@op-engineering/op-sqlite": ">=2",
-        "@opentelemetry/api": "^1.4.1",
-        "@planetscale/database": ">=1",
-        "@prisma/client": "*",
-        "@tidbcloud/serverless": "*",
-        "@types/better-sqlite3": "*",
-        "@types/pg": "*",
-        "@types/react": ">=18",
-        "@types/sql.js": "*",
-        "@vercel/postgres": ">=0.8.0",
-        "@xata.io/client": "*",
-        "better-sqlite3": ">=7",
-        "bun-types": "*",
-        "expo-sqlite": ">=13.2.0",
-        "knex": "*",
-        "kysely": "*",
-        "mysql2": ">=2",
-        "pg": ">=8",
-        "postgres": ">=3",
-        "react": ">=18",
-        "sql.js": ">=1",
-        "sqlite3": ">=5"
-      },
-      "peerDependenciesMeta": {
-        "@aws-sdk/client-rds-data": {
-          "optional": true
-        },
-        "@cloudflare/workers-types": {
-          "optional": true
-        },
-        "@electric-sql/pglite": {
-          "optional": true
-        },
-        "@libsql/client": {
-          "optional": true
-        },
-        "@libsql/client-wasm": {
-          "optional": true
-        },
-        "@neondatabase/serverless": {
-          "optional": true
-        },
-        "@op-engineering/op-sqlite": {
-          "optional": true
-        },
-        "@opentelemetry/api": {
-          "optional": true
-        },
-        "@planetscale/database": {
-          "optional": true
-        },
-        "@prisma/client": {
-          "optional": true
-        },
-        "@tidbcloud/serverless": {
-          "optional": true
-        },
-        "@types/better-sqlite3": {
-          "optional": true
-        },
-        "@types/pg": {
-          "optional": true
-        },
-        "@types/react": {
-          "optional": true
-        },
-        "@types/sql.js": {
-          "optional": true
-        },
-        "@vercel/postgres": {
-          "optional": true
-        },
-        "@xata.io/client": {
-          "optional": true
-        },
-        "better-sqlite3": {
-          "optional": true
-        },
-        "bun-types": {
-          "optional": true
-        },
-        "expo-sqlite": {
-          "optional": true
-        },
-        "knex": {
-          "optional": true
-        },
-        "kysely": {
-          "optional": true
-        },
-        "mysql2": {
-          "optional": true
-        },
-        "pg": {
-          "optional": true
-        },
-        "postgres": {
-          "optional": true
-        },
-        "prisma": {
-          "optional": true
-        },
-        "react": {
-          "optional": true
-        },
-        "sql.js": {
-          "optional": true
-        },
-        "sqlite3": {
-          "optional": true
-        }
       }
     },
     "node_modules/@payloadcms/email-nodemailer": {
@@ -4667,6 +4415,131 @@
         "drizzle-kit": "bin.cjs"
       }
     },
+    "node_modules/drizzle-orm": {
+      "version": "0.36.1",
+      "resolved": "https://registry.npmjs.org/drizzle-orm/-/drizzle-orm-0.36.1.tgz",
+      "integrity": "sha512-F4hbimnMEhyWzDowQB4xEuVJJWXLHZYD7FYwvo8RImY+N7pStGqsbfmT95jDbec1s4qKmQbiuxEDZY90LRrfIw==",
+      "license": "Apache-2.0",
+      "peerDependencies": {
+        "@aws-sdk/client-rds-data": ">=3",
+        "@cloudflare/workers-types": ">=3",
+        "@electric-sql/pglite": ">=0.2.0",
+        "@libsql/client": ">=0.10.0",
+        "@libsql/client-wasm": ">=0.10.0",
+        "@neondatabase/serverless": ">=0.1",
+        "@op-engineering/op-sqlite": ">=2",
+        "@opentelemetry/api": "^1.4.1",
+        "@planetscale/database": ">=1",
+        "@prisma/client": "*",
+        "@tidbcloud/serverless": "*",
+        "@types/better-sqlite3": "*",
+        "@types/pg": "*",
+        "@types/react": ">=18",
+        "@types/sql.js": "*",
+        "@vercel/postgres": ">=0.8.0",
+        "@xata.io/client": "*",
+        "better-sqlite3": ">=7",
+        "bun-types": "*",
+        "expo-sqlite": ">=13.2.0",
+        "knex": "*",
+        "kysely": "*",
+        "mysql2": ">=2",
+        "pg": ">=8",
+        "postgres": ">=3",
+        "react": ">=18",
+        "sql.js": ">=1",
+        "sqlite3": ">=5"
+      },
+      "peerDependenciesMeta": {
+        "@aws-sdk/client-rds-data": {
+          "optional": true
+        },
+        "@cloudflare/workers-types": {
+          "optional": true
+        },
+        "@electric-sql/pglite": {
+          "optional": true
+        },
+        "@libsql/client": {
+          "optional": true
+        },
+        "@libsql/client-wasm": {
+          "optional": true
+        },
+        "@neondatabase/serverless": {
+          "optional": true
+        },
+        "@op-engineering/op-sqlite": {
+          "optional": true
+        },
+        "@opentelemetry/api": {
+          "optional": true
+        },
+        "@planetscale/database": {
+          "optional": true
+        },
+        "@prisma/client": {
+          "optional": true
+        },
+        "@tidbcloud/serverless": {
+          "optional": true
+        },
+        "@types/better-sqlite3": {
+          "optional": true
+        },
+        "@types/pg": {
+          "optional": true
+        },
+        "@types/react": {
+          "optional": true
+        },
+        "@types/sql.js": {
+          "optional": true
+        },
+        "@vercel/postgres": {
+          "optional": true
+        },
+        "@xata.io/client": {
+          "optional": true
+        },
+        "better-sqlite3": {
+          "optional": true
+        },
+        "bun-types": {
+          "optional": true
+        },
+        "expo-sqlite": {
+          "optional": true
+        },
+        "knex": {
+          "optional": true
+        },
+        "kysely": {
+          "optional": true
+        },
+        "mysql2": {
+          "optional": true
+        },
+        "pg": {
+          "optional": true
+        },
+        "postgres": {
+          "optional": true
+        },
+        "prisma": {
+          "optional": true
+        },
+        "react": {
+          "optional": true
+        },
+        "sql.js": {
+          "optional": true
+        },
+        "sqlite3": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/electron-to-chromium": {
       "version": "1.5.344",
       "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.344.tgz",
@@ -5143,12 +5016,6 @@
         }
       ],
       "license": "BSD-3-Clause"
-    },
-    "node_modules/ignore-loader": {
-      "version": "0.1.2",
-      "resolved": "https://registry.npmjs.org/ignore-loader/-/ignore-loader-0.1.2.tgz",
-      "integrity": "sha512-yOJQEKrNwoYqrWLS4DcnzM7SEQhRKis5mB+LdKKh4cPmGYlLPR0ozRzHV5jmEk2IxptqJNQA5Cc0gw8Fj12bXA==",
-      "dev": true
     },
     "node_modules/image-size": {
       "version": "1.2.0",
