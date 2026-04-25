@@ -11,15 +11,15 @@ const SOCIAL_LABELS: Record<string, string> = {
 interface FooterProps {
   footer?: {
     logo?: any
-    navLinks?: Array<{ label?: string; page?: any; url?: string }>
-    socialLinks?: Array<{ platform?: string; url?: string }>
-    copyrightText?: string
+    navLinks?: Array<{ label?: string; page?: any; url?: string | null; id?: string | null }> | null
+    socialLinks?: Array<{ platform?: string; url?: string | null; id?: string | null }> | null
+    copyrightText?: string | null
   } | null
   general?: {
-    contactEmail?: string
-    contactPhone?: string
-    contactAddress?: string
-    siteName?: string
+    contactEmail?: string | null
+    contactPhone?: string | null
+    contactAddress?: string | null
+    siteName?: string | null
   } | null
 }
 

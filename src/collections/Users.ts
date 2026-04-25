@@ -21,8 +21,8 @@ export const Users: CollectionConfig = {
       generateEmailSubject: () => 'Verify your Heart in Motion HK account',
     },
     forgotPassword: {
-      generateEmailHTML: ({ token, user }) =>
-        forgotPasswordEmailTemplate({ token, user: { email: user.email as string, name: user.name as string | undefined } }),
+      generateEmailHTML: (args) =>
+        forgotPasswordEmailTemplate({ token: (args as any).token, user: { email: (args as any).user?.email as string, name: (args as any).user?.name as string | undefined } }),
       generateEmailSubject: () => 'Reset your Heart in Motion HK password',
     },
     maxLoginAttempts: 5,

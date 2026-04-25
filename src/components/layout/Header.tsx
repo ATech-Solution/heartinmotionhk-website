@@ -14,22 +14,24 @@ const SOCIAL_ICONS: Record<string, string> = {
 
 interface NavItem {
   label?: string
-  linkType?: string
-  page?: { slug?: string } | null
-  url?: string
+  linkType?: string | null
+  page?: { slug?: string } | number | null
+  url?: string | null
+  id?: string | null
 }
 
 interface CtaButton {
   label?: string
-  url?: string
-  style?: string
+  url?: string | null
+  style?: string | null
+  id?: string | null
 }
 
 interface HeaderProps {
   header?: {
     logo?: any
-    navItems?: NavItem[]
-    ctaButtons?: CtaButton[]
+    navItems?: NavItem[] | null
+    ctaButtons?: CtaButton[] | null
   } | null
   general?: any
   locale?: string

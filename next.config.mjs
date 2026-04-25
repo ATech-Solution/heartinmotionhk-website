@@ -1,4 +1,3 @@
-import type { NextConfig } from 'next'
 import { withPayload } from '@payloadcms/next/withPayload'
 
 const securityHeaders = [
@@ -9,8 +8,10 @@ const securityHeaders = [
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
 ]
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
+  generateBuildId: async () => null,
   async headers() {
     return [
       {
@@ -32,12 +33,15 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack: (config) => {
-    // @payloadcms/ui ships .scss alongside its dist JS and imports them directly.
-    // All those styles are already pre-compiled into @payloadcms/ui/dist/styles.css.
-    // Return an empty module for those imports to prevent webpack parse failures.
+    // @payloadcms/ui ships .scss files alongside its dist JS.
+    // Those styles are pre-compiled into @payloadcms/ui/dist/styles.css so the
+    // raw .scss imports can be ignored. Use a function test to avoid triggering
+    // Next.js's canMatchCss detection (which would strip all built-in CSS loaders).
     config.module.rules.unshift({
-      test: /\.scss$/,
-      include: /node_modules[\\/]@payloadcms/,
+      test: (filePath) =>
+        filePath.endsWith('.scss') &&
+        filePath.includes('node_modules') &&
+        filePath.includes('@payloadcms'),
       use: 'ignore-loader',
     })
     return config

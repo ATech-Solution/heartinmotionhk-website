@@ -1,4 +1,6 @@
-import type { DefaultNodeTypes, SerializedEditorState } from '@payloadcms/richtext-lexical/types'
+import type { DefaultNodeTypes } from '@payloadcms/richtext-lexical'
+import type { SerializedEditorState } from 'lexical'
+import React from 'react'
 
 interface RichTextProps {
   content?: SerializedEditorState | null
@@ -17,7 +19,7 @@ function renderNode(node: DefaultNodeTypes, index: number): React.ReactNode {
       )
     case 'heading': {
       const level = (node as any).tag ?? 'h2'
-      const Tag = level as keyof JSX.IntrinsicElements
+      const Tag = level as keyof React.JSX.IntrinsicElements
       return (
         <Tag key={index} className="font-display mb-3">
           {(node as any).children?.map((child: any, i: number) => renderNode(child, i))}

@@ -1,13 +1,20 @@
 import type { Metadata } from 'next'
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
 import config from '@payload-config'
+import { importMap } from '../importMap'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export const generateMetadata = ({ params }: { params: { segments?: string[] } }): Promise<Metadata> =>
-  generatePageMetadata({ config, params: { segments: params.segments ?? [] } })
+type Props = {
+  params: Promise<{ segments?: string[] }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
 
-export default function Page({ params }: { params: { segments?: string[] } }) {
-  return RootPage({ config, params: { segments: params.segments ?? [] } })
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  return generatePageMetadata({ config, params: params as any, searchParams: searchParams as any })
+}
+
+export default function Page({ params, searchParams }: Props) {
+  return RootPage({ config, importMap, params: params as any, searchParams: searchParams as any })
 }

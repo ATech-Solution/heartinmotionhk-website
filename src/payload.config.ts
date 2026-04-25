@@ -113,6 +113,7 @@ export default buildConfig({
   // ── Admin ─────────────────────────────────────────────
   admin: {
     user: 'users',
+    autoLogin: { email: 'tan@atech.software', prefillOnly: false },
     livePreview: {
       breakpoints: [
         { label: 'Mobile', name: 'mobile', width: 375, height: 812 },
@@ -130,7 +131,6 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: '— Heart in Motion HK',
-      favicon: '/favicon.ico',
     },
     components: {
       views: {

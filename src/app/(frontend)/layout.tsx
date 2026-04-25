@@ -4,7 +4,6 @@ import config from '@payload-config'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Caveat, Inter } from 'next/font/google'
-import '@/app/globals.css'
 import { SiteHeader } from '@/components/layout/Header'
 import { SiteFooter } from '@/components/layout/Footer'
 
@@ -62,7 +61,7 @@ export default async function FrontendLayout({
   return (
     <html lang={locale === 'zh-HK' ? 'zh-HK' : 'en'} className={`${inter.variable} ${caveat.variable}`}>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/public/favicon.ico" sizes="any" />
       </head>
       <body className="font-body bg-brand-beige text-brand-dark antialiased">
         <SiteHeader header={header} general={general} locale={locale} />

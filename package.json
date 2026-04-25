@@ -24,7 +24,6 @@
     "@payloadcms/db-sqlite": "3.33.0",
     "@payloadcms/email-nodemailer": "3.33.0",
     "@payloadcms/next": "3.33.0",
-    "@payloadcms/ui": "3.33.0",
     "@payloadcms/plugin-form-builder": "3.33.0",
     "@payloadcms/plugin-import-export": "3.33.0",
     "@payloadcms/plugin-nested-docs": "3.33.0",
@@ -32,6 +31,7 @@
     "@payloadcms/plugin-search": "3.33.0",
     "@payloadcms/plugin-seo": "3.33.0",
     "@payloadcms/richtext-lexical": "3.33.0",
+    "@payloadcms/ui": "3.33.0",
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "graphql": "^16.13.2",
@@ -47,16 +47,16 @@
     "tsx": "^4.21.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.4",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "19.2.14",
     "@types/react-dom": "^19",
-    "autoprefixer": "^10.0.0",
+    "ignore-loader": "^0.1.2",
     "postcss": "^8.0.0",
     "sass": "^1.99.0",
-    "tailwindcss": "^4",
-    "typescript": "5.9.3",
-    "ignore-loader": "^0.1.2"
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5.7.3"
   },
   "engines": {
     "node": ">=20.0.0"
