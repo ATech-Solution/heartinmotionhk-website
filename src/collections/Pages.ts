@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
 import { isAdminOrEditor } from '@/access/isAdminOrEditor'
 import { revalidatePage } from '@/hooks/revalidatePage'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { HeroBlock } from '@/blocks/HeroBlock'
 import { RealChallengeBlock } from '@/blocks/RealChallengeBlock'
 import { HeartTeamCoachingBlock } from '@/blocks/HeartTeamCoachingBlock'
@@ -14,6 +15,18 @@ import { CoachingExperienceBlock } from '@/blocks/CoachingExperienceBlock'
 import { AboutHeartInMotionBlock } from '@/blocks/AboutHeartInMotionBlock'
 import { ServiceDetailBlock } from '@/blocks/ServiceDetailBlock'
 import { ContactFormBlock } from '@/blocks/ContactFormBlock'
+import { BookingSessionBlock } from '@/blocks/BookingSessionBlock'
+
+function slugify(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -47,6 +60,14 @@ export const Pages: CollectionConfig = {
     readVersions: isAdminOrEditor,
   },
   hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (!data.slug && data.title) {
+          data.slug = slugify(data.title)
+        }
+        return data
+      },
+    ],
     afterChange: [revalidatePage],
   },
   fields: [
@@ -57,20 +78,24 @@ export const Pages: CollectionConfig = {
       required: true,
     },
     {
+      name: 'content',
+      type: 'richText',
+      localized: true,
+      editor: lexicalEditor(),
+      admin: {
+        description: 'Shown on the page when no layout blocks are added',
+      },
+    },
+    {
       name: 'slug',
-      type: 'select',
+      type: 'text',
       required: true,
       unique: true,
-      options: [
-        { label: 'Home', value: 'home' },
-        { label: 'About', value: 'about' },
-        { label: 'Services', value: 'services' },
-        { label: 'Contact', value: 'contact' },
-        { label: 'Privacy Policy', value: 'privacy-policy' },
-        { label: 'Terms & Conditions', value: 'terms' },
-        { label: 'Maintenance', value: 'maintenance' },
-      ],
-      admin: { position: 'sidebar' },
+      index: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Auto-generated from the title. Edit to override.',
+      },
     },
     {
       name: 'layout',
@@ -88,6 +113,7 @@ export const Pages: CollectionConfig = {
         AboutHeartInMotionBlock,
         ServiceDetailBlock,
         ContactFormBlock,
+        BookingSessionBlock,
       ],
     },
   ],

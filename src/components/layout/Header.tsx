@@ -78,32 +78,53 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             )}
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="flex items-center gap-[60px]">
-            {navItems.map((item, i) => {
-              const href =
-                item.linkType === 'external'
-                  ? (item.url ?? '#')
-                  : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
-              const isFirst = i === 0
-              return (
-                <Link
-                  key={i}
-                  href={href}
-                  className={`text-[18px] text-[#000033] transition-colors duration-150 hover:text-brand-teal ${
-                    isFirst ? 'font-bold' : 'font-normal'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              )
-            })}
-          </nav>
+          <div className="flex gap-[60px]">
+            {/* Desktop Nav */}
+            <nav className="flex items-center gap-[60px]">
+              {navItems.map((item, i) => {
+                const href =
+                  item.linkType === 'external'
+                    ? (item.url ?? '#')
+                    : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+                const isFirst = i === 0
+                return (
+                  <Link
+                    key={i}
+                    href={href}
+                    className={`text-[18px] text-[#000033] transition-colors duration-150 hover:text-brand-teal ${
+                      isFirst ? 'font-bold' : 'font-normal'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </nav>
 
-          {/* Locale switcher */}
-          <div className="flex items-center gap-3">
-            <LocaleSwitcher currentLocale={locale ?? 'en'} />
+            {/* Locale switcher */}
+            <div className="flex items-center gap-3">
+              <div className='hidden'>
+                <LocaleSwitcher currentLocale={locale ?? 'en'} />
+              </div>
+              <div className="px-4 flex gap-3">
+                <a
+                  href={connectUrl}
+                  className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black px-8"
+                >
+                  {connectLabel}
+                  <span className="rotate-[0deg] inline-block text-2xl font-bold">›</span>
+                </a>
+                <a
+                  href={emailUrl}
+                  className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[16px] font-bold text-black px-8"
+                >
+                  {emailLabel}
+                  <span className="rotate-[0deg] inline-block text-2xl font-bold">›</span>
+                </a>
+              </div>
+            </div>
           </div>
+        
         </div>
       </div>
 
@@ -144,6 +165,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
         </nav>
 
         <LocaleSwitcher currentLocale={locale ?? 'en'} />
+        
       </div>
 
       {/* Mobile header — white background */}
@@ -192,7 +214,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
       </div>
 
       {/* Mobile CTA bar — always visible below mobile navbar */}
-      <div className="md:hidden bg-white px-4 pb-3 flex flex-col gap-3">
+      <div className="lg:hidden bg-white px-4 pb-3 flex flex-col gap-3">
         <a
           href={connectUrl}
           className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] font-bold text-black"

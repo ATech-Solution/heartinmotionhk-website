@@ -21,12 +21,19 @@ const SOCIAL_ICONS: Record<string, { label: string; svg: string }> = {
   },
 }
 
+interface PolicyGroup {
+  title?: string | null
+  content?: any | null
+}
+
 interface FooterProps {
   footer?: {
     logo?: any
     navLinks?: Array<{ label?: string; page?: any; url?: string | null; id?: string | null }> | null
     socialLinks?: Array<{ platform?: string; url?: string | null; id?: string | null }> | null
     copyrightText?: string | null
+    privacyPolicy?: PolicyGroup | null
+    termsConditions?: PolicyGroup | null
   } | null
   general?: {
     contactEmail?: string | null
@@ -47,6 +54,8 @@ export function SiteFooter({ footer, general }: FooterProps) {
   const navLinks = footer?.navLinks ?? []
   const socialLinks = footer?.socialLinks ?? []
   const logoUrl = footer?.logo?.url ?? null
+  const privacyPolicy = footer?.privacyPolicy ?? null
+  const termsConditions = footer?.termsConditions ?? null
 
   return (
     <footer className="bg-[#f5eded] relative">
@@ -85,7 +94,10 @@ export function SiteFooter({ footer, general }: FooterProps) {
                   {link.label}
                 </Link>
               ))}
-              <FooterPolicyLinks />
+              <FooterPolicyLinks
+                privacyPolicy={privacyPolicy}
+                termsConditions={termsConditions}
+              />
             </nav>
           </div>
 

@@ -175,7 +175,28 @@ export interface User {
 export interface Page {
   id: number;
   title: string;
-  slug: 'home' | 'about' | 'services' | 'contact' | 'privacy-policy' | 'terms' | 'maintenance';
+  /**
+   * Shown on the page when no layout blocks are added
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Auto-generated from the title. Edit to override.
+   */
+  slug: string;
   layout?:
     | (
         | {
@@ -517,6 +538,45 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'contact-form';
+          }
+        | {
+            /**
+             * Main heading for the section
+             */
+            sectionTitle: string;
+            /**
+             * Introductory paragraph below the heading
+             */
+            sectionSubtitle?: string | null;
+            /**
+             * List of services shown as booking cards
+             */
+            services?:
+              | {
+                  name: string;
+                  description?: string | null;
+                  /**
+                   * e.g. https://wa.me/85212345678
+                   */
+                  whatsappUrl?: string | null;
+                  /**
+                   * Email address for booking this service. e.g. contact@heartinmotionhk.com
+                   */
+                  email?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'booking-session';
           }
       )[]
     | null;
@@ -1104,6 +1164,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
+  content?: T;
   slug?: T;
   layout?:
     | T
@@ -1334,6 +1395,30 @@ export interface PagesSelect<T extends boolean = true> {
               subheading?: T;
               sideImage?: T;
               form?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'booking-session'?:
+          | T
+          | {
+              sectionTitle?: T;
+              sectionSubtitle?: T;
+              services?:
+                | T
+                | {
+                    name?: T;
+                    description?: T;
+                    whatsappUrl?: T;
+                    email?: T;
+                    id?: T;
+                  };
               visibility?:
                 | T
                 | {
@@ -1830,6 +1915,48 @@ export interface Footer {
       }[]
     | null;
   copyrightText?: string | null;
+  /**
+   * Content shown in the Privacy Policy popup
+   */
+  privacyPolicy?: {
+    title?: string | null;
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  /**
+   * Content shown in the Terms & Conditions popup
+   */
+  termsConditions?: {
+    title?: string | null;
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1928,6 +2055,18 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T;
       };
   copyrightText?: T;
+  privacyPolicy?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+      };
+  termsConditions?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: 'Gochi Hand';
+    font-stretch: 100%; /* Note that font-stretch is a % of normal width */
+    font-style: normal; /* See note below */
+    font-weight: 400;
+    src: url(/public/font/GochiHand-Regular.woff2) format('woff2');
+}
+
 @theme {
   /* Brand colours */
   --color-brand-teal: #6dbfb8;
@@ -14,8 +22,10 @@
   --color-brand-blue: #a8c8e8;
 
   /* Typography */
-  --font-display: "Caveat", cursive;
-  --font-body: "Inter", sans-serif;
+  --font-gochi-hand: "Gochi Hand", sans-serif;
+  /* --font-display: "Caveat", cursive; */
+  --font-display: "Gochi Hand", sans-serif;
+  --font-body: "Arial", sans-serif;
 
   /* Spacing extras */
   --spacing-18: 4.5rem;
@@ -56,4 +66,12 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
+}
+
+/* custom */
+h2.leading-tight{
+  font-family: "Gochi Hand", Sans-serif;
+  font-size: 48px;
+  font-weight: normal;
+  color: #000000;
 }

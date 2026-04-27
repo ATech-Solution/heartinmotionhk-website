@@ -36,5 +36,5 @@ export default async function ServicesPage() {
   const page = result.docs[0]
   if (!page) notFound()
 
-  return <RenderBlocks blocks={(page.layout as any) ?? []} />
+  return <RenderBlocks blocks={(page.layout as any) ?? []} richTextContent={(page as any).content} />
 }

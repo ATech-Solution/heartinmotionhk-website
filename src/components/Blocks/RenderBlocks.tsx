@@ -1,4 +1,5 @@
 import type { Page } from '@/payload-types'
+import { RichText } from '@/components/ui/RichText'
 import { HeroBlockComponent } from './HeroBlock'
 import { RealChallengeBlockComponent } from './RealChallengeBlock'
 import { HeartTeamCoachingBlockComponent } from './HeartTeamCoachingBlock'
@@ -11,6 +12,7 @@ import { CoachingExperienceBlockComponent } from './CoachingExperienceBlock'
 import { AboutHeartInMotionBlockComponent } from './AboutHeartInMotionBlock'
 import { ServiceDetailBlockComponent } from './ServiceDetailBlock'
 import { ContactFormBlockComponent } from './ContactFormBlock'
+import { BookingSessionBlockComponent } from './BookingSessionBlock'
 import { visibilityClasses } from '@/utils/visibilityClasses'
 
 type LayoutBlock = NonNullable<Page['layout']>[number]
@@ -28,10 +30,24 @@ const blockComponents: Record<string, React.FC<any>> = {
   'about-him': AboutHeartInMotionBlockComponent,
   'service-detail': ServiceDetailBlockComponent,
   'contact-form': ContactFormBlockComponent,
+  'booking-session': BookingSessionBlockComponent,
 }
 
-export function RenderBlocks({ blocks }: { blocks: LayoutBlock[] }) {
-  if (!blocks || blocks.length === 0) return null
+export function RenderBlocks({
+  blocks,
+  richTextContent,
+}: {
+  blocks: LayoutBlock[]
+  richTextContent?: any
+}) {
+  if (!blocks || blocks.length === 0) {
+    if (!richTextContent) return null
+    return (
+      <div className="max-w-[860px] mx-auto px-6 py-16">
+        <RichText content={richTextContent} className="prose prose-lg max-w-none" />
+      </div>
+    )
+  }
 
   return (
     <>

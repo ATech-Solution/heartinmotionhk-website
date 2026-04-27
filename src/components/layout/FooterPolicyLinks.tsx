@@ -2,8 +2,19 @@
 
 import { useState } from 'react'
 import { PolicyModal } from '@/components/ui/PolicyModal'
+import { RichText } from '@/components/ui/RichText'
 
-function PrivacyPolicyContent() {
+interface PolicyGroup {
+  title?: string | null
+  content?: any | null
+}
+
+interface FooterPolicyLinksProps {
+  privacyPolicy?: PolicyGroup | null
+  termsConditions?: PolicyGroup | null
+}
+
+function FallbackPrivacyContent() {
   return (
     <>
       <div>
@@ -55,7 +66,7 @@ function PrivacyPolicyContent() {
   )
 }
 
-function TermsConditionsContent() {
+function FallbackTermsContent() {
   return (
     <>
       <div>
@@ -125,8 +136,11 @@ function TermsConditionsContent() {
 
 type ModalType = 'privacy' | 'terms' | null
 
-export function FooterPolicyLinks() {
+export function FooterPolicyLinks({ privacyPolicy, termsConditions }: FooterPolicyLinksProps) {
   const [open, setOpen] = useState<ModalType>(null)
+
+  const privacyTitle = privacyPolicy?.title || 'Privacy policy'
+  const termsTitle = termsConditions?.title || 'Terms & Conditions'
 
   return (
     <>
@@ -144,13 +158,21 @@ export function FooterPolicyLinks() {
       </button>
 
       {open === 'privacy' && (
-        <PolicyModal title="Privacy policy" onClose={() => setOpen(null)}>
-          <PrivacyPolicyContent />
+        <PolicyModal title={privacyTitle} onClose={() => setOpen(null)}>
+          {privacyPolicy?.content ? (
+            <RichText content={privacyPolicy.content} />
+          ) : (
+            <FallbackPrivacyContent />
+          )}
         </PolicyModal>
       )}
       {open === 'terms' && (
-        <PolicyModal title="Terms & Conditions" onClose={() => setOpen(null)}>
-          <TermsConditionsContent />
+        <PolicyModal title={termsTitle} onClose={() => setOpen(null)}>
+          {termsConditions?.content ? (
+            <RichText content={termsConditions.content} />
+          ) : (
+            <FallbackTermsContent />
+          )}
         </PolicyModal>
       )}
     </>

@@ -43,7 +43,7 @@ export function PolicyModal({ title, onClose, children }: PolicyModalProps) {
     >
       <div
         ref={contentRef}
-        className="relative bg-white rounded-lg w-full max-w-[520px] max-h-[85vh] flex flex-col shadow-2xl"
+        className="relative bg-white rounded-3xl w-full max-w-[640px] max-h-[85vh] flex flex-col shadow-2xl"
       >
         {/* Header */}
         <div className="flex items-start justify-between px-8 pt-8 pb-4 flex-shrink-0">
@@ -58,7 +58,7 @@ export function PolicyModal({ title, onClose, children }: PolicyModalProps) {
         </div>
 
         {/* Scrollable content */}
-        <div className="overflow-y-auto px-8 pb-8 flex-1 text-[14px] text-black leading-relaxed space-y-4">
+        <div className="overflow-y-auto px-8 pb-8 flex-1 text-[16px] text-black leading-relaxed space-y-4">
           {children}
         </div>
       </div>
