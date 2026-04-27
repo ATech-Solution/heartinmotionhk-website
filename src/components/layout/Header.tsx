@@ -5,13 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { LocaleSwitcher } from '@/components/language/LocaleSwitcher'
 
-const SOCIAL_ICONS: Record<string, string> = {
-  facebook: 'f',
-  linkedin: 'in',
-  instagram: '📷',
-  whatsapp: '💬',
-}
-
 interface NavItem {
   label?: string
   linkType?: string | null
@@ -27,11 +20,19 @@ interface CtaButton {
   id?: string | null
 }
 
+interface MobileCta {
+  connectLabel?: string | null
+  connectUrl?: string | null
+  emailLabel?: string | null
+  emailUrl?: string | null
+}
+
 interface HeaderProps {
   header?: {
     logo?: any
     navItems?: NavItem[] | null
     ctaButtons?: CtaButton[] | null
+    mobileCta?: MobileCta | null
   } | null
   general?: any
   locale?: string
@@ -48,30 +49,93 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
   const logoUrl = header?.logo?.url ?? null
   const navItems = header?.navItems ?? []
   const ctaButtons = header?.ctaButtons ?? []
+  const mobileCta = header?.mobileCta
+
+  const connectUrl = mobileCta?.connectUrl ?? general?.bookingUrl ?? '#'
+  const emailUrl = mobileCta?.emailUrl ?? (general?.contactEmail ? `mailto:${general.contactEmail}` : '#')
+  const connectLabel = mobileCta?.connectLabel ?? "Let's connect"
+  const emailLabel = mobileCta?.emailLabel ?? 'Email me'
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-brand-beige-dark shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-6">
-        {/* Logo */}
-        <Link href="/" className="flex-shrink-0">
+    <header className="sticky top-0 z-50">
+      {/* Desktop header — beige background */}
+      <div className="hidden lg:block bg-[#f5eded] h-[110px]">
+        <div className="max-w-[1440px] mx-auto px-16 h-full flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+            {logoUrl ? (
+              <Image
+                src={logoUrl}
+                alt={general?.siteName ?? 'Heart in Motion HK'}
+                width={56}
+                height={50}
+                className="h-12 w-auto object-contain"
+              />
+            ) : (
+              <span className="font-display text-[27px] text-[#3f3e3e] leading-tight">
+                heart<br />in motion
+              </span>
+            )}
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="flex items-center gap-[60px]">
+            {navItems.map((item, i) => {
+              const href =
+                item.linkType === 'external'
+                  ? (item.url ?? '#')
+                  : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+              const isFirst = i === 0
+              return (
+                <Link
+                  key={i}
+                  href={href}
+                  className={`text-[18px] text-[#000033] transition-colors duration-150 hover:text-brand-teal ${
+                    isFirst ? 'font-bold' : 'font-normal'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* Locale switcher */}
+          <div className="flex items-center gap-3">
+            <LocaleSwitcher currentLocale={locale ?? 'en'} />
+          </div>
+        </div>
+      </div>
+
+      {/* Tablet header */}
+      <div className="hidden md:flex lg:hidden bg-[#f5eded] h-[80px] items-center px-8 justify-between">
+        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
           {logoUrl ? (
-            <Image src={logoUrl} alt={general?.siteName ?? 'Heart in Motion HK'} width={120} height={48} className="h-12 w-auto object-contain" />
+            <Image
+              src={logoUrl}
+              alt={general?.siteName ?? 'Heart in Motion HK'}
+              width={44}
+              height={40}
+              className="h-10 w-auto object-contain"
+            />
           ) : (
-            <span className="font-display text-xl text-brand-dark">Heart in Motion</span>
+            <span className="font-display text-[22px] text-[#3f3e3e] leading-tight">
+              heart in motion
+            </span>
           )}
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="flex items-center gap-6">
           {navItems.map((item, i) => {
-            const href = item.linkType === 'external'
-              ? (item.url ?? '#')
-              : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+            const href =
+              item.linkType === 'external'
+                ? (item.url ?? '#')
+                : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
             return (
               <Link
                 key={i}
                 href={href}
-                className="text-sm text-brand-dark/70 hover:text-brand-teal transition-colors duration-150 font-medium"
+                className="text-[15px] text-[#000033] font-normal hover:text-brand-teal transition-colors"
               >
                 {item.label}
               </Link>
@@ -79,71 +143,98 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        {/* CTA Buttons + Locale */}
-        <div className="hidden md:flex items-center gap-3">
-          <LocaleSwitcher currentLocale={locale ?? 'en'} />
-          {ctaButtons.map((btn, i) => (
-            <a
-              key={i}
-              href={btn.url ?? '#'}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-150
-                ${btn.style === 'secondary'
-                  ? 'bg-brand-yellow text-brand-dark hover:bg-brand-yellow-light'
-                  : 'bg-brand-teal text-white hover:bg-brand-teal-dark'
-                }`}
-            >
-              {btn.label}
-              <span className="text-base leading-none">›</span>
-            </a>
-          ))}
-        </div>
+        <LocaleSwitcher currentLocale={locale ?? 'en'} />
+      </div>
 
-        {/* Mobile menu button */}
+      {/* Mobile header — white background */}
+      <div className="md:hidden bg-white h-[80px] flex items-center px-4 justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+          {logoUrl ? (
+            <Image
+              src={logoUrl}
+              alt={general?.siteName ?? 'Heart in Motion HK'}
+              width={55}
+              height={49}
+              className="h-12 w-auto object-contain"
+            />
+          ) : (
+            <span className="font-display text-[27px] text-[#3f3e3e] leading-tight">
+              heart<br />in motion
+            </span>
+          )}
+        </Link>
+
+        {/* Hamburger */}
         <button
-          className="md:hidden p-2 text-brand-dark"
+          className="p-2 text-brand-dark"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
-          <div className="w-5 space-y-1.5">
-            <span className={`block h-0.5 bg-current transition-all duration-200 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`block h-0.5 bg-current transition-all duration-200 ${mobileOpen ? 'opacity-0' : ''}`} />
-            <span className={`block h-0.5 bg-current transition-all duration-200 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <div className="w-6 space-y-[5px]">
+            <span
+              className={`block h-0.5 bg-current transition-all duration-200 origin-center ${
+                mobileOpen ? 'rotate-45 translate-y-[7px]' : ''
+              }`}
+            />
+            <span
+              className={`block h-0.5 bg-current transition-all duration-200 ${
+                mobileOpen ? 'opacity-0 scale-x-0' : ''
+              }`}
+            />
+            <span
+              className={`block h-0.5 bg-current transition-all duration-200 origin-center ${
+                mobileOpen ? '-rotate-45 -translate-y-[7px]' : ''
+              }`}
+            />
           </div>
         </button>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobile menu drawer */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-brand-beige-dark bg-white px-6 py-4 space-y-3">
-          {navItems.map((item, i) => {
-            const href = item.linkType === 'external'
-              ? (item.url ?? '#')
-              : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
-            return (
-              <Link
-                key={i}
-                href={href}
-                onClick={() => setMobileOpen(false)}
-                className="block text-sm text-brand-dark/70 hover:text-brand-teal py-1"
-              >
-                {item.label}
-              </Link>
-            )
-          })}
-          <div className="pt-2 flex flex-col gap-2">
-            {ctaButtons.map((btn, i) => (
-              <a
-                key={i}
-                href={btn.url ?? '#'}
-                className={`text-center px-4 py-2.5 rounded-full text-sm font-semibold
-                  ${btn.style === 'secondary'
-                    ? 'bg-brand-yellow text-brand-dark'
-                    : 'bg-brand-teal text-white'
-                  }`}
-              >
-                {btn.label}
-              </a>
-            ))}
+        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-5 space-y-4 shadow-lg">
+          {/* CTA buttons */}
+          <div className="flex flex-col gap-3">
+            <a
+              href={connectUrl}
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] font-bold text-black"
+            >
+              {connectLabel}
+              <span className="rotate-[-90deg] inline-block text-sm">›</span>
+            </a>
+            <a
+              href={emailUrl}
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[14px] font-bold text-black"
+            >
+              {emailLabel}
+              <span className="rotate-[-90deg] inline-block text-sm">›</span>
+            </a>
+          </div>
+
+          {/* Nav links */}
+          <nav className="space-y-1 pt-2 border-t border-gray-100">
+            {navItems.map((item, i) => {
+              const href =
+                item.linkType === 'external'
+                  ? (item.url ?? '#')
+                  : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+              return (
+                <Link
+                  key={i}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block py-2.5 text-[16px] text-brand-dark hover:text-brand-teal transition-colors"
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+
+          <div className="pt-2 border-t border-gray-100">
             <LocaleSwitcher currentLocale={locale ?? 'en'} />
           </div>
         </div>

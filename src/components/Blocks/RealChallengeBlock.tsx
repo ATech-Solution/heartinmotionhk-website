@@ -9,19 +9,45 @@ interface RealChallengeBlockProps {
 
 export function RealChallengeBlockComponent({ heading, body, animatedGif }: RealChallengeBlockProps) {
   return (
-    <section className="py-16 px-6 md:px-16 max-w-6xl mx-auto">
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          {heading && (
-            <h2 className="font-display text-3xl md:text-4xl text-brand-dark mb-6">{heading}</h2>
+    <section className="bg-[#f5eded] py-16 px-[52px] md:px-12">
+      <div className="max-w-[1440px] mx-auto">
+        {/* Mobile: stacked — decorative top, text below */}
+        <div className="flex flex-col md:hidden gap-6">
+          {animatedGif && (
+            <div className="w-full flex justify-center">
+              <MediaImage media={animatedGif} className="max-w-[320px] w-full h-auto" unoptimized />
+            </div>
           )}
-          {body && <RichText content={body} className="text-brand-dark/70 leading-relaxed" />}
-        </div>
-        {animatedGif && (
-          <div className="rounded-3xl overflow-hidden shadow-card">
-            <MediaImage media={animatedGif} className="w-full h-auto" unoptimized />
+          <div>
+            {heading && (
+              <h2 className="font-display text-[32px] text-black leading-[0.97] mb-4">{heading}</h2>
+            )}
+            {body && (
+              <div className="text-[14px] text-[#3f3e3e] text-justify leading-[1.5]">
+                <RichText content={body} />
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* Desktop: 2-column — decorative left (~40%), text right (~60%) */}
+        <div className="hidden md:flex items-center gap-16">
+          <div className="w-[40%] flex-shrink-0 flex justify-center">
+            {animatedGif && (
+              <MediaImage media={animatedGif} className="max-w-full h-auto" unoptimized />
+            )}
+          </div>
+          <div className="flex-1">
+            {heading && (
+              <h2 className="font-display text-[40px] text-black leading-[0.97] mb-6">{heading}</h2>
+            )}
+            {body && (
+              <div className="text-[16px] text-black text-justify leading-[1.5] max-w-[473px]">
+                <RichText content={body} />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   )

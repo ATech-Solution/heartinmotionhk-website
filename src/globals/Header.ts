@@ -61,7 +61,7 @@ export const Header: GlobalConfig = {
     {
       name: 'ctaButtons',
       type: 'array',
-      label: 'CTA Buttons',
+      label: 'CTA Buttons (Desktop)',
       maxRows: 3,
       fields: [
         {
@@ -83,6 +83,40 @@ export const Header: GlobalConfig = {
             { label: 'Primary (Teal)', value: 'primary' },
             { label: 'Secondary (Yellow)', value: 'secondary' },
           ],
+        },
+      ],
+    },
+    {
+      name: 'mobileCta',
+      type: 'group',
+      label: 'Mobile CTA Buttons',
+      admin: { description: 'Two action buttons shown in the mobile menu.' },
+      fields: [
+        {
+          name: 'connectLabel',
+          type: 'text',
+          localized: true,
+          defaultValue: "Let's connect",
+          label: 'Connect Button Label',
+        },
+        {
+          name: 'connectUrl',
+          type: 'text',
+          label: 'Connect Button URL',
+          admin: { description: 'e.g. booking/calendar link' },
+        },
+        {
+          name: 'emailLabel',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Email me',
+          label: 'Email Button Label',
+        },
+        {
+          name: 'emailUrl',
+          type: 'text',
+          label: 'Email Button URL',
+          admin: { description: 'e.g. mailto: link' },
         },
       ],
     },

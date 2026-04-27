@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { MediaImage } from '@/components/ui/MediaImage'
 
 interface HeroBlockProps {
@@ -18,53 +17,66 @@ export function HeroBlockComponent({
   ctaLabel,
   ctaUrl,
 }: HeroBlockProps) {
-  return (
-    <section className="relative w-full overflow-hidden bg-brand-beige">
-      {/* Banner Image */}
-      <div className="relative w-full">
-        {bannerImage && (
-          <div className="hidden md:block">
-            <MediaImage
-              media={bannerImage}
-              className="w-full h-auto object-cover max-h-[520px]"
-              priority
-            />
-          </div>
-        )}
-        {(mobileBannerImage || bannerImage) && (
-          <div className="block md:hidden">
-            <MediaImage
-              media={mobileBannerImage ?? bannerImage}
-              className="w-full h-auto object-cover max-h-[320px]"
-              priority
-            />
-          </div>
-        )}
-      </div>
+  const desktopImg = bannerImage
+  const mobileImg = mobileBannerImage ?? bannerImage
 
-      {/* Text overlay / below */}
-      {(headline || subheadline) && (
-        <div className="px-6 py-10 md:px-16 md:py-14 max-w-5xl">
+  return (
+    <section className="bg-[#f5eded] px-[52px] md:px-8 py-6">
+      {/* Image container with gradient overlay and overlaid text */}
+      <div className="relative w-full rounded-[20px] overflow-hidden h-[282px] md:h-[390px] lg:h-[488px]">
+        {/* Desktop image */}
+        {desktopImg && (
+          <div className="hidden md:block absolute inset-0">
+            <MediaImage
+              media={desktopImg}
+              className="w-full h-full object-cover"
+              priority
+            />
+          </div>
+        )}
+
+        {/* Mobile image */}
+        {mobileImg && (
+          <div className="block md:hidden absolute inset-0">
+            <MediaImage
+              media={mobileImg}
+              className="w-full h-full object-cover"
+              priority
+            />
+          </div>
+        )}
+
+        {/* Gradient overlay — transparent → beige */}
+        <div
+          className="absolute inset-0 rounded-[20px]"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(237,237,237,0.35) 43.75%, #f5eded 77.885%)',
+          }}
+        />
+
+        {/* Text — overlaid at bottom */}
+        <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 w-full pr-8">
           {headline && (
-            <h1 className="font-display text-4xl md:text-6xl text-brand-dark leading-tight mb-4">
+            <h1 className="font-display text-[32px] md:text-[48px] text-black leading-none mb-2 md:mb-3">
               {headline}
             </h1>
           )}
           {subheadline && (
-            <p className="text-brand-dark/70 text-base md:text-lg leading-relaxed max-w-2xl mb-6">
+            <p className="text-[14px] md:text-[18px] text-black text-justify leading-[1.5] max-w-[1110px]">
               {subheadline}
             </p>
           )}
           {ctaLabel && ctaUrl && (
             <a
               href={ctaUrl}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-teal text-white rounded-full font-semibold text-sm hover:bg-brand-teal-dark transition-colors duration-200 shadow-brand"
+              className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-brand-teal text-white rounded-full font-semibold text-sm hover:bg-brand-teal-dark transition-colors duration-200"
             >
               {ctaLabel}
             </a>
           )}
         </div>
-      )}
+      </div>
     </section>
   )
 }

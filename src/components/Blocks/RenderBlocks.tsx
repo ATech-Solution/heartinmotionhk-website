@@ -11,6 +11,7 @@ import { CoachingExperienceBlockComponent } from './CoachingExperienceBlock'
 import { AboutHeartInMotionBlockComponent } from './AboutHeartInMotionBlock'
 import { ServiceDetailBlockComponent } from './ServiceDetailBlock'
 import { ContactFormBlockComponent } from './ContactFormBlock'
+import { visibilityClasses } from '@/utils/visibilityClasses'
 
 type LayoutBlock = NonNullable<Page['layout']>[number]
 
@@ -40,7 +41,17 @@ export function RenderBlocks({ blocks }: { blocks: LayoutBlock[] }) {
           console.warn(`RenderBlocks: unknown blockType "${block.blockType}"`)
           return null
         }
-        return <Component key={i} {...block} />
+        const vis = (block as any).visibility
+        const wrapClass = visibilityClasses(
+          vis?.showOnMobile ?? true,
+          vis?.showOnTablet ?? true,
+          vis?.showOnDesktop ?? true,
+        )
+        return (
+          <div key={i} className={wrapClass}>
+            <Component {...block} />
+          </div>
+        )
       })}
     </>
   )

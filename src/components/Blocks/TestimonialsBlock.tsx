@@ -2,7 +2,7 @@
 
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface Testimonial {
   id?: string
@@ -18,64 +18,104 @@ interface TestimonialsBlockProps {
 }
 
 export function TestimonialsBlockComponent({ heading, testimonials }: TestimonialsBlockProps) {
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000 })])
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
 
+  useEffect(() => {
+    if (!emblaApi) return
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap())
+    emblaApi.on('select', onSelect)
+    return () => { emblaApi.off('select', onSelect) }
+  }, [emblaApi])
+
   if (!testimonials || testimonials.length === 0) return null
 
   return (
-    <section className="py-16 px-6 md:px-16 bg-brand-beige-dark">
-      <div className="max-w-4xl mx-auto">
+    <section className="bg-[#f5eded] py-16 px-[52px] md:px-12">
+      <div className="max-w-[1444px] mx-auto">
         {heading && (
-          <h2 className="font-display text-3xl text-brand-dark mb-10 text-center">{heading}</h2>
+          <h2 className="font-display text-[28px] md:text-[36px] text-black text-center mb-10">
+            {heading}
+          </h2>
         )}
-        <div className="relative">
-          <div className="overflow-hidden" ref={emblaRef}>
+
+        <div className="relative flex items-center gap-4">
+          {/* Prev arrow */}
+          {testimonials.length > 1 && (
+            <button
+              onClick={scrollPrev}
+              aria-label="Previous testimonial"
+              className="flex-shrink-0 text-[28px] text-black/40 hover:text-black transition-colors"
+            >
+              ‹
+            </button>
+          )}
+
+          {/* Carousel */}
+          <div className="overflow-hidden flex-1" ref={emblaRef}>
             <div className="flex">
               {testimonials.map((t, i) => (
-                <div key={t.id ?? i} className="flex-[0_0_100%] min-w-0 px-4">
-                  <blockquote className="bg-white rounded-3xl p-8 md:p-12 shadow-card text-center">
+                <div key={t.id ?? i} className="flex-[0_0_100%] min-w-0">
+                  <div className="flex flex-col items-center gap-4 px-4">
                     {t.quote && (
-                      <p className="text-brand-dark/80 text-base md:text-lg leading-relaxed italic mb-6">
+                      <p className="font-body text-[16px] md:text-[20px] text-black text-center leading-normal max-w-[824px]">
                         &ldquo;{t.quote}&rdquo;
                       </p>
                     )}
-                    <footer>
-                      {t.authorName && (
-                        <p className="font-semibold text-brand-dark">{t.authorName}</p>
-                      )}
-                      {(t.authorTitle || t.authorCompany) && (
-                        <p className="text-sm text-brand-dark/60 mt-1">
-                          {[t.authorTitle, t.authorCompany].filter(Boolean).join(', ')}
-                        </p>
-                      )}
-                    </footer>
-                  </blockquote>
+                    {(t.authorName || t.authorTitle || t.authorCompany) && (
+                      <p className="font-bold text-[14px] md:text-[16px] text-black text-center">
+                        {[
+                          t.authorName ? `- ${t.authorName}` : null,
+                          t.authorTitle,
+                          t.authorCompany,
+                        ]
+                          .filter(Boolean)
+                          .join(', ')}
+                        {' -'}
+                      </p>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Next arrow */}
           {testimonials.length > 1 && (
-            <div className="flex justify-center gap-4 mt-8">
-              <button
-                onClick={scrollPrev}
-                className="w-10 h-10 rounded-full border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white transition-colors duration-200 flex items-center justify-center font-bold"
-                aria-label="Previous testimonial"
-              >
-                ‹
-              </button>
-              <button
-                onClick={scrollNext}
-                className="w-10 h-10 rounded-full border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white transition-colors duration-200 flex items-center justify-center font-bold"
-                aria-label="Next testimonial"
-              >
-                ›
-              </button>
-            </div>
+            <button
+              onClick={scrollNext}
+              aria-label="Next testimonial"
+              className="flex-shrink-0 text-[28px] text-black/40 hover:text-black transition-colors"
+            >
+              ›
+            </button>
           )}
         </div>
+
+        {/* Dot indicators */}
+        {testimonials.length > 1 && (
+          <div className="flex justify-center gap-[4px] mt-6">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => emblaApi?.scrollTo(i)}
+                aria-label={`Go to testimonial ${i + 1}`}
+                className="p-0 border-none bg-transparent"
+              >
+                <span
+                  className={`block rounded-full transition-colors duration-200 ${
+                    i === selectedIndex
+                      ? 'bg-black w-[10px] h-[10px]'
+                      : 'bg-black/30 w-[10px] h-[10px]'
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

@@ -7,12 +7,18 @@ interface HeartTeamCoachingBlockProps {
 
 export function HeartTeamCoachingBlockComponent({ heading, body }: HeartTeamCoachingBlockProps) {
   return (
-    <section className="py-14 px-6 md:px-16 bg-white">
-      <div className="max-w-4xl mx-auto text-center">
+    <section className="bg-[#f5eded] pt-[80px] pb-5 px-[52px] md:px-12">
+      <div className="max-w-[1440px] mx-auto">
         {heading && (
-          <h2 className="font-display text-3xl md:text-4xl text-brand-dark mb-6">{heading}</h2>
+          <h2 className="font-display text-[32px] md:text-[40px] text-black leading-[0.97] mb-6">
+            {heading}
+          </h2>
         )}
-        {body && <RichText content={body} className="text-brand-dark/70 leading-relaxed text-base md:text-lg" />}
+        {body && (
+          <div className="text-[14px] md:text-[16px] text-black text-justify leading-[1.5] max-w-[883px] whitespace-pre-wrap">
+            <RichText content={body} />
+          </div>
+        )}
       </div>
     </section>
   )

@@ -1,9 +1,3 @@
-const bgMap: Record<string, string> = {
-  teal: 'bg-brand-teal',
-  yellow: 'bg-brand-yellow',
-  beige: 'bg-brand-beige-dark',
-}
-
 interface CTABlockProps {
   heading?: string
   subheading?: string
@@ -12,32 +6,54 @@ interface CTABlockProps {
   background?: string
 }
 
-export function CTABlockComponent({ heading, subheading, ctaLabel, ctaUrl, background = 'teal' }: CTABlockProps) {
-  const bg = bgMap[background] ?? bgMap.teal
-  const textColor = background === 'yellow' ? 'text-brand-dark' : 'text-white'
+const bgStyles: Record<string, string> = {
+  teal: 'bg-brand-teal',
+  'teal-gradient': '',
+  yellow: 'bg-[#fff5ce]',
+  beige: 'bg-[#f5eded]',
+}
+
+export function CTABlockComponent({
+  heading,
+  subheading,
+  ctaLabel,
+  ctaUrl,
+  background = 'teal-gradient',
+}: CTABlockProps) {
+  const isTealGradient = background === 'teal-gradient'
 
   return (
-    <section className={`${bg} py-16 px-6 md:px-16`}>
-      <div className="max-w-3xl mx-auto text-center">
-        {heading && (
-          <h2 className={`font-display text-3xl md:text-5xl mb-4 ${textColor}`}>{heading}</h2>
-        )}
-        {subheading && (
-          <p className={`text-base md:text-lg mb-8 opacity-90 ${textColor}`}>{subheading}</p>
-        )}
-        {ctaLabel && ctaUrl && (
-          <a
-            href={ctaUrl}
-            className={`inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border-2 transition-colors duration-200
-              ${background === 'teal'
-                ? 'bg-white text-brand-teal border-white hover:bg-transparent hover:text-white'
-                : 'bg-brand-teal text-white border-brand-teal hover:bg-brand-teal-dark'
-              }`}
-          >
-            {ctaLabel}
-            <span className="text-lg leading-none">›</span>
-          </a>
-        )}
+    <section
+      className={`py-[30px] px-[52px] md:px-12 ${bgStyles[background] ?? ''}`}
+      style={isTealGradient ? { background: 'linear-gradient(90deg, #b2e6e3 0%, #b2e6e3 100%)' } : undefined}
+    >
+      <div className="max-w-[1440px] mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-10">
+          {/* Text */}
+          <div className="flex flex-col gap-5 max-w-[897px]">
+            {heading && (
+              <h2 className="font-display text-[20px] md:text-[30px] text-black leading-[1.5]">
+                {`"${heading}"`}
+              </h2>
+            )}
+            {subheading && (
+              <p className="text-[14px] md:text-[16px] text-[#3f3e3e] leading-[1.5]">
+                {subheading}
+              </p>
+            )}
+          </div>
+
+          {/* CTA button */}
+          {ctaLabel && ctaUrl && (
+            <a
+              href={ctaUrl}
+              className="flex-shrink-0 flex items-center justify-center gap-4 h-10 px-[15px] bg-[#8ec0bd] rounded-[15px] text-[14px] font-bold text-black min-w-[328px] md:min-w-0 md:w-[320px]"
+            >
+              {ctaLabel}
+              <span className="rotate-[-90deg] inline-block text-sm">›</span>
+            </a>
+          )}
+        </div>
       </div>
     </section>
   )
