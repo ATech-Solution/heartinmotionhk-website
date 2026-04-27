@@ -1,6 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
+import sharp from 'sharp'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
@@ -28,6 +29,7 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000',
   secret: process.env.PAYLOAD_SECRET ?? 'fallback-dev-secret',
+  sharp,
 
   // ── Database ──────────────────────────────────────────
   db: sqliteAdapter({
@@ -56,7 +58,7 @@ export default buildConfig({
     transportOptions: {
       host: process.env.AWS_SES_SMTP_HOST,
       port: Number(process.env.AWS_SES_SMTP_PORT ?? 587),
-      secure: false,
+      secure: Number(process.env.AWS_SES_SMTP_PORT ?? 587) === 465,
       auth: {
         user: process.env.AWS_SES_SMTP_USER,
         pass: process.env.AWS_SES_SMTP_PASSWORD,

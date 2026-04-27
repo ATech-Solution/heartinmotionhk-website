@@ -21,6 +21,7 @@ interface ServicesOverviewBlockProps {
   ctaUrl?: string
 }
 
+/* Blob background colours matching the Figma — pink, teal, blue */
 const blobColors = ['#eb9097', '#8ec0bd', '#4fb4df']
 
 export function ServicesOverviewBlockComponent({
@@ -35,11 +36,11 @@ export function ServicesOverviewBlockComponent({
   if (!services || services.length === 0) return null
 
   return (
-    <section className="bg-[#fff5ce] py-14 px-[52px] md:px-12">
+    <section className="bg-[#fff5ce] py-14 px-4 md:px-[52px]">
       <div className="max-w-[1440px] mx-auto">
-        {/* Heading */}
+        {/* Section heading */}
         {heading && (
-          <h2 className="font-display text-[30px] md:text-[30px] text-black text-center leading-[1.5] mb-4">
+          <h2 className="font-display text-[32px] md:text-[30px] text-black text-center leading-[1.5] mb-4">
             {heading}
           </h2>
         )}
@@ -49,19 +50,18 @@ export function ServicesOverviewBlockComponent({
           </p>
         )}
 
-        {/* Service cards — horizontal scroll on mobile, 3-col on desktop */}
-        {/* Mobile carousel */}
+        {/* Mobile — horizontal scroll carousel */}
         <div className="md:hidden overflow-hidden" ref={emblaRef}>
           <div className="flex gap-4">
             {services.map((svc, i) => (
-              <div key={svc.id ?? i} className="flex-[0_0_80%] min-w-0">
+              <div key={svc.id ?? i} className="flex-[0_0_75%] min-w-0">
                 <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
               </div>
             ))}
           </div>
         </div>
 
-        {/* Desktop grid */}
+        {/* Desktop — 3-column flex */}
         <div className="hidden md:flex justify-center gap-8 lg:gap-12">
           {services.map((svc, i) => (
             <div key={svc.id ?? i} className="flex-1 max-w-[320px]">
@@ -75,7 +75,7 @@ export function ServicesOverviewBlockComponent({
           <div className="mt-12 flex justify-center">
             <Link
               href={ctaUrl}
-              className="flex items-center justify-center gap-4 h-10 px-[20px] bg-[#86d0ef] rounded-[20px] text-[14px] font-bold text-black min-w-[320px]"
+              className="flex items-center justify-center gap-4 h-10 px-[20px] bg-[#86d0ef] rounded-[20px] text-[14px] font-bold text-black min-w-[320px] hover:opacity-90 transition-opacity"
             >
               {ctaLabel}
             </Link>
@@ -89,9 +89,9 @@ export function ServicesOverviewBlockComponent({
 function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Blob shape container */}
-      <div className="relative w-full aspect-[0.88]">
-        {/* Colored blob background */}
+      {/* Blob + photo stacked container */}
+      <div className="relative w-full" style={{ aspectRatio: '1 / 1.05' }}>
+        {/* Coloured blob background */}
         <div
           className="absolute inset-0"
           style={{
@@ -100,12 +100,13 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
           }}
         />
 
-        {/* Photo with organic rounded corners */}
+        {/* Photo inset with organic rounded corners — matches Figma shadow + border-radius */}
         {svc.image && (
           <div
-            className="absolute inset-[10%] overflow-hidden shadow-[0px_5px_9px_0px_rgba(2,147,52,0.05)]"
+            className="absolute overflow-hidden shadow-[0px_5px_9px_0px_rgba(2,147,52,0.05)]"
             style={{
-              borderRadius: '75px 0 76px 76px',
+              inset: '10%',
+              borderRadius: '101px 0 102px 101px',
             }}
           >
             <MediaImage
@@ -116,9 +117,9 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
         )}
       </div>
 
-      {/* Label badge */}
+      {/* Label badge — white pill below the blob */}
       {svc.title && (
-        <div className="bg-white rounded-[23px] shadow-[0px_3px_1.5px_rgba(0,0,0,0.25)] px-4 py-2 min-w-[200px] text-center">
+        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] px-4 py-2 min-w-[220px] max-w-full text-center">
           <span className="font-bold text-[#01162c] text-[14px] md:text-[16px] leading-[1.48]">
             {svc.title}
           </span>

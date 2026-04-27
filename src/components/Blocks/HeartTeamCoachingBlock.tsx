@@ -7,10 +7,10 @@ interface HeartTeamCoachingBlockProps {
 
 export function HeartTeamCoachingBlockComponent({ heading, body }: HeartTeamCoachingBlockProps) {
   return (
-    <section className="bg-[#f5eded] pt-[80px] pb-5 px-[52px] md:px-12">
+    <section className="bg-[#f5eded] pt-[60px] md:pt-[80px] pb-0 px-4 md:px-[52px]">
       <div className="max-w-[1440px] mx-auto">
         {heading && (
-          <h2 className="font-display text-[32px] md:text-[40px] text-black leading-[0.97] mb-6">
+          <h2 className="font-display text-[32px] md:text-[40px] text-black leading-[0.97] mb-5 md:mb-6">
             {heading}
           </h2>
         )}

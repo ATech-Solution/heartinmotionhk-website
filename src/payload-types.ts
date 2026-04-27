@@ -185,6 +185,14 @@ export interface Page {
             mobileBannerImage?: (number | null) | Media;
             ctaLabel?: string | null;
             ctaUrl?: string | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'hero';
@@ -207,6 +215,14 @@ export interface Page {
               [k: string]: unknown;
             } | null;
             animatedGif?: (number | null) | Media;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'real-challenge';
@@ -228,21 +244,56 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'heart-team-coaching';
           }
         | {
             heading?: string | null;
+            sectionIntro?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             values?:
               | {
                   title: string;
                   description?: string | null;
                   icon?: (number | null) | Media;
+                  /**
+                   * Optional decorative illustration shown beside this card (e.g. tree, birds, stones).
+                   */
+                  decorativeImage?: (number | null) | Media;
                   color?: ('teal' | 'yellow' | 'pink' | 'blue') | null;
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'values';
@@ -252,7 +303,15 @@ export interface Page {
             subheading?: string | null;
             ctaLabel?: string | null;
             ctaUrl?: string | null;
-            background?: ('teal' | 'yellow' | 'beige') | null;
+            background?: ('teal' | 'teal-gradient' | 'yellow' | 'beige') | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
@@ -261,6 +320,19 @@ export interface Page {
             heading?: string | null;
             subheading?: string | null;
             services?: (number | Service)[] | null;
+            /**
+             * Text for the "View full services" button.
+             */
+            ctaLabel?: string | null;
+            ctaUrl?: string | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'services-overview';
@@ -268,6 +340,14 @@ export interface Page {
         | {
             heading?: string | null;
             testimonials?: (number | Testimonial)[] | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'testimonials';
@@ -297,6 +377,14 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'about-me';
@@ -332,6 +420,14 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'coaching-experience';
@@ -377,6 +473,14 @@ export interface Page {
                 }[]
               | null;
             image?: (number | null) | Media;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'about-him';
@@ -385,6 +489,14 @@ export interface Page {
             heading?: string | null;
             subheading?: string | null;
             services?: (number | Service)[] | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'service-detail';
@@ -394,6 +506,14 @@ export interface Page {
             subheading?: string | null;
             sideImage?: (number | null) | Media;
             form: number | Form;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'contact-form';
@@ -997,6 +1117,13 @@ export interface PagesSelect<T extends boolean = true> {
               mobileBannerImage?: T;
               ctaLabel?: T;
               ctaUrl?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1006,6 +1133,13 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               body?: T;
               animatedGif?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1014,6 +1148,13 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               body?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1021,14 +1162,23 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              sectionIntro?: T;
               values?:
                 | T
                 | {
                     title?: T;
                     description?: T;
                     icon?: T;
+                    decorativeImage?: T;
                     color?: T;
                     id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1041,6 +1191,13 @@ export interface PagesSelect<T extends boolean = true> {
               ctaLabel?: T;
               ctaUrl?: T;
               background?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1050,6 +1207,15 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               services?: T;
+              ctaLabel?: T;
+              ctaUrl?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1058,6 +1224,13 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               testimonials?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1073,6 +1246,13 @@ export interface PagesSelect<T extends boolean = true> {
                     image?: T;
                     alt?: T;
                     id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1096,6 +1276,13 @@ export interface PagesSelect<T extends boolean = true> {
                     content?: T;
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1114,6 +1301,13 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               image?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1123,6 +1317,13 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               services?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1133,6 +1334,13 @@ export interface PagesSelect<T extends boolean = true> {
               subheading?: T;
               sideImage?: T;
               form?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1578,6 +1786,21 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Two action buttons shown in the mobile menu.
+   */
+  mobileCta?: {
+    connectLabel?: string | null;
+    /**
+     * e.g. booking/calendar link
+     */
+    connectUrl?: string | null;
+    emailLabel?: string | null;
+    /**
+     * e.g. mailto: link
+     */
+    emailUrl?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1670,6 +1893,14 @@ export interface HeaderSelect<T extends boolean = true> {
         url?: T;
         style?: T;
         id?: T;
+      };
+  mobileCta?:
+    | T
+    | {
+        connectLabel?: T;
+        connectUrl?: T;
+        emailLabel?: T;
+        emailUrl?: T;
       };
   updatedAt?: T;
   createdAt?: T;

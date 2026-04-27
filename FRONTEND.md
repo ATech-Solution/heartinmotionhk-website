@@ -30,7 +30,6 @@ This skill helps with :
 - Prioritize Figma fidelity to match designs exactly
 - Avoid hardcoded values, use design tokens from Figma where available
 - Follow WCAG requirements for accessibility
-- Add component documentation
 - Place UI components in `public/assets`; avoid inline styles unless truly necessary
 - Place Image in `media`; avoid inline styles unless truly necessary
 - IMPORTANT: please follow `FIGMAMCP.md`

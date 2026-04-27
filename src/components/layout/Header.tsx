@@ -191,31 +191,29 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
         </button>
       </div>
 
+      {/* Mobile CTA bar — always visible below mobile navbar */}
+      <div className="md:hidden bg-white px-4 pb-3 flex flex-col gap-3">
+        <a
+          href={connectUrl}
+          className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] font-bold text-black"
+        >
+          {connectLabel}
+          <span className="rotate-[-90deg] inline-block text-sm">›</span>
+        </a>
+        <a
+          href={emailUrl}
+          className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[14px] font-bold text-black"
+        >
+          {emailLabel}
+          <span className="rotate-[-90deg] inline-block text-sm">›</span>
+        </a>
+      </div>
+
       {/* Mobile menu drawer */}
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-4 py-5 space-y-4 shadow-lg">
-          {/* CTA buttons */}
-          <div className="flex flex-col gap-3">
-            <a
-              href={connectUrl}
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] font-bold text-black"
-            >
-              {connectLabel}
-              <span className="rotate-[-90deg] inline-block text-sm">›</span>
-            </a>
-            <a
-              href={emailUrl}
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[14px] font-bold text-black"
-            >
-              {emailLabel}
-              <span className="rotate-[-90deg] inline-block text-sm">›</span>
-            </a>
-          </div>
-
           {/* Nav links */}
-          <nav className="space-y-1 pt-2 border-t border-gray-100">
+          <nav className="space-y-1">
             {navItems.map((item, i) => {
               const href =
                 item.linkType === 'external'

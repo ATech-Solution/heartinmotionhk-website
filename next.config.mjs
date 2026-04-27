@@ -11,7 +11,9 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  generateBuildId: async () => null,
+  sassOptions: {
+    silenceDeprecations: ['import', 'legacy-js-api'],
+  },
   async headers() {
     return [
       {

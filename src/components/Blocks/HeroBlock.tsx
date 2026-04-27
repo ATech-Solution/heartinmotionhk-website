@@ -14,16 +14,14 @@ export function HeroBlockComponent({
   subheadline,
   bannerImage,
   mobileBannerImage,
-  ctaLabel,
-  ctaUrl,
 }: HeroBlockProps) {
   const desktopImg = bannerImage
   const mobileImg = mobileBannerImage ?? bannerImage
 
   return (
-    <section className="bg-[#f5eded] px-[52px] md:px-8 py-6">
-      {/* Image container with gradient overlay and overlaid text */}
-      <div className="relative w-full rounded-[20px] overflow-hidden h-[282px] md:h-[390px] lg:h-[488px]">
+    <section className="bg-[#f5eded] px-4 md:px-[52px] py-3 md:py-6">
+      {/* Hero image container */}
+      <div className="relative w-full rounded-[20px] overflow-hidden h-[282px] lg:h-[488px]">
         {/* Desktop image */}
         {desktopImg && (
           <div className="hidden md:block absolute inset-0">
@@ -46,7 +44,12 @@ export function HeroBlockComponent({
           </div>
         )}
 
-        {/* Gradient overlay — transparent → beige */}
+        {/* Fallback background when no image */}
+        {!desktopImg && !mobileImg && (
+          <div className="absolute inset-0 bg-[#d0e8e6]" />
+        )}
+
+        {/* Gradient overlay — transparent → semi → beige */}
         <div
           className="absolute inset-0 rounded-[20px]"
           style={{
@@ -55,10 +58,10 @@ export function HeroBlockComponent({
           }}
         />
 
-        {/* Text — overlaid at bottom */}
-        <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 w-full pr-8">
+        {/* Text overlaid at bottom-left */}
+        <div className="absolute bottom-6 left-6 md:bottom-10 md:left-8 w-full pr-8">
           {headline && (
-            <h1 className="font-display text-[32px] md:text-[48px] text-black leading-none mb-2 md:mb-3">
+            <h1 className="font-display text-[32px] md:text-[48px] text-black leading-[1.5] mb-2 md:mb-3">
               {headline}
             </h1>
           )}
@@ -66,14 +69,6 @@ export function HeroBlockComponent({
             <p className="text-[14px] md:text-[18px] text-black text-justify leading-[1.5] max-w-[1110px]">
               {subheadline}
             </p>
-          )}
-          {ctaLabel && ctaUrl && (
-            <a
-              href={ctaUrl}
-              className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-brand-teal text-white rounded-full font-semibold text-sm hover:bg-brand-teal-dark transition-colors duration-200"
-            >
-              {ctaLabel}
-            </a>
           )}
         </div>
       </div>

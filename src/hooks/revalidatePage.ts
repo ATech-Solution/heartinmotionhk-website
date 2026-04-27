@@ -1,7 +1,7 @@
 import type { CollectionAfterChangeHook } from 'payload'
 
 export const revalidatePage: CollectionAfterChangeHook = async ({ doc, req }) => {
-  if (doc._status === 'published') {
+  if (doc._status === 'published' && process.env.PAYLOAD_PUBLIC_SERVER_URL && process.env.REVALIDATE_SECRET) {
     const slug = doc.slug === 'home' ? '/' : `/${doc.slug}`
     const revalidateUrl =
       `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/revalidate` +

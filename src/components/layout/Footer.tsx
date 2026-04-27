@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { FooterPolicyLinks } from './FooterPolicyLinks'
 
 const SOCIAL_ICONS: Record<string, { label: string; svg: string }> = {
   facebook: {
@@ -84,6 +85,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
                   {link.label}
                 </Link>
               ))}
+              <FooterPolicyLinks />
             </nav>
           </div>
 

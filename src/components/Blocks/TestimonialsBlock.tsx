@@ -34,8 +34,17 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
   if (!testimonials || testimonials.length === 0) return null
 
   return (
-    <section className="bg-[#f5eded] py-16 px-[52px] md:px-12">
+    <section className="bg-[#f5eded] pt-10 pb-16 px-4 md:px-[52px]">
       <div className="max-w-[1444px] mx-auto">
+        {/* Decorative horizontal line — matches Figma */}
+        <div
+          className="w-full h-[2px] mb-10 rounded-full"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 0%, #b2e6e3 20%, #fbacb2 50%, #86d0ef 80%, transparent 100%)',
+          }}
+        />
+
         {heading && (
           <h2 className="font-display text-[28px] md:text-[36px] text-black text-center mb-10">
             {heading}
@@ -48,7 +57,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
             <button
               onClick={scrollPrev}
               aria-label="Previous testimonial"
-              className="flex-shrink-0 text-[28px] text-black/40 hover:text-black transition-colors"
+              className="flex-shrink-0 text-[32px] text-black/40 hover:text-black transition-colors leading-none"
             >
               ‹
             </button>
@@ -88,7 +97,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
             <button
               onClick={scrollNext}
               aria-label="Next testimonial"
-              className="flex-shrink-0 text-[28px] text-black/40 hover:text-black transition-colors"
+              className="flex-shrink-0 text-[32px] text-black/40 hover:text-black transition-colors leading-none"
             >
               ›
             </button>
@@ -106,10 +115,8 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
                 className="p-0 border-none bg-transparent"
               >
                 <span
-                  className={`block rounded-full transition-colors duration-200 ${
-                    i === selectedIndex
-                      ? 'bg-black w-[10px] h-[10px]'
-                      : 'bg-black/30 w-[10px] h-[10px]'
+                  className={`block rounded-full transition-colors duration-200 w-[10px] h-[10px] ${
+                    i === selectedIndex ? 'bg-black' : 'bg-black/30'
                   }`}
                 />
               </button>

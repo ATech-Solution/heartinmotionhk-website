@@ -23,50 +23,80 @@ interface ValuesBlockProps {
 }
 
 export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBlockProps) {
+  if (!values || values.length === 0) return null
+
   return (
-    <section className="bg-[#f5eded] py-12 px-[52px] md:px-12">
+    <section className="bg-[#f5eded] pb-16 pt-4 px-[52px] md:px-12">
       <div className="max-w-[1440px] mx-auto">
-        {/* Section intro (used by HeartTeamCoachingBlock visually; here for standalone use) */}
         {sectionIntro && (
           <div className="text-[14px] md:text-[16px] text-black text-justify leading-[1.5] max-w-[883px] mb-10">
             <RichText content={sectionIntro} />
           </div>
         )}
 
-        {/* 2-column grid of value cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[85px] gap-y-[55px]">
-          {values?.map((val, i) => {
+        {/* Desktop: 2-column grid — each card has illustration above pill */}
+        <div className="hidden md:grid md:grid-cols-2 gap-x-[85px] gap-y-[55px]">
+          {values.map((val, i) => {
             const pillBg = pillColorMap[val.color ?? 'teal'] ?? pillColorMap.teal
-
             return (
-              <div key={i} className="relative flex flex-col">
-                {/* Card */}
-                <div className="flex flex-col gap-5">
-                  {/* Colored pill header */}
-                  <div className={`relative h-[60px] w-[390px] max-w-full rounded-[30px] ${pillBg} flex items-center justify-center`}>
-                    {val.title && (
-                      <span className="font-bold text-[20px] text-black text-center px-4">
-                        {val.title}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Body text */}
-                  {val.description && (
-                    <p className="text-[14px] md:text-[16px] text-[#3f3e3e] text-justify leading-[1.85] max-w-[397px]">
-                      {val.description}
-                    </p>
+              <div key={i} className="flex flex-col">
+                {/* Decorative illustration positioned above-right, above the pill */}
+                <div className="flex justify-end h-[220px] items-end pb-2">
+                  {val.decorativeImage ? (
+                    <MediaImage
+                      media={val.decorativeImage}
+                      className="max-h-full w-auto object-contain max-w-[180px]"
+                    />
+                  ) : (
+                    /* Invisible spacer so pill aligns consistently when no image */
+                    <span className="block" aria-hidden="true" />
                   )}
                 </div>
 
-                {/* Decorative illustration — positioned to the right of the card on desktop */}
-                {val.decorativeImage && (
-                  <div className="mt-4 md:mt-0 md:absolute md:right-[-120px] md:top-0 w-[120px] md:w-[160px] flex-shrink-0">
-                    <MediaImage
-                      media={val.decorativeImage}
-                      className="w-full h-auto object-contain"
-                    />
-                  </div>
+                {/* Colored pill header */}
+                <div
+                  className={`relative h-[60px] w-full max-w-[390px] rounded-[30px] ${pillBg} flex items-center justify-center`}
+                >
+                  {val.title && (
+                    <span className="font-bold text-[20px] text-black text-center px-6">
+                      {val.title}
+                    </span>
+                  )}
+                </div>
+
+                {/* Body text */}
+                {val.description && (
+                  <p className="mt-5 text-[16px] text-[#3f3e3e] text-justify leading-[1.85] max-w-[397px]">
+                    {val.description}
+                  </p>
+                )}
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Mobile: single column stacked cards */}
+        <div className="md:hidden flex flex-col gap-8">
+          {values.map((val, i) => {
+            const pillBg = pillColorMap[val.color ?? 'teal'] ?? pillColorMap.teal
+            return (
+              <div key={i} className="flex flex-col gap-4">
+                {/* Colored pill header */}
+                <div
+                  className={`relative h-[56px] w-full max-w-[390px] rounded-[30px] ${pillBg} flex items-center justify-center`}
+                >
+                  {val.title && (
+                    <span className="font-bold text-[18px] text-black text-center px-5">
+                      {val.title}
+                    </span>
+                  )}
+                </div>
+
+                {/* Body text */}
+                {val.description && (
+                  <p className="text-[14px] text-[#3f3e3e] text-justify leading-[1.85]">
+                    {val.description}
+                  </p>
                 )}
               </div>
             )

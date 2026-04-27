@@ -1,3 +1,4 @@
+import '../globals.css'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
@@ -61,7 +62,7 @@ export default async function FrontendLayout({
   return (
     <html lang={locale === 'zh-HK' ? 'zh-HK' : 'en'} className={`${inter.variable} ${caveat.variable}`}>
       <head>
-        <link rel="icon" href="/public/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className="font-body bg-brand-beige text-brand-dark antialiased">
         <SiteHeader header={header} general={general} locale={locale} />

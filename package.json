@@ -18,7 +18,8 @@
     "clean": "rm -rf .next node_modules",
     "rebuild": "rm -rf .next node_modules && next build",
     "redb": "NODE_OPTIONS='--import tsx' payload migrate:create && NODE_OPTIONS='--import tsx' payload migrate",
-    "regen": "NODE_OPTIONS='--import tsx' payload generate:types && NODE_OPTIONS='--import tsx' payload generate:importmap"
+    "regen": "NODE_OPTIONS='--import tsx' payload generate:types && NODE_OPTIONS='--import tsx' payload generate:importmap",
+    "seed": "NODE_OPTIONS='--import tsx' tsx src/seed.ts"
   },
   "dependencies": {
     "@payloadcms/db-sqlite": "3.33.0",
