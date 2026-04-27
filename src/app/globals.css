@@ -4,8 +4,10 @@
     font-family: 'Gochi Hand';
     font-stretch: 100%; /* Note that font-stretch is a % of normal width */
     font-style: normal; /* See note below */
-    font-weight: 400;
-    src: url(/public/font/GochiHand-Regular.woff2) format('woff2');
+    font-weight: normal;
+    src: url(/font/GochiHand-Regular.woff2) format('woff2');
+    font-display: swap; /* Recommended for better loading performance */
+
 }
 
 @theme {
@@ -75,3 +77,34 @@ h2.leading-tight{
   font-weight: normal;
   color: #000000;
 }
+
+/* ── Scroll-triggered animations ───────────────────────────────────── */
+@keyframes him-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes him-fade-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes him-fade-left {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+@keyframes him-fade-right {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+.him-animate {
+  opacity: 0;
+}
+.him-animate.him-visible {
+  animation-fill-mode: both;
+  animation-duration: 0.72s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.him-fade.him-visible       { animation-name: him-fade-in;    opacity: 1; }
+.him-fade-up.him-visible    { animation-name: him-fade-up;    opacity: 1; }
+.him-fade-left.him-visible  { animation-name: him-fade-left;  opacity: 1; }
+.him-fade-right.him-visible { animation-name: him-fade-right; opacity: 1; }

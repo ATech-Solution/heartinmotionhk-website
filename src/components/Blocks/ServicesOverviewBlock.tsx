@@ -1,7 +1,9 @@
 'use client'
 
+import { useCallback, useEffect, useState } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import { MediaImage } from '@/components/ui/MediaImage'
+import { AnimateOnScroll } from '@/components/ui/AnimateOnScroll'
 import Link from 'next/link'
 
 interface Service {
@@ -31,55 +33,94 @@ export function ServicesOverviewBlockComponent({
   ctaLabel,
   ctaUrl,
 }: ServicesOverviewBlockProps) {
-  const [emblaRef] = useEmblaCarousel({ loop: false, align: 'start' })
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' })
+
+  useEffect(() => {
+    if (!emblaApi) return
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap())
+    emblaApi.on('select', onSelect)
+    return () => { emblaApi.off('select', onSelect) }
+  }, [emblaApi])
+
+  const scrollTo = useCallback((i: number) => emblaApi?.scrollTo(i), [emblaApi])
 
   if (!services || services.length === 0) return null
 
   return (
     <section className="bg-[#fff5ce] py-14 px-4 md:px-[52px]">
       <div className="max-w-[1440px] mx-auto">
+
         {/* Section heading */}
         {heading && (
-          <h2 className="font-display text-[32px] md:text-[30px] text-black text-center leading-[1.5] mb-4">
-            {heading}
-          </h2>
+          <AnimateOnScroll animation="fade-up">
+            <h2 className="font-display text-[32px] md:text-[30px] text-black text-center leading-[1.5] mb-4">
+              {heading}
+            </h2>
+          </AnimateOnScroll>
         )}
         {subheading && (
-          <p className="text-[14px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-10">
-            {subheading}
-          </p>
+          <AnimateOnScroll animation="fade-up" delay={100}>
+            <p className="text-[14px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-10">
+              {subheading}
+            </p>
+          </AnimateOnScroll>
         )}
 
-        {/* Mobile — horizontal scroll carousel */}
-        <div className="md:hidden overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-4">
-            {services.map((svc, i) => (
-              <div key={svc.id ?? i} className="flex-[0_0_75%] min-w-0">
-                <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
-              </div>
-            ))}
+        {/* Mobile — horizontal scroll carousel with dot indicators */}
+        <div className="md:hidden">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex gap-4">
+              {services.map((svc, i) => (
+                <div key={svc.id ?? i} className="flex-[0_0_80%] min-w-0">
+                  <AnimateOnScroll animation="fade-up" delay={i * 100}>
+                    <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
+                  </AnimateOnScroll>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Dot indicators */}
+          {services.length > 1 && (
+            <div className="flex justify-center gap-[4px] mt-6">
+              {services.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => scrollTo(i)}
+                  aria-label={`Go to service ${i + 1}`}
+                  className="p-0 border-none bg-transparent"
+                >
+                  <span
+                    className={`block rounded-full transition-colors duration-200 w-[10px] h-[10px] ${
+                      i === selectedIndex ? 'bg-black' : 'bg-black/30'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Desktop — 3-column flex */}
         <div className="hidden md:flex justify-center gap-8 lg:gap-12">
           {services.map((svc, i) => (
-            <div key={svc.id ?? i} className="flex-1 max-w-[320px]">
+            <AnimateOnScroll key={svc.id ?? i} animation="fade-up" delay={i * 120} className="flex-1 max-w-[320px]">
               <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
-            </div>
+            </AnimateOnScroll>
           ))}
         </div>
 
         {/* CTA button */}
         {ctaLabel && ctaUrl && (
-          <div className="mt-12 flex justify-center">
+          <AnimateOnScroll animation="fade-up" delay={200} className="mt-12 flex justify-center">
             <Link
               href={ctaUrl}
               className="flex items-center justify-center gap-4 h-10 px-[20px] bg-[#86d0ef] rounded-[20px] text-[14px] font-bold text-black min-w-[320px] hover:opacity-90 transition-opacity"
             >
               {ctaLabel}
             </Link>
-          </div>
+          </AnimateOnScroll>
         )}
       </div>
     </section>
@@ -100,7 +141,7 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
           }}
         />
 
-        {/* Photo inset with organic rounded corners — matches Figma shadow + border-radius */}
+        {/* Photo inset with organic rounded corners */}
         {svc.image && (
           <div
             className="absolute overflow-hidden shadow-[0px_5px_9px_0px_rgba(2,147,52,0.05)]"
@@ -120,7 +161,7 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
       {/* Label badge — white pill below the blob */}
       {svc.title && (
         <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] px-4 py-2 min-w-[220px] max-w-full text-center">
-          <span className="font-bold text-[#01162c] text-[14px] md:text-[16px] leading-[1.48]">
+          <span className="font-bold text-[#01162c] text-[12px] md:text-[16px] leading-[1.48]">
             {svc.title}
           </span>
         </div>

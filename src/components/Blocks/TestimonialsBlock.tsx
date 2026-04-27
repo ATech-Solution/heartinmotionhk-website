@@ -3,6 +3,7 @@
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { useCallback, useEffect, useState } from 'react'
+import { AnimateOnScroll } from '@/components/ui/AnimateOnScroll'
 
 interface Testimonial {
   id?: string
@@ -34,95 +35,103 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
   if (!testimonials || testimonials.length === 0) return null
 
   return (
-    <section className="bg-[#f5eded] pt-10 pb-16 px-4 md:px-[52px]">
+    <section className="bg-white pt-10 pb-16 px-4 md:px-[52px]">
       <div className="max-w-[1444px] mx-auto">
-        {/* Decorative horizontal line — matches Figma */}
-        <div
-          className="w-full h-[2px] mb-10 rounded-full"
-          style={{
-            background:
-              'linear-gradient(90deg, transparent 0%, #b2e6e3 20%, #fbacb2 50%, #86d0ef 80%, transparent 100%)',
-          }}
-        />
+
+        {/* Decorative horizontal gradient line */}
+        <AnimateOnScroll animation="fade">
+          <div
+            className="w-full h-[2px] mb-10 rounded-full"
+            style={{
+              background:
+                'linear-gradient(90deg, transparent 0%, #b2e6e3 20%, #fbacb2 50%, #86d0ef 80%, transparent 100%)',
+            }}
+          />
+        </AnimateOnScroll>
 
         {heading && (
-          <h2 className="font-display text-[28px] md:text-[36px] text-black text-center mb-10">
-            {heading}
-          </h2>
+          <AnimateOnScroll animation="fade-up">
+            <h2 className="font-display text-[28px] md:text-[36px] text-black text-center mb-10">
+              {heading}
+            </h2>
+          </AnimateOnScroll>
         )}
 
-        <div className="relative flex items-center gap-4">
-          {/* Prev arrow */}
-          {testimonials.length > 1 && (
-            <button
-              onClick={scrollPrev}
-              aria-label="Previous testimonial"
-              className="flex-shrink-0 text-[32px] text-black/40 hover:text-black transition-colors leading-none"
-            >
-              ‹
-            </button>
-          )}
+        <AnimateOnScroll animation="fade-up" delay={100}>
+          <div className="relative flex items-center gap-4">
+            {/* Prev arrow */}
+            {testimonials.length > 1 && (
+              <button
+                onClick={scrollPrev}
+                aria-label="Previous testimonial"
+                className="flex-shrink-0 text-[40px] text-black/40 hover:text-black transition-colors leading-none pb-1"
+              >
+                ‹
+              </button>
+            )}
 
-          {/* Carousel */}
-          <div className="overflow-hidden flex-1" ref={emblaRef}>
-            <div className="flex">
-              {testimonials.map((t, i) => (
-                <div key={t.id ?? i} className="flex-[0_0_100%] min-w-0">
-                  <div className="flex flex-col items-center gap-4 px-4">
-                    {t.quote && (
-                      <p className="font-body text-[16px] md:text-[20px] text-black text-center leading-normal max-w-[824px]">
-                        &ldquo;{t.quote}&rdquo;
-                      </p>
-                    )}
-                    {(t.authorName || t.authorTitle || t.authorCompany) && (
-                      <p className="font-bold text-[14px] md:text-[16px] text-black text-center">
-                        {[
-                          t.authorName ? `- ${t.authorName}` : null,
-                          t.authorTitle,
-                          t.authorCompany,
-                        ]
-                          .filter(Boolean)
-                          .join(', ')}
-                        {' -'}
-                      </p>
-                    )}
+            {/* Carousel viewport */}
+            <div className="overflow-hidden flex-1" ref={emblaRef}>
+              <div className="flex">
+                {testimonials.map((t, i) => (
+                  <div key={t.id ?? i} className="flex-[0_0_100%] min-w-0">
+                    <div className="flex flex-col items-center gap-4 px-2 md:px-4">
+                      {t.quote && (
+                        <p className="font-body text-[16px] md:text-[20px] text-black text-center leading-normal max-w-[824px]">
+                          &ldquo;{t.quote}&rdquo;
+                        </p>
+                      )}
+                      {(t.authorName || t.authorTitle || t.authorCompany) && (
+                        <p className="font-bold text-[12px] md:text-[16px] text-black text-center">
+                          {[
+                            t.authorName ? `- ${t.authorName}` : null,
+                            t.authorTitle,
+                            t.authorCompany,
+                          ]
+                            .filter(Boolean)
+                            .join(', ')}
+                          {' -'}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Next arrow */}
+            {testimonials.length > 1 && (
+              <button
+                onClick={scrollNext}
+                aria-label="Next testimonial"
+                className="flex-shrink-0 text-[40px] text-black/40 hover:text-black transition-colors leading-none pb-1"
+              >
+                ›
+              </button>
+            )}
+          </div>
+
+          {/* Dot indicators */}
+          {testimonials.length > 1 && (
+            <div className="flex justify-center gap-[4px] mt-6">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => emblaApi?.scrollTo(i)}
+                  aria-label={`Go to testimonial ${i + 1}`}
+                  className="p-0 border-none bg-transparent"
+                >
+                  <span
+                    className={`block rounded-full transition-colors duration-200 w-[10px] h-[10px] ${
+                      i === selectedIndex ? 'bg-black' : 'bg-black/30'
+                    }`}
+                  />
+                </button>
               ))}
             </div>
-          </div>
-
-          {/* Next arrow */}
-          {testimonials.length > 1 && (
-            <button
-              onClick={scrollNext}
-              aria-label="Next testimonial"
-              className="flex-shrink-0 text-[32px] text-black/40 hover:text-black transition-colors leading-none"
-            >
-              ›
-            </button>
           )}
-        </div>
+        </AnimateOnScroll>
 
-        {/* Dot indicators */}
-        {testimonials.length > 1 && (
-          <div className="flex justify-center gap-[4px] mt-6">
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => emblaApi?.scrollTo(i)}
-                aria-label={`Go to testimonial ${i + 1}`}
-                className="p-0 border-none bg-transparent"
-              >
-                <span
-                  className={`block rounded-full transition-colors duration-200 w-[10px] h-[10px] ${
-                    i === selectedIndex ? 'bg-black' : 'bg-black/30'
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     </section>
   )

@@ -26,6 +26,14 @@ export const HeroBlock: Block = {
       name: 'subheadline',
       type: 'textarea',
       localized: true,
+      admin: { description: 'Shown on desktop (≥768px).' },
+    },
+    {
+      name: 'subheadlineMobile',
+      type: 'textarea',
+      localized: true,
+      label: 'Subheadline (Mobile & Tablet)',
+      admin: { description: 'Shown on mobile and tablet (<768px). Falls back to Subheadline if left empty.' },
     },
     {
       name: 'bannerImage',

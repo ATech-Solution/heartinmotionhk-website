@@ -10,6 +10,7 @@ import { TestimonialsBlockComponent } from './TestimonialsBlock'
 import { AboutMeBlockComponent } from './AboutMeBlock'
 import { CoachingExperienceBlockComponent } from './CoachingExperienceBlock'
 import { AboutHeartInMotionBlockComponent } from './AboutHeartInMotionBlock'
+import { AboutShortcutBlockComponent } from './AboutShortcutBlock'
 import { ServiceDetailBlockComponent } from './ServiceDetailBlock'
 import { ContactFormBlockComponent } from './ContactFormBlock'
 import { BookingSessionBlockComponent } from './BookingSessionBlock'
@@ -28,6 +29,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   'about-me': AboutMeBlockComponent,
   'coaching-experience': CoachingExperienceBlockComponent,
   'about-him': AboutHeartInMotionBlockComponent,
+  'about-shortcut': AboutShortcutBlockComponent,
   'service-detail': ServiceDetailBlockComponent,
   'contact-form': ContactFormBlockComponent,
   'booking-session': BookingSessionBlockComponent,

@@ -67,7 +67,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
               <Image
                 src={logoUrl}
                 alt={general?.siteName ?? 'Heart in Motion HK'}
-                width={56}
+                width={168}
                 height={50}
                 className="h-12 w-auto object-contain"
               />

@@ -13,6 +13,7 @@ import { TestimonialsBlock } from '@/blocks/TestimonialsBlock'
 import { AboutMeBlock } from '@/blocks/AboutMeBlock'
 import { CoachingExperienceBlock } from '@/blocks/CoachingExperienceBlock'
 import { AboutHeartInMotionBlock } from '@/blocks/AboutHeartInMotionBlock'
+import { AboutShortcutBlock } from '@/blocks/AboutShortcutBlock'
 import { ServiceDetailBlock } from '@/blocks/ServiceDetailBlock'
 import { ContactFormBlock } from '@/blocks/ContactFormBlock'
 import { BookingSessionBlock } from '@/blocks/BookingSessionBlock'
@@ -111,6 +112,7 @@ export const Pages: CollectionConfig = {
         AboutMeBlock,
         CoachingExperienceBlock,
         AboutHeartInMotionBlock,
+        AboutShortcutBlock,
         ServiceDetailBlock,
         ContactFormBlock,
         BookingSessionBlock,

@@ -71,10 +71,12 @@ export function SiteFooter({ footer, general }: FooterProps) {
                 height={61}
                 className="h-[61px] w-auto object-contain"
               />
-            ) : null}
+            ) : 
             <span className="font-display text-[34px] text-[#3f3e3e] leading-[0.8] whitespace-pre">
               {'heart \nin motion'}
             </span>
+            }
+            
           </div>
         </div>
 

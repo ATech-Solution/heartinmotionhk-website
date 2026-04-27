@@ -3,6 +3,7 @@ import { RichText } from '@/components/ui/RichText'
 
 interface AboutHeartInMotionBlockProps {
   heading?: string
+  body?: any
   missionTitle?: string
   mission?: any
   visionTitle?: string
@@ -13,6 +14,7 @@ interface AboutHeartInMotionBlockProps {
 
 export function AboutHeartInMotionBlockComponent({
   heading,
+  body,
   missionTitle,
   mission,
   visionTitle,
@@ -24,7 +26,12 @@ export function AboutHeartInMotionBlockComponent({
     <section className="py-16 px-6 md:px-16 bg-brand-beige-dark">
       <div className="max-w-6xl mx-auto">
         {heading && (
-          <h2 className="font-display text-3xl md:text-4xl text-brand-dark mb-10">{heading}</h2>
+          <h2 className="font-display text-3xl md:text-4xl text-brand-dark mb-6">{heading}</h2>
+        )}
+        {body && (
+          <div className="text-[16px] text-[#3f3e3e] leading-[1.5] max-w-[883px] mb-10">
+            <RichText content={body} />
+          </div>
         )}
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">

@@ -1,5 +1,6 @@
 import { MediaImage } from '@/components/ui/MediaImage'
 import { RichText } from '@/components/ui/RichText'
+import { AnimateOnScroll } from '@/components/ui/AnimateOnScroll'
 
 interface RealChallengeBlockProps {
   heading?: string
@@ -9,16 +10,17 @@ interface RealChallengeBlockProps {
 
 export function RealChallengeBlockComponent({ heading, body, animatedGif }: RealChallengeBlockProps) {
   return (
-    <section className="bg-[#f5eded] py-12 md:py-16 px-4 md:px-[52px]">
+    <section className="bg-white py-12 md:py-16 px-4 md:px-[52px]">
       <div className="max-w-[1440px] mx-auto">
+
         {/* Mobile: illustration above, text below */}
         <div className="flex flex-col md:hidden gap-6">
           {animatedGif && (
-            <div className="w-full flex justify-center">
+            <AnimateOnScroll animation="fade" className="w-full flex justify-center">
               <MediaImage media={animatedGif} className="max-w-[320px] w-full h-auto" unoptimized />
-            </div>
+            </AnimateOnScroll>
           )}
-          <div>
+          <AnimateOnScroll animation="fade-up" delay={100}>
             {heading && (
               <h2 className="font-display text-[32px] text-black leading-[0.97] mb-4">
                 {heading}
@@ -29,17 +31,18 @@ export function RealChallengeBlockComponent({ heading, body, animatedGif }: Real
                 <RichText content={body} />
               </div>
             )}
-          </div>
+          </AnimateOnScroll>
         </div>
 
-        {/* Desktop: illustration ~40% left, text ~60% right */}
+        {/* Desktop: illustration ~40% left, heading + text ~60% right */}
         <div className="hidden md:flex items-center gap-16">
-          <div className="w-[40%] flex-shrink-0 flex justify-center">
+          <AnimateOnScroll animation="fade-left" className="w-[40%] flex-shrink-0 flex justify-center">
             {animatedGif && (
               <MediaImage media={animatedGif} className="max-w-full h-auto" unoptimized />
             )}
-          </div>
-          <div className="flex-1">
+          </AnimateOnScroll>
+
+          <AnimateOnScroll animation="fade-right" delay={150} className="flex-1">
             {heading && (
               <h2 className="font-display text-[40px] text-black leading-[0.97] mb-6">
                 {heading}
@@ -50,8 +53,9 @@ export function RealChallengeBlockComponent({ heading, body, animatedGif }: Real
                 <RichText content={body} />
               </div>
             )}
-          </div>
+          </AnimateOnScroll>
         </div>
+
       </div>
     </section>
   )

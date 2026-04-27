@@ -23,6 +23,12 @@ export const AboutHeartInMotionBlock: Block = {
       required: true,
     },
     {
+      name: 'body',
+      type: 'richText',
+      localized: true,
+      admin: { description: 'Optional introductory paragraph shown below the heading.' },
+    },
+    {
       name: 'missionTitle',
       type: 'text',
       localized: true,
