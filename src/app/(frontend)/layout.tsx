@@ -64,7 +64,7 @@ export default async function FrontendLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="font-body bg-brand-beige text-brand-dark antialiased">
+      <body className="font-body bg-brand-beigess bg-white text-brand-dark antialiased">
         <SiteHeader header={header} general={general} locale={locale} />
         <main>{children}</main>
         <SiteFooter footer={footer} general={general} />

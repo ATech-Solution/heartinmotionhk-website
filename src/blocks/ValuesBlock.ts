@@ -45,11 +45,6 @@ export const ValuesBlock: Block = {
           localized: true,
         },
         {
-          name: 'icon',
-          type: 'upload',
-          relationTo: 'media',
-        },
-        {
           name: 'decorativeImage',
           type: 'upload',
           label: 'Decorative Illustration',

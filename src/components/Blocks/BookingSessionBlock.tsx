@@ -70,7 +70,7 @@ export function BookingSessionBlockComponent({
 
                 {/* Right: Book now + action buttons */}
                 <div className="flex flex-col items-center gap-[4px] ml-0 md:ml-6 flex-shrink-0">
-                  <span className="text-[14px] font-bold text-black text-center leading-[26px]">
+                  <span className="text-[16px] font-bold text-black text-center leading-[26px]">
                     Book Now
                   </span>
                   <div className="flex items-center gap-[9px]">

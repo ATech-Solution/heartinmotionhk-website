@@ -59,27 +59,8 @@ export function SiteFooter({ footer, general }: FooterProps) {
 
   return (
     <footer className="bg-[#f5eded] relative">
-      <div className="max-w-[1440px] mx-auto px-[100px] pt-[100px] pb-[15px]">
-        {/* Logo top-right */}
-        <div className="flex justify-end mb-2">
-          <div className="flex items-center gap-3">
-            {logoUrl ? (
-              <Image
-                src={logoUrl}
-                alt={general?.siteName ?? 'Heart in Motion HK'}
-                width={69}
-                height={61}
-                className="h-[61px] w-auto object-contain"
-              />
-            ) : 
-            <span className="font-display text-[34px] text-[#3f3e3e] leading-[0.8] whitespace-pre">
-              {'heart \nin motion'}
-            </span>
-            }
-            
-          </div>
-        </div>
-
+      <div className="max-w-[1300px] mx-auto px-[100px] pt-[100px] pb-[15px]">
+        
         {/* 2-column main content */}
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 mt-8">
           {/* Left column — Nav links */}
@@ -167,11 +148,32 @@ export function SiteFooter({ footer, general }: FooterProps) {
               )}
             </div>
           </div>
+
+          {/* Logo top-right */}
+          <div className="flex justify-end mb-2">
+            <div className="flex items-center gap-3">
+              {logoUrl ? (
+                <Image
+                  src={logoUrl}
+                  alt={general?.siteName ?? 'Heart in Motion HK'}
+                  width={69}
+                  height={61}
+                  className="h-[61px] w-auto object-contain"
+                />
+              ) : 
+              <span className="font-display text-[34px] text-[#3f3e3e] leading-[0.8] whitespace-pre">
+                {'heart \nin motion'}
+              </span>
+              }
+              
+            </div>
+          </div>    
+
         </div>
 
         {/* Copyright */}
         <div className="mt-[55px]">
-          <p className="text-[14px] text-black">
+          <p className="text-[16px] text-black">
             {footer?.copyrightText ?? `©${new Date().getFullYear()} Heart in Motion - All Rights Reserved`}
           </p>
         </div>

@@ -48,8 +48,8 @@ export function ServicesOverviewBlockComponent({
   if (!services || services.length === 0) return null
 
   return (
-    <section className="bg-[#fff5ce] py-14 px-4 md:px-[52px]">
-      <div className="max-w-[1440px] mx-auto">
+    <section className="bg-[#fff5ce] pt-[60px] pb-[80px] px-4 md:px-[52px]">
+      <div className="max-w-[1337px] mx-auto">
 
         {/* Section heading */}
         {heading && (
@@ -61,7 +61,7 @@ export function ServicesOverviewBlockComponent({
         )}
         {subheading && (
           <AnimateOnScroll animation="fade-up" delay={100}>
-            <p className="text-[14px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-10">
+            <p className="text-[16px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-10">
               {subheading}
             </p>
           </AnimateOnScroll>
@@ -116,9 +116,10 @@ export function ServicesOverviewBlockComponent({
           <AnimateOnScroll animation="fade-up" delay={200} className="mt-12 flex justify-center">
             <Link
               href={ctaUrl}
-              className="flex items-center justify-center gap-4 h-10 px-[20px] bg-[#86d0ef] rounded-[20px] text-[14px] font-bold text-black min-w-[320px] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center gap-4 h-[47px] px-5 bg-[#86d0ef] rounded-[20px] text-[16px] font-bold text-black w-[320px] hover:opacity-90 transition-opacity"
             >
               {ctaLabel}
+              <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
             </Link>
           </AnimateOnScroll>
         )}
@@ -158,9 +159,9 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
         )}
       </div>
 
-      {/* Label badge — white pill below the blob */}
+      {/* Label badge — white pill below the blob, h-[46px] matching Figma */}
       {svc.title && (
-        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] px-4 py-2 min-w-[220px] max-w-full text-center">
+        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] px-4 h-[46px] flex items-center justify-center min-w-[240px] max-w-full text-center">
           <span className="font-bold text-[#01162c] text-[12px] md:text-[16px] leading-[1.48]">
             {svc.title}
           </span>

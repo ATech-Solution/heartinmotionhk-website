@@ -40,7 +40,7 @@ export function AboutShortcutBlockComponent({
               </h2>
             )}
             {body && (
-              <div className="text-[14px] text-[#3f3e3e] text-justify leading-[1.5]">
+              <div className="text-[16px] text-[#3f3e3e] text-justify leading-[1.5]">
                 <RichText content={body} />
               </div>
             )}
@@ -52,7 +52,7 @@ export function AboutShortcutBlockComponent({
           <AnimateOnScroll animation="fade-up" delay={200}>
             <Link
               href={ctaUrl}
-              className="flex items-center justify-center gap-3 h-10 px-[15px] bg-[#86d0ef] rounded-[15px] text-[14px] font-bold text-black w-[328px] max-w-full hover:opacity-90 transition-opacity"
+              className="flex items-center justify-center gap-3 h-10 px-[15px] bg-[#86d0ef] rounded-[15px] text-[16px] font-bold text-black w-[328px] max-w-full hover:opacity-90 transition-opacity"
             >
               {ctaLabel}
               <span className="inline-block rotate-[-90deg] text-base leading-none">›</span>

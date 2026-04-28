@@ -91,7 +91,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                   <Link
                     key={i}
                     href={href}
-                    className={`text-[18px] text-[#000033] transition-colors duration-150 hover:text-brand-teal ${
+                    className={`text-[18px] text-[#000033] transition-colors duration-150 hover:text-brand-teals hover:font-scale ${
                       isFirst ? 'font-bold' : 'font-normal'
                     }`}
                   >
@@ -112,14 +112,14 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                   className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black px-8"
                 >
                   {connectLabel}
-                  <span className="rotate-[0deg] inline-block text-2xl font-bold">›</span>
+                  <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
                 </a>
                 <a
                   href={emailUrl}
                   className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[16px] font-bold text-black px-8"
                 >
                   {emailLabel}
-                  <span className="rotate-[0deg] inline-block text-2xl font-bold">›</span>
+                  <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
                 </a>
               </div>
             </div>
@@ -135,8 +135,8 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             <Image
               src={logoUrl}
               alt={general?.siteName ?? 'Heart in Motion HK'}
-              width={44}
-              height={40}
+              width={168}
+              height={50}
               className="h-10 w-auto object-contain"
             />
           ) : (
@@ -213,27 +213,9 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
         </button>
       </div>
 
-      {/* Mobile CTA bar — always visible below mobile navbar */}
-      <div className="lg:hidden bg-white px-4 pb-3 flex flex-col gap-3">
-        <a
-          href={connectUrl}
-          className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] font-bold text-black"
-        >
-          {connectLabel}
-          <span className="rotate-[-90deg] inline-block text-sm">›</span>
-        </a>
-        <a
-          href={emailUrl}
-          className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[14px] font-bold text-black"
-        >
-          {emailLabel}
-          <span className="rotate-[-90deg] inline-block text-sm">›</span>
-        </a>
-      </div>
-
       {/* Mobile menu drawer */}
       {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-5 space-y-4 shadow-lg">
+        <div className="md:hidden mobile-menu-open bg-white border-gray-100 px-4 py-5 space-y-4 shadow-lg">
           {/* Nav links */}
           <nav className="space-y-1">
             {navItems.map((item, i) => {
@@ -246,7 +228,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                   key={i}
                   href={href}
                   onClick={() => setMobileOpen(false)}
-                  className="block py-2.5 text-[16px] text-brand-dark hover:text-brand-teal transition-colors"
+                  className="block py-2.5 text-[18px] font-bold text-brand-dark hover:text-brand-teal transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -254,11 +236,31 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             })}
           </nav>
 
-          <div className="pt-2 border-t border-gray-100">
+          <div className="hidden pt-2 border-t border-gray-100">
             <LocaleSwitcher currentLocale={locale ?? 'en'} />
           </div>
         </div>
       )}
+
+      {/* Mobile CTA bar — always visible below mobile navbar */}
+      <div className="mobile-cta lg:hidden bg-white px-4 pb-3 flex flex-col gap-3">
+        <a
+          href={connectUrl}
+          className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black"
+        >
+          {connectLabel}
+          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+        </a>
+        <a
+          href={emailUrl}
+          className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[16px] font-bold text-black"
+        >
+          {emailLabel}
+          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+        </a>
+      </div>
+
+      
     </header>
   )
 }

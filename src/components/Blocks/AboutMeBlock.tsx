@@ -11,7 +11,7 @@ interface AboutMeBlockProps {
 export function AboutMeBlockComponent({ heading, body, profileImage, certImages }: AboutMeBlockProps) {
   return (
     <section className="py-16 px-6 md:px-16 bg-white">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-[1110px] mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-start mb-12">
           <div>
             {heading && (

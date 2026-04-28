@@ -30,18 +30,18 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
   if (!values || values.length === 0) return null
 
   return (
-    <section className="bg-white pb-16 pt-4 px-4 md:px-[52px]">
-      <div className="max-w-[1440px] mx-auto">
+    <section className="bg-white pt-[50px] pb-[60px] md:pt-[60px] md:pb-[60px] px-4 md:px-[52px]">
+      <div className="max-w-[1000px] mx-auto">
         {sectionIntro && (
-          <AnimateOnScroll animation="fade-up" className="mb-10">
-            <div className="text-[14px] md:text-[16px] text-black text-justify leading-[1.5] max-w-[883px]">
+          <AnimateOnScroll animation="fade-up" className="mb-8 md:mb-10">
+            <div className="text-[16px] md:text-[16px] text-black text-justify leading-[1.5] max-w-[883px]">
               <RichText content={sectionIntro} />
             </div>
           </AnimateOnScroll>
         )}
 
         {/* Desktop: 2-column grid — illustration above pill + body */}
-        <div className="hidden md:grid md:grid-cols-2 gap-x-[85px] gap-y-[40px]">
+        <div className="hidden md:grid md:grid-cols-2 gap-x-[50px] gap-y-[40px]">
           {values.map((val, i) => {
             const pillBg = pillColorMap[val.color ?? 'teal'] ?? pillColorMap.teal
             const anim = cardAnimations[i % cardAnimations.length]
@@ -49,7 +49,7 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
               <AnimateOnScroll key={i} animation={anim} delay={i * 80}>
                 <div className="flex flex-col">
                   {/* Illustration sits above-right, baseline-aligned with pill */}
-                  <div className="flex justify-end h-[220px] items-end pb-2">
+                  <div className="flex justify-center h-[220px] items-end pb-2">
                     {val.decorativeImage ? (
                       <MediaImage
                         media={val.decorativeImage}
@@ -62,10 +62,10 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
 
                   {/* Colored pill header */}
                   <div
-                    className={`relative h-[60px] w-full max-w-[394px] rounded-[30px] ${pillBg} flex items-center justify-center`}
+                    className={`relative h-[60px] w-full rounded-[30px] ${pillBg} flex items-center`}
                   >
                     {val.title && (
-                      <span className="font-bold text-[20px] text-black text-center px-6">
+                      <span className="font-bold text-[20px] text-black text-left px-6">
                         {val.title}
                       </span>
                     )}
@@ -73,7 +73,7 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
 
                   {/* Body text */}
                   {val.description && (
-                    <p className="mt-5 text-[16px] text-[#3f3e3e] text-justify leading-[1.85] max-w-[397px] pr-5">
+                    <p className="mt-5 text-[16px] text-[#3f3e3e] text-justify leading-[1.48]">
                       {val.description}
                     </p>
                   )}
@@ -84,23 +84,24 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
         </div>
 
         {/* Mobile: single-column stacked cards */}
-        <div className="md:hidden flex flex-col gap-8">
+        <div className="md:hidden flex flex-col gap-6">
           {values.map((val, i) => {
             const pillBg = pillColorMap[val.color ?? 'teal'] ?? pillColorMap.teal
             return (
               <AnimateOnScroll key={i} animation="fade-up" delay={i * 100}>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
+                  {/* Colored pill — full width, h-[40px] matching Figma button height */}
                   <div
-                    className={`relative h-[56px] w-full max-w-[390px] rounded-[30px] ${pillBg} flex items-center justify-center`}
+                    className={`relative h-[40px] w-full rounded-[20px] ${pillBg} flex items-center`}
                   >
                     {val.title && (
-                      <span className="font-bold text-[18px] text-black text-center px-5">
+                      <span className="font-bold text-[16px] text-black px-5">
                         {val.title}
                       </span>
                     )}
                   </div>
                   {val.description && (
-                    <p className="text-[14px] text-[#3f3e3e] text-justify leading-[1.85]">
+                    <p className="text-[16px] text-[#3f3e3e] text-justify leading-[1.5]">
                       {val.description}
                     </p>
                   )}
