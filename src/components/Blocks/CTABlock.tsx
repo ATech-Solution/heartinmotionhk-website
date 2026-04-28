@@ -58,8 +58,8 @@ export function CTABlockComponent({
         </div>
 
         {/* Desktop: text left, button right */}
-        <div className="hidden md:flex items-center justify-between gap-10">
-          <AnimateOnScroll animation="fade-left" className="flex flex-col gap-5 max-w-[897px]">
+        <div className={`hidden ${subheading ? 'md:flex items-center justify-between gap-10' : 'md:grid items-center justify-center gap-3 min-h-[100px]' }`}>
+          <AnimateOnScroll animation="fade-left" className={`${subheading ? 'flex flex-col gap-5 max-w-[897px]': 'max-w-full'}`}>
             {heading && (
               <h2 className="font-display text-[30px] text-black leading-[1.5]">
                 &ldquo;{heading}&rdquo;
@@ -71,14 +71,11 @@ export function CTABlockComponent({
               </p>
             )}
           </AnimateOnScroll>
-          {/* <div class="hidden md:grid items-center justify-center gap-3 min-h-[100px]"><div class="him-animate him-fade-left max-w-full him-visible"><h2 class="font-display text-[30px] text-black leading-[1.5]">“<!-- -->Unlock Your Strength, Ignite Your Passion<!-- -->”</h2></div><div class="him-animate him-fade-right him-visible mx-auto"><a href="booking-session" class="flex items-center justify-between gap-1 h-10 px-6 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black w-[235px] hover:opacity-90 transition-opacity">Book a session<span class="inline-block rotate-[-0deg] text-base leading-none">›</span></a></div></div> */}
 
           {ctaLabel && ctaUrl && (
-            <AnimateOnScroll animation="fade-right" delay={150} className="flex-shrink-0">
+            <AnimateOnScroll animation="fade-right" delay={150} className={`${subheading ? 'flex-shrink-0': 'mx-auto'}`}>
               <a
-                href={ctaUrl}
-                className="inline-flex items-center justify-center gap-4 h-[47px] px-5 bg-[#8ec0bd] rounded-[20px] text-[16px] font-bold text-black w-[320px] hover:opacity-90 transition-opacity"
-              >
+                href={ctaUrl} className="inline-flex items-center justify-between gap-1 h-10 px-6 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black w-[235px] hover:opacity-90 transition-opacity">
                 {ctaLabel}
                 <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
               </a>
