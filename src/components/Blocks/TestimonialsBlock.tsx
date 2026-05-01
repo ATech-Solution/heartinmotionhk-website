@@ -33,20 +33,14 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
   }, [emblaApi])
 
   if (!testimonials || testimonials.length === 0) return null
-
+  // heading = heading || 'What my clients say'
   return (
-    <section className="bg-white pt-[40px] pb-[50px] md:pt-[60px] md:pb-[80px] px-4 md:px-[52px]">
+    <section className="bg-white pt-[40px] pb-[50px] md:pt-[28px] md:pb-[60px] px-4 md:px-[52px]">
       <div className="max-w-[1337px] mx-auto">
 
         {/* Decorative horizontal gradient line — desktop only */}
         <AnimateOnScroll animation="fade" className="hidden md:block">
-          <div
-            className="w-full h-[2px] mb-10 rounded-full"
-            style={{
-              background:
-                'linear-gradient(90deg, transparent 0%, #b2e6e3 20%, #fbacb2 50%, #86d0ef 80%, transparent 100%)',
-            }}
-          />
+          <div className="w-full h-[2px] mb-10 rounded-full"/>
         </AnimateOnScroll>
 
         {heading && (
@@ -58,7 +52,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
         )}
 
         <AnimateOnScroll animation="fade-up" delay={100}>
-          <div className="relative flex items-center gap-2 md:gap-4">
+          <div className="relative flex items-center gap-2 md:gap-4 md:w-[870px]">
             {/* Prev arrow — desktop only */}
             {testimonials.length > 1 && (
               <button
@@ -66,7 +60,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
                 aria-label="Previous testimonial"
                 className="hidden md:flex flex-shrink-0 w-[44px] h-[44px] items-center justify-center hover:opacity-60 transition-opacity"
               >
-                <img src="/icon/nav-left.svg" alt="" className="w-[14px] h-[21px]" aria-hidden="true" />
+                <img src="icon/angle-right.svg" alt="" className="rotate-[180deg] hover:rotate-[180deg] w-[25px] h-[25px]" aria-hidden="true" />
               </button>
             )}
 
@@ -77,7 +71,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
                   <div key={t.id ?? i} className="flex-[0_0_100%] min-w-0">
                     <div className="flex flex-col items-center gap-3 md:gap-4 px-0 md:px-4">
                       {t.quote && (
-                        <p className="font-body text-[16px] md:text-[20px] text-black text-center leading-normal max-w-[824px]">
+                        <p className="font-body text-[16px] md:text-[20px] text-black text-center leading-normal max-w-[790px]">
                           &ldquo;{t.quote}&rdquo;
                         </p>
                       )}
@@ -106,14 +100,14 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
                 aria-label="Next testimonial"
                 className="hidden md:flex flex-shrink-0 w-[44px] h-[44px] items-center justify-center hover:opacity-60 transition-opacity"
               >
-                <img src="/icon/nav-right.svg" alt="" className="w-[14px] h-[21px]" aria-hidden="true" />
+                <img src="icon/angle-right.svg" alt="" className="w-[25px] h-[25px]" aria-hidden="true" />
               </button>
             )}
           </div>
 
           {/* Dot indicators */}
           {testimonials.length > 1 && (
-            <div className="flex justify-center gap-[4px] mt-5 md:mt-6">
+            <div className="flex justify-center gap-[15px] mt-5 md:mt-10">
               {testimonials.map((_, i) => (
                 <button
                   key={i}

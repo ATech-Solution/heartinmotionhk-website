@@ -25,7 +25,7 @@ export function CTABlockComponent({
   const bgClass = bgStyles[background] ?? bgStyles['teal-gradient']
 
   return (
-    <section className={`${bgClass} px-4 md:px-[52px] min-h-[156px] md:min-h-[234px] flex items-center`}>
+    <section className={`${bgClass} px-4 md:px-[52px] min-h-[156px] md:min-h-[215px] flex items-center`}>
       <div className="w-full max-w-[1000px] mx-auto py-[28px] md:py-0">
 
         {/* Mobile: stacked, centered — matches Figma 156px banner */}
@@ -51,7 +51,7 @@ export function CTABlockComponent({
                 className="inline-flex items-center justify-between h-[40px] px-[15px] bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black w-[328px] max-w-full hover:opacity-90 transition-opacity"
               >
                 {ctaLabel}
-                <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+                <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />
               </a>
             </AnimateOnScroll>
           )}
@@ -73,11 +73,11 @@ export function CTABlockComponent({
           </AnimateOnScroll>
 
           {ctaLabel && ctaUrl && (
-            <AnimateOnScroll animation="fade-right" delay={150} className={`${subheading ? 'flex-shrink-0': 'mx-auto'}`}>
+            <AnimateOnScroll animation="fade-right" delay={150} className={`group transition-all duration-300 ${subheading ? 'flex-shrink-0': 'mx-auto'}`}>
               <a
-                href={ctaUrl} className="inline-flex items-center justify-between gap-1 h-10 px-6 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black w-[235px] hover:opacity-90 transition-opacity">
+                href={ctaUrl} className="inline-flex items-center justify-between gap-1 h-10 px-6 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black w-[235px] group-hover:text-white group-hover:bg-[#6C9A97] group-hover:shadow-lgs">
                 {ctaLabel}
-                <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+                <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
               </a>
             </AnimateOnScroll>
           )}

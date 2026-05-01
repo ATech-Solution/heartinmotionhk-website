@@ -48,20 +48,20 @@ export function ServicesOverviewBlockComponent({
   if (!services || services.length === 0) return null
 
   return (
-    <section className="bg-[#fff5ce] pt-[60px] pb-[80px] px-4 md:px-[52px]">
-      <div className="max-w-[1337px] mx-auto">
+    <section className="bg-[#fff5ce] pt-[55px] pb-[55px] px-4 md:px-[52px]">
+      <div className="max-w-[1200px] mx-auto">
 
         {/* Section heading */}
         {heading && (
           <AnimateOnScroll animation="fade-up">
-            <h2 className="font-display text-[32px] md:text-[30px] text-black text-center leading-[1.5] mb-4">
+            <h2 className="font-display text-[32px] md:text-[30px] text-black text-center leading-[1.5] mb-3">
               {heading}
             </h2>
           </AnimateOnScroll>
         )}
         {subheading && (
           <AnimateOnScroll animation="fade-up" delay={100}>
-            <p className="text-[16px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-10">
+            <p className="text-[16px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-13">
               {subheading}
             </p>
           </AnimateOnScroll>
@@ -72,7 +72,7 @@ export function ServicesOverviewBlockComponent({
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-4">
               {services.map((svc, i) => (
-                <div key={svc.id ?? i} className="flex-[0_0_80%] min-w-0">
+                <div key={svc.id ?? i} className="flex-[0_0_100%] min-w-0">
                   <AnimateOnScroll animation="fade-up" delay={i * 100}>
                     <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
                   </AnimateOnScroll>
@@ -83,7 +83,7 @@ export function ServicesOverviewBlockComponent({
 
           {/* Dot indicators */}
           {services.length > 1 && (
-            <div className="flex justify-center gap-[4px] mt-6">
+            <div className="flex justify-center gap-[4px] mt-4 mb-13">
               {services.map((_, i) => (
                 <button
                   key={i}
@@ -103,9 +103,9 @@ export function ServicesOverviewBlockComponent({
         </div>
 
         {/* Desktop — 3-column flex */}
-        <div className="hidden md:flex justify-center gap-8 lg:gap-12">
+        <div className="hidden md:flex gap-8 lg:gap-20">
           {services.map((svc, i) => (
-            <AnimateOnScroll key={svc.id ?? i} animation="fade-up" delay={i * 120} className="flex-1 max-w-[320px]">
+            <AnimateOnScroll key={svc.id ?? i} animation="fade-up" delay={i * 120} className="flex-1 max-w-[345px]">
               <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
             </AnimateOnScroll>
           ))}
@@ -113,13 +113,13 @@ export function ServicesOverviewBlockComponent({
 
         {/* CTA button */}
         {ctaLabel && ctaUrl && (
-          <AnimateOnScroll animation="fade-up" delay={200} className="mt-12 flex justify-center">
+          <AnimateOnScroll animation="fade-up" delay={200} className="mt-3 flex justify-center group transition-all duration-300">
             <Link
               href={ctaUrl}
-              className="inline-flex items-center justify-center gap-4 h-[47px] px-5 bg-[#86d0ef] rounded-[20px] text-[16px] font-bold text-black w-[320px] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center gap-4 h-[47px] px-5 bg-[#86d0ef] rounded-[20px] text-[16px] font-bold text-black w-[320px]s w-[235px] group-hover:text-white group-hover:bg-[#6C9A97] transition-all"
             >
               {ctaLabel}
-              <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+              <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
             </Link>
           </AnimateOnScroll>
         )}
@@ -130,27 +130,11 @@ export function ServicesOverviewBlockComponent({
 
 function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center md:items-end gap-4">
       {/* Blob + photo stacked container */}
-      <div className="relative w-full" style={{ aspectRatio: '1 / 1.05' }}>
-        {/* Coloured blob background */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundColor: blobColor,
-            borderRadius: '87% 87% 88% 87% / 87% 87% 88% 87%',
-          }}
-        />
-
-        {/* Photo inset with organic rounded corners */}
+      <div className="relative w-[240px] mx-auto md:w-full" style={{ aspectRatio: '1 / 1.05' }}>      
         {svc.image && (
-          <div
-            className="absolute overflow-hidden shadow-[0px_5px_9px_0px_rgba(2,147,52,0.05)]"
-            style={{
-              inset: '10%',
-              borderRadius: '101px 0 102px 101px',
-            }}
-          >
+          <div className="absolutes overflow-hidden">
             <MediaImage
               media={svc.image}
               className="w-full h-full object-cover object-bottom"
@@ -161,8 +145,8 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
 
       {/* Label badge — white pill below the blob, h-[46px] matching Figma */}
       {svc.title && (
-        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] px-4 h-[46px] flex items-center justify-center min-w-[240px] max-w-full text-center">
-          <span className="font-bold text-[#01162c] text-[12px] md:text-[16px] leading-[1.48]">
+        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] absolute mt-41 md:mt-55 px-5 h-[40px] md:h-[46px] flex items-center justify-center max-w-[310px]s md:min-w-[310px] max-w-full text-center">
+          <span className="font-bold text-[#01162c] text-[14px] md:text-[16px] leading-[1.48]">
             {svc.title}
           </span>
         </div>

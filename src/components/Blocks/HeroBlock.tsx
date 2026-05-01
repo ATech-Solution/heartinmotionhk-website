@@ -23,6 +23,8 @@ export function HeroBlockComponent({
   const desktopImg = bannerImage
   const mobileImg = mobileBannerImage ?? bannerImage
 
+  // const ctaLabel = "Learn more"
+  // const ctaUrl ="#"
   return (
     <section className="bg-white px-4 md:px-[52px] pt-3 pb-6 md:py-[48px] w-full">
 
@@ -30,10 +32,10 @@ export function HeroBlockComponent({
       {ctaLabel && ctaUrl && (
         <a
           href={ctaUrl}
-          className="md:hidden mb-3 w-full h-[40px] px-[15px] bg-[#8ec0bd] rounded-[15px] flex items-center justify-between text-[16px] font-bold text-black hover:opacity-90 transition-opacity"
+          className="md:hidden mb-3 w-full h-[40px] px-[15px] bg-[#8ec0bd] rounded-[15px] flex items-center justify-between text-[16px] font-bold text-black"
         >
           {ctaLabel}
-          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />
         </a>
       )}
 
@@ -78,7 +80,9 @@ export function HeroBlockComponent({
         >
           {headline && (
             <h1 className="font-display text-[32px] md:text-[48px] text-black leading-none mb-2 md:mb-3">
-              {headline}
+              {headline ? 
+                headline.split(' ').slice(0, 2).slice(0, 3).join(' ')
+                : ''}
             </h1>
           )}
           {/* Mobile subheadline */}
@@ -95,12 +99,15 @@ export function HeroBlockComponent({
           )}
           {/* Desktop CTA — inside image overlay */}
           {ctaLabel && ctaUrl && (
+            <div className="group transition-all duration-300">
             <a
               href={ctaUrl}
-              className="hidden md:inline-flex mt-4 items-center gap-2 px-6 py-3 bg-[#8ec0bd] text-black rounded-[15px] font-bold text-sm hover:opacity-90 transition-opacity"
+              className="hidden md:inline-flex mt-4 items-center gap-2 px-6 py-3 bg-[#8ec0bd] text-black rounded-[15px] font-bold text-sm group-hover:text-white group-hover:bg-[#6C9A97] transition-all"
             >
               {ctaLabel}
+              <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
             </a>
+            </div>
           )}
         </AnimateOnScroll>
       </div>

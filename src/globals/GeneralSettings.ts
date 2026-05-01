@@ -39,29 +39,6 @@ export const GeneralSettings: GlobalConfig = {
       localized: true,
     },
     {
-      name: 'socialLinks',
-      type: 'array',
-      fields: [
-        {
-          name: 'platform',
-          type: 'select',
-          required: true,
-          options: [
-            { label: 'Facebook', value: 'facebook' },
-            { label: 'LinkedIn', value: 'linkedin' },
-            { label: 'Instagram', value: 'instagram' },
-            { label: 'WhatsApp', value: 'whatsapp' },
-            { label: 'YouTube', value: 'youtube' },
-          ],
-        },
-        {
-          name: 'url',
-          type: 'text',
-          required: true,
-        },
-      ],
-    },
-    {
       name: 'bookingUrl',
       type: 'text',
       label: "Let's Connect URL",

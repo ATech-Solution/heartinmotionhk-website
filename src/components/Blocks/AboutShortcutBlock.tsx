@@ -55,7 +55,7 @@ export function AboutShortcutBlockComponent({
               className="flex items-center justify-center gap-3 h-10 px-[15px] bg-[#86d0ef] rounded-[15px] text-[16px] font-bold text-black w-[328px] max-w-full hover:opacity-90 transition-opacity"
             >
               {ctaLabel}
-              <span className="inline-block rotate-[-90deg] text-base leading-none">›</span>
+              <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />
             </Link>
           </AnimateOnScroll>
         )}

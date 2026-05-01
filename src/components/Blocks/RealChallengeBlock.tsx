@@ -35,7 +35,7 @@ export function RealChallengeBlockComponent({ heading, body, animatedGif }: Real
         </div>
 
         {/* Desktop: illustration ~40% left, heading + text ~60% right */}
-        <div className="hidden md:flex items-center gap-[80px]">
+        <div className="hidden md:flex items-center gap-[80px] px-4">
           <AnimateOnScroll animation="fade-left" className="w-[40%] flex-shrink-0 flex justify-center">
             {animatedGif && (
               <MediaImage media={animatedGif} className="max-w-full h-auto" unoptimized />
@@ -49,7 +49,7 @@ export function RealChallengeBlockComponent({ heading, body, animatedGif }: Real
               </h2>
             )}
             {body && (
-              <div className="text-[16px] text-black text-justify leading-[1.5] max-w-[473px]">
+              <div className="text-[16px] text-black text-justify leading-[1.5]">
                 <RichText content={body} />
               </div>
             )}

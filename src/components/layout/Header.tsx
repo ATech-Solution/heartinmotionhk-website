@@ -51,6 +51,8 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
   const ctaButtons = header?.ctaButtons ?? []
   const mobileCta = header?.mobileCta
 
+  const siteName = general?.siteName ?? null
+  const siteTagline = general?.siteTagline ?? null
   const connectUrl = mobileCta?.connectUrl ?? general?.bookingUrl ?? '#'
   const emailUrl = mobileCta?.emailUrl ?? (general?.contactEmail ? `mailto:${general.contactEmail}` : '#')
   const connectLabel = mobileCta?.connectLabel ?? "Let's connect"
@@ -73,7 +75,8 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
               />
             ) : (
               <span className="font-display text-[27px] text-[#3f3e3e] leading-tight">
-                heart<br />in motion
+                {siteName}<br/>
+                {siteTagline}
               </span>
             )}
           </Link>
@@ -107,20 +110,24 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                 <LocaleSwitcher currentLocale={locale ?? 'en'} />
               </div>
               <div className="px-4 flex gap-3">
-                <a
-                  href={connectUrl}
-                  className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black px-8"
-                >
-                  {connectLabel}
-                  <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
-                </a>
-                <a
-                  href={emailUrl}
-                  className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[16px] font-bold text-black px-8"
-                >
-                  {emailLabel}
-                  <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
-                </a>
+                <div className="group transition-all duration-300">
+                  <a
+                    href={connectUrl}
+                    className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black px-6 group-hover:text-white group-hover:bg-[#6C9A97]"
+                  >
+                    {connectLabel}
+                    <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
+                  </a>
+                </div>
+                <div className="group transition-all duration-300">
+                  <a
+                    href={emailUrl}
+                    className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[16px] font-bold text-black px-6 group-hover:text-white group-hover:bg-[#9C8A40]"
+                  >
+                    {emailLabel}
+                    <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -141,7 +148,8 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             />
           ) : (
             <span className="font-display text-[22px] text-[#3f3e3e] leading-tight">
-              heart in motion
+              {siteName}<br />
+              {siteTagline}
             </span>
           )}
         </Link>
@@ -164,7 +172,9 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <LocaleSwitcher currentLocale={locale ?? 'en'} />
+        <div className='hidden'>
+          <LocaleSwitcher currentLocale={locale ?? 'en'} />
+        </div>
         
       </div>
 
@@ -182,7 +192,8 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             />
           ) : (
             <span className="font-display text-[27px] text-[#3f3e3e] leading-tight">
-              heart<br />in motion
+              {siteName}<br />
+              {siteTagline}
             </span>
           )}
         </Link>
@@ -249,14 +260,14 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black"
         >
           {connectLabel}
-          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />
         </a>
         <a
           href={emailUrl}
           className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[16px] font-bold text-black"
         >
           {emailLabel}
-          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0" aria-hidden="true" />
+          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />
         </a>
       </div>
 

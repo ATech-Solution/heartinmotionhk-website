@@ -40,6 +40,7 @@ interface FooterProps {
     contactPhone?: string | null
     contactAddress?: string | null
     siteName?: string | null
+    siteTagline?: string | null
   } | null
 }
 
@@ -56,6 +57,11 @@ export function SiteFooter({ footer, general }: FooterProps) {
   const logoUrl = footer?.logo?.url ?? null
   const privacyPolicy = footer?.privacyPolicy ?? null
   const termsConditions = footer?.termsConditions ?? null
+
+  // console.log('General props:', JSON.stringify(general, null, 2))
+  // console.log('footer props:', JSON.stringify(footer, null, 2))
+  const siteName = general?.siteName ?? null
+  const siteTagline = general?.siteTagline ?? null
 
   return (
     <footer className="bg-[#f5eded] relative">
@@ -155,14 +161,15 @@ export function SiteFooter({ footer, general }: FooterProps) {
               {logoUrl ? (
                 <Image
                   src={logoUrl}
-                  alt={general?.siteName ?? 'Heart in Motion HK'}
+                  alt={siteName ?? 'Heart in Motion HK'}
                   width={69}
                   height={61}
                   className="h-[61px] w-auto object-contain"
                 />
               ) : 
               <span className="font-display text-[34px] text-[#3f3e3e] leading-[0.8] whitespace-pre">
-                {'heart \nin motion'}
+                {siteName ? siteName.split(' ').slice(0, 2).join(' ') : 'heart in motion'}
+                {siteTagline ? `\n${siteTagline}` : '' }
               </span>
               }
               

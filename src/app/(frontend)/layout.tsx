@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { unstable_noStore as noStore } from 'next/cache'
 import { Caveat, Inter } from 'next/font/google'
 import { SiteHeader } from '@/components/layout/Header'
 import { SiteFooter } from '@/components/layout/Footer'
@@ -30,27 +31,27 @@ export default async function FrontendLayout({
 }: {
   children: React.ReactNode
 }) {
+  noStore()
   const cookieStore = await cookies()
   const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
   const hasAdminToken = cookieStore.has('payload-token')
 
   const payload = await getPayload({ config })
 
-  // Maintenance mode check — skip for admin users and the maintenance page itself
-  if (!hasAdminToken && process.env.MAINTENANCE_MODE !== 'true') {
-    try {
-      const maintenance = await payload.findGlobal({
-        slug: 'maintenance-settings',
-        locale,
-      })
-      if ((maintenance as any)?.enabled) {
-        redirect('/maintenance')
+  // Maintenance mode check — skip for admin users, runs before loading layout data
+  if (!hasAdminToken) {
+    if (process.env.MAINTENANCE_MODE === 'true') {
+      redirect('/maintenance')
+    } else {
+      let maintenanceEnabled = false
+      try {
+        const maintenance = await payload.findGlobal({ slug: 'maintenance-settings', locale })
+        maintenanceEnabled = Boolean((maintenance as any)?.enabled)
+      } catch {
+        // If check fails, allow through
       }
-    } catch {
-      // If check fails, allow through
+      if (maintenanceEnabled) redirect('/maintenance')
     }
-  } else if (!hasAdminToken && process.env.MAINTENANCE_MODE === 'true') {
-    redirect('/maintenance')
   }
 
   const [header, footer, general] = await Promise.all([

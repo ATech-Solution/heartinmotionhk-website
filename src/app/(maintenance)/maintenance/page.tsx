@@ -10,6 +10,7 @@ export default async function MaintenancePage() {
   const cookieStore = await cookies()
   const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
 
+  let logo = null
   let title = 'We are under maintenance'
   let message = null
   let estimatedReturn = null
@@ -20,22 +21,23 @@ export default async function MaintenancePage() {
     title = (settings as any)?.title ?? title
     message = (settings as any)?.message
     estimatedReturn = (settings as any)?.estimatedReturn
+    logo = (settings as any)?.logo
   } catch {
     // Proceed with defaults if Payload is unavailable
   }
 
   return (
     <div className="min-h-screen bg-brand-beige flex items-center justify-center px-6">
-      <div className="max-w-lg text-center">
-        <div className="text-6xl mb-6">🔧</div>
+      <div className="max-w-2xl text-center">
+        <div className="text-6xl mb-6">{logo ? <img src={logo.url} alt={logo.alt} className="max-h-24 mx-auto" /> : '🔧'}</div>
         <h1 className="font-display text-4xl md:text-5xl text-brand-dark mb-4">{title}</h1>
         {message && (
-          <div className="text-brand-dark/60 text-base leading-relaxed mb-6">
+          <div className="text-black text-base leading-relaxed mb-6">
             <RichText content={message} />
           </div>
         )}
         {estimatedReturn && (
-          <p className="text-sm text-brand-teal font-medium">{estimatedReturn}</p>
+          <p className="text-md font-bold text-black font-medium">{estimatedReturn}</p>
         )}
       </div>
     </div>

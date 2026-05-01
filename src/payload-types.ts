@@ -201,7 +201,14 @@ export interface Page {
     | (
         | {
             headline: string;
+            /**
+             * Shown on desktop (≥768px).
+             */
             subheadline?: string | null;
+            /**
+             * Shown on mobile and tablet (<768px). Falls back to Subheadline if left empty.
+             */
+            subheadlineMobile?: string | null;
             bannerImage: number | Media;
             mobileBannerImage?: (number | null) | Media;
             ctaLabel?: string | null;
@@ -298,7 +305,6 @@ export interface Page {
               | {
                   title: string;
                   description?: string | null;
-                  icon?: (number | null) | Media;
                   /**
                    * Optional decorative illustration shown beside this card (e.g. tree, birds, stones).
                    */
@@ -455,6 +461,24 @@ export interface Page {
           }
         | {
             heading: string;
+            /**
+             * Optional introductory paragraph shown below the heading.
+             */
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             missionTitle?: string | null;
             mission?: {
               root: {
@@ -505,6 +529,41 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'about-him';
+          }
+        | {
+            /**
+             * Decorative image shown alongside the shortcut text.
+             */
+            image?: (number | null) | Media;
+            heading: string;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaLabel?: string | null;
+            ctaUrl?: string | null;
+            /**
+             * Control which viewports this block appears on.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnTablet?: boolean | null;
+              showOnMobile?: boolean | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'about-shortcut';
           }
         | {
             heading?: string | null;
@@ -1174,6 +1233,7 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               headline?: T;
               subheadline?: T;
+              subheadlineMobile?: T;
               bannerImage?: T;
               mobileBannerImage?: T;
               ctaLabel?: T;
@@ -1229,7 +1289,6 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     title?: T;
                     description?: T;
-                    icon?: T;
                     decorativeImage?: T;
                     color?: T;
                     id?: T;
@@ -1351,6 +1410,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              body?: T;
               missionTitle?: T;
               mission?: T;
               visionTitle?: T;
@@ -1362,6 +1422,24 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               image?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnTablet?: T;
+                    showOnMobile?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'about-shortcut'?:
+          | T
+          | {
+              image?: T;
+              heading?: T;
+              body?: T;
+              ctaLabel?: T;
+              ctaUrl?: T;
               visibility?:
                 | T
                 | {
@@ -1803,13 +1881,6 @@ export interface GeneralSetting {
   contactEmail?: string | null;
   contactPhone?: string | null;
   contactAddress?: string | null;
-  socialLinks?:
-    | {
-        platform: 'facebook' | 'linkedin' | 'instagram' | 'whatsapp' | 'youtube';
-        url: string;
-        id?: string | null;
-      }[]
-    | null;
   bookingUrl?: string | null;
   emailMeUrl?: string | null;
   emailFromName?: string | null;
@@ -1818,16 +1889,22 @@ export interface GeneralSetting {
   createdAt?: string | null;
 }
 /**
+ * Control the public maintenance page shown to visitors when the site is offline.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "maintenance-settings".
  */
 export interface MaintenanceSetting {
   id: number;
   /**
-   * When enabled, all visitors without an admin session will be redirected to the maintenance page.
+   * ⚠️ When enabled, all public visitors (without an admin session) are redirected to the maintenance page. Admins logged in can still access the site normally.
    */
   enabled?: boolean | null;
+  logo?: (number | null) | Media;
   title?: string | null;
+  /**
+   * Optional message shown below the title. Supports rich text formatting.
+   */
   message?: {
     root: {
       type: string;
@@ -1843,6 +1920,9 @@ export interface MaintenanceSetting {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * e.g. "Back on 1 May 2026 at 10:00 AM HKT"
+   */
   estimatedReturn?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1970,13 +2050,6 @@ export interface GeneralSettingsSelect<T extends boolean = true> {
   contactEmail?: T;
   contactPhone?: T;
   contactAddress?: T;
-  socialLinks?:
-    | T
-    | {
-        platform?: T;
-        url?: T;
-        id?: T;
-      };
   bookingUrl?: T;
   emailMeUrl?: T;
   emailFromName?: T;
@@ -1991,6 +2064,7 @@ export interface GeneralSettingsSelect<T extends boolean = true> {
  */
 export interface MaintenanceSettingsSelect<T extends boolean = true> {
   enabled?: T;
+  logo?: T;
   title?: T;
   message?: T;
   estimatedReturn?: T;

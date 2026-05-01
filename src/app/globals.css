@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../**/*.{tsx,ts,jsx,js}";
 
 @font-face {
     font-family: 'Gochi Hand';
@@ -103,8 +104,9 @@ h2.leading-tight{
 
 .w-\[20px\] {
     width: 20px;
-    filter: drop-shadow(0.5px 0px 0px black) drop-shadow(-0.5px 0px 0px black);
 }
+/* .angle-button {filter: drop-shadow(0.5px 0px 0px black) drop-shadow(-0.5px 0px 0px black);} */
+
 .h-\[20px\] {
     height: 20px;
 }

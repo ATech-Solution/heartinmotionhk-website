@@ -30,7 +30,7 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
   if (!values || values.length === 0) return null
 
   return (
-    <section className="bg-white pt-[50px] pb-[60px] md:pt-[60px] md:pb-[60px] px-4 md:px-[52px]">
+    <section className="bg-white pt-[50px] pb-[60px] md:pt-[60px] md:pb-[80px] px-4 md:px-[52px]">
       <div className="max-w-[1000px] mx-auto">
         {sectionIntro && (
           <AnimateOnScroll animation="fade-up" className="mb-8 md:mb-10">
@@ -49,7 +49,7 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
               <AnimateOnScroll key={i} animation={anim} delay={i * 80}>
                 <div className="flex flex-col">
                   {/* Illustration sits above-right, baseline-aligned with pill */}
-                  <div className="flex justify-center h-[220px] items-end pb-2">
+                  <div className="flex justify-center h-[236px] items-end pb-6">
                     {val.decorativeImage ? (
                       <MediaImage
                         media={val.decorativeImage}
