@@ -227,7 +227,28 @@ export interface Page {
           }
         | {
             heading: string;
+            /**
+             * Shown on desktop (≥768px).
+             */
             body?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Shown on mobile and tablet (<768px). Falls back to Subheadline if left empty.
+             */
+            bodyMobile?: {
               root: {
                 type: string;
                 children: {
@@ -418,14 +439,6 @@ export interface Page {
           }
         | {
             heading: string;
-            certifications?:
-              | {
-                  title: string;
-                  institution?: string | null;
-                  year?: string | null;
-                  id?: string | null;
-                }[]
-              | null;
             accordionItems?:
               | {
                   title: string;
@@ -1253,6 +1266,7 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               body?: T;
+              bodyMobile?: T;
               animatedGif?: T;
               visibility?:
                 | T
@@ -1381,14 +1395,6 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
-              certifications?:
-                | T
-                | {
-                    title?: T;
-                    institution?: T;
-                    year?: T;
-                    id?: T;
-                  };
               accordionItems?:
                 | T
                 | {

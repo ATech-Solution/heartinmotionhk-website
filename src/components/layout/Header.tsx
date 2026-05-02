@@ -59,10 +59,10 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
   const emailLabel = mobileCta?.emailLabel ?? 'Email me'
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-50 headerBlock">
       {/* Desktop header — beige background */}
       <div className="hidden lg:block bg-[#f5eded] h-[110px]">
-        <div className="max-w-[1440px] mx-auto px-16 h-full flex items-center justify-between">
+        <div className="max-w-[1250px] mx-auto px-16 md:px-0 h-full flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
             {logoUrl ? (
@@ -89,13 +89,14 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                   item.linkType === 'external'
                     ? (item.url ?? '#')
                     : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
-                const isFirst = i === 0
+                // const isActive = i === 0
+                const isActive = 0
                 return (
                   <Link
                     key={i}
                     href={href}
-                    className={`text-[18px] text-[#000033] transition-colors duration-150 hover:text-brand-teals hover:font-scale ${
-                      isFirst ? 'font-bold' : 'font-normal'
+                    className={`text-[18px] text-[#000033] transition-colors duration-150 hover:font-scale ${
+                      isActive ? 'font-bold' : 'font-normal'
                     }`}
                   >
                     {item.label}
@@ -200,7 +201,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
 
         {/* Hamburger */}
         <button
-          className="p-2 text-brand-dark"
+          className="p-2 text-black"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -239,7 +240,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                   key={i}
                   href={href}
                   onClick={() => setMobileOpen(false)}
-                  className="block py-2.5 text-[18px] font-bold text-brand-dark hover:text-brand-teal transition-colors"
+                  className="block py-2.5 text-[18px] font-bold text-black transition-colors"
                 >
                   {item.label}
                 </Link>

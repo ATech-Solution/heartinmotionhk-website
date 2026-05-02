@@ -26,7 +26,15 @@ export const RealChallengeBlock: Block = {
       name: 'body',
       type: 'richText',
       localized: true,
+      admin: { description: 'Shown on desktop (≥768px).' },
     },
+    {
+      name: 'bodyMobile',
+      type: 'richText',
+      localized: true,
+      label: 'Description (Mobile & Tablet)',
+      admin: { description: 'Shown on mobile and tablet (<768px). Falls back to Subheadline if left empty.' },								
+    },									
     {
       name: 'animatedGif',
       type: 'upload',

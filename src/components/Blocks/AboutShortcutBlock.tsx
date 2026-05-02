@@ -19,8 +19,8 @@ export function AboutShortcutBlockComponent({
   image,
 }: AboutShortcutBlockProps) {
   return (
-    <section className="bg-white py-10 px-4">
-      <div className="max-w-[400px] mx-auto flex flex-col gap-6">
+    <section className="bg-white py-5 md:py-10 px-4">
+      <div className="max-w-[400px] mx-auto flex flex-col gap-3">
         {/* Decorative image */}
         {image && (
           <AnimateOnScroll animation="fade" className="flex justify-center">
@@ -33,14 +33,14 @@ export function AboutShortcutBlockComponent({
 
         {/* Text content */}
         <AnimateOnScroll animation="fade-up" delay={100}>
-          <div className="flex flex-col gap-[30px]">
+          <div className="flex flex-col gap-[10px]">
             {heading && (
-              <h2 className="font-display text-[32px] text-black leading-[1.5]">
+              <h2 className="font-display text-[32px] text-black leading-[1.5] px-6">
                 {heading}
               </h2>
             )}
             {body && (
-              <div className="text-[16px] text-[#3f3e3e] text-justify leading-[1.5]">
+              <div className="text-[14px] text-[#3f3e3e] text-justify leading-[1.5] px-6">
                 <RichText content={body} />
               </div>
             )}
@@ -49,10 +49,10 @@ export function AboutShortcutBlockComponent({
 
         {/* CTA button */}
         {ctaLabel && ctaUrl && (
-          <AnimateOnScroll animation="fade-up" delay={200}>
+          <AnimateOnScroll animation="fade-up" delay={200} className='px-5'>
             <Link
               href={ctaUrl}
-              className="flex items-center justify-center gap-3 h-10 px-[15px] bg-[#86d0ef] rounded-[15px] text-[16px] font-bold text-black w-[328px] max-w-full hover:opacity-90 transition-opacity"
+              className="flex items-center justify-center gap-3 h-10 px-[15px] bg-[#86d0ef] rounded-[15px] text-[16px] font-bold text-black w-full"
             >
               {ctaLabel}
               <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />

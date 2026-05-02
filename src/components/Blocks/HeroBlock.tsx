@@ -26,7 +26,7 @@ export function HeroBlockComponent({
   // const ctaLabel = "Learn more"
   // const ctaUrl ="#"
   return (
-    <section className="bg-white px-4 md:px-[52px] pt-3 pb-6 md:py-[48px] w-full">
+    <section className="bg-white px-6 md:px-[52px] pt-7 pb-6 md:py-[48px] w-full">
 
       {/* Mobile only: CTA button above the hero image card */}
       {ctaLabel && ctaUrl && (
@@ -58,36 +58,28 @@ export function HeroBlockComponent({
           <div className="block md:hidden absolute inset-0">
             <MediaImage
               media={mobileImg}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain object-top"
               priority
             />
           </div>
         )}
 
         {/* Gradient overlay — transparent → beige */}
-        <div
-          className="absolute inset-0 rounded-[20px]"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(237,237,237,0.35) 43.75%, #f5eded 77.885%)',
-          }}
-        />
+        <div className="absolute inset-0 rounded-[20px]"/>
 
         {/* Text overlay */}
         <AnimateOnScroll
           animation="fade-up"
-          className="absolute bottom-6 left-[27px] md:bottom-8 md:left-8 w-full pr-8"
+          className="absolute bottom-6 left-[27px] md:bottom-8 w-full pr-8 md:pr-12"
         >
           {headline && (
-            <h1 className="font-display text-[32px] md:text-[48px] text-black leading-none mb-2 md:mb-3">
-              {headline ? 
-                headline.split(' ').slice(0, 2).slice(0, 3).join(' ')
-                : ''}
+            <h1 className="font-display text-[32px] md:text-[48px] text-black leading-none mb-2 md:mb-3 w-[250px] md:w-full">
+              {headline}
             </h1>
           )}
           {/* Mobile subheadline */}
           {(subheadlineMobile) && (
-            <p className="md:hidden text-[16px] text-black text-justify leading-[1.5] max-w-[315px]">
+            <p className="md:hidden text-[14px] text-black text-justify leading-[1.25] max-w-[335px]">
               {subheadlineMobile}
             </p>
           )}

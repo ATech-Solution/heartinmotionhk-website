@@ -64,11 +64,11 @@ export function SiteFooter({ footer, general }: FooterProps) {
   const siteTagline = general?.siteTagline ?? null
 
   return (
-    <footer className="bg-[#f5eded] relative">
-      <div className="max-w-[1300px] mx-auto px-[100px] pt-[100px] pb-[15px]">
+    <footer className="bg-[#f5eded] relative footerBlock">
+      <div className="max-w-[1250px] mx-auto px-16  md:px-0 pt-[10px] pb-[30px]">
         
         {/* 2-column main content */}
-        <div className="flex flex-col md:flex-row gap-10 md:gap-16 mt-8">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 mt-8 pl-20 md:pl-3">
           {/* Left column — Nav links */}
           <div className="flex-shrink-0 min-w-[220px]">
             <nav className="space-y-5">
@@ -76,7 +76,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
                 <Link
                   key={i}
                   href={link.url ?? getPagePath(link.page)}
-                  className={`block text-[18px] text-black hover:text-brand-teal transition-colors duration-150 ${
+                  className={`block text-[18px] text-black hover:font-bold ${
                     i === 0 ? 'font-bold' : 'font-normal'
                   }`}
                 >
@@ -93,16 +93,20 @@ export function SiteFooter({ footer, general }: FooterProps) {
           {/* Right column — Contact */}
           <div className="flex-1">
             <p className="text-[18px] font-bold text-black mb-5">Contact</p>
-            <div className="space-y-[10px]">
+            <div className="space-y-[15px]">
               {general?.contactAddress && (
-                <div className="flex items-start gap-[5px] text-[16px] text-black">
-                  <span className="text-[#556372] mt-0.5 w-[15px] flex-shrink-0">📍</span>
+                <div className="flex items-start gap-[20px] text-[16px] text-black">
+                  <span className="text-[#556372] mt-0.5 w-[15px] flex-shrink-0">
+                     <img src="/icon/pin.svg" alt="" className="w-[auto] h-[15px] flex-shrink-0" aria-hidden="true" />
+                  </span>
                   <span>{general.contactAddress}</span>
                 </div>
               )}
               {general?.contactPhone && (
-                <div className="flex items-center gap-[5px] text-[16px] text-black">
-                  <span className="text-[#556372] w-[15px] flex-shrink-0">📞</span>
+                <div className="flex items-center gap-[20px] text-[16px] text-black">
+                  <span className="text-[#556372] w-[15px] flex-shrink-0">
+                    <img src="/icon/phone.svg" alt="" className="w-[15px] h-[15px] flex-shrink-0" aria-hidden="true" />
+                  </span>
                   <a
                     href={`tel:${general.contactPhone}`}
                     className="hover:text-brand-teal transition-colors"
@@ -112,8 +116,10 @@ export function SiteFooter({ footer, general }: FooterProps) {
                 </div>
               )}
               {general?.contactEmail && (
-                <div className="flex items-center gap-[5px] text-[16px] text-black">
-                  <span className="text-[#556372] w-[15px] flex-shrink-0">✉</span>
+                <div className="flex items-center gap-[20px] text-[16px] text-black">
+                  <span className="text-[#556372] w-[15px] flex-shrink-0">
+                    <img src="/icon/envelope.svg" alt="" className="w-[15px] h-[15px] flex-shrink-0" aria-hidden="true" />
+                  </span>
                   <a
                     href={`mailto:${general.contactEmail}`}
                     className="hover:text-brand-teal transition-colors"
@@ -157,7 +163,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
 
           {/* Logo top-right */}
           <div className="flex justify-end mb-2">
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3">
               {logoUrl ? (
                 <Image
                   src={logoUrl}
@@ -179,8 +185,8 @@ export function SiteFooter({ footer, general }: FooterProps) {
         </div>
 
         {/* Copyright */}
-        <div className="mt-[55px]">
-          <p className="text-[16px] text-black">
+        <div className="mt-[30px]">
+          <p className="text-[14px] text-black">
             {footer?.copyrightText ?? `©${new Date().getFullYear()} Heart in Motion - All Rights Reserved`}
           </p>
         </div>

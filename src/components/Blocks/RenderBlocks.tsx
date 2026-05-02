@@ -45,7 +45,7 @@ export function RenderBlocks({
   if (!blocks || blocks.length === 0) {
     if (!richTextContent) return null
     return (
-      <div className="max-w-[860px] mx-auto px-6 py-16">
+      <div className="max-w-[1200px] mx-auto px-6 py-16 min-h-[380px]">
         <RichText content={richTextContent} className="prose prose-lg max-w-none" />
       </div>
     )

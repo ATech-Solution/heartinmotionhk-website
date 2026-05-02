@@ -22,28 +22,28 @@ export const CoachingExperienceBlock: Block = {
       localized: true,
       required: true,
     },
-    {
-      name: 'certifications',
-      type: 'array',
-      label: 'Certifications',
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          localized: true,
-          required: true,
-        },
-        {
-          name: 'institution',
-          type: 'text',
-          localized: true,
-        },
-        {
-          name: 'year',
-          type: 'text',
-        },
-      ],
-    },
+    // {
+    //   name: 'certifications',
+    //   type: 'array',
+    //   label: 'Certifications',
+    //   fields: [
+    //     {
+    //       name: 'title',
+    //       type: 'text',
+    //       localized: true,
+    //       required: true,
+    //     },
+    //     {
+    //       name: 'institution',
+    //       type: 'text',
+    //       localized: true,
+    //     },
+    //     {
+    //       name: 'year',
+    //       type: 'text',
+    //     },
+    //   ],
+    // },
     {
       name: 'accordionItems',
       type: 'array',

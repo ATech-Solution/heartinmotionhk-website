@@ -54,7 +54,7 @@ export function ServicesOverviewBlockComponent({
         {/* Section heading */}
         {heading && (
           <AnimateOnScroll animation="fade-up">
-            <h2 className="font-display text-[32px] md:text-[30px] text-black text-center leading-[1.5] mb-3">
+            <h2 className="font-display text-[32px] md:text-[48px] text-black text-center leading-[1.5] mb-3">
               {heading}
             </h2>
           </AnimateOnScroll>

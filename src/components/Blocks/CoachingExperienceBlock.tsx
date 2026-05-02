@@ -24,18 +24,20 @@ function AccordionRow({ title, content }: AccordionItem) {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="border-b border-brand-beige-dark">
+    <div className="px-3 py-3 mb-5 rounded-[8px] shadow-[0px_0px_4px_rgba(0,0,0,0.40)]">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex justify-between items-center py-4 text-left text-brand-dark font-medium hover:text-brand-teal transition-colors duration-200"
+        className="w-full flex justify-between items-center"
         aria-expanded={open}
       >
-        <span>{title}</span>
-        <span className={`text-xl transition-transform duration-200 ${open ? 'rotate-90' : ''}`}>›</span>
+        <span className='text-left text-[20px] text-black font-bold'>{title}</span>
+        <span className={`text-[25px] transition-transform duration-200 ${open ? 'rotate-90' : ''}`}>
+          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] text-black" aria-hidden="true" />
+        </span>
       </button>
       {open && content && (
-        <div className="pb-4">
-          <RichText content={content} className="text-brand-dark/70 text-sm leading-relaxed" />
+        <div className="pl-2 pr-5 pt-7 pb-0">
+          <RichText content={content} className="text-[16px] text-black" />
         </div>
       )}
     </div>
@@ -48,20 +50,20 @@ export function CoachingExperienceBlockComponent({
   accordionItems,
 }: CoachingExperienceBlockProps) {
   return (
-    <section className="py-14 px-6 md:px-16 bg-brand-beige">
-      <div className="max-w-4xl mx-auto">
+    <section className="px-6 py-10 md:px-16 bg-white pt-20 pb-20 mt-5 mb-5">
+      <div className="max-w-[1200px] mx-auto">
         {heading && (
-          <h2 className="font-display text-3xl md:text-4xl text-brand-dark mb-8">{heading}</h2>
+          <h2 className="font-display text-[28px] md:text-[40px] text-black mb-3">{heading}</h2>
         )}
-        {certifications && certifications.length > 0 && (
+        {/* {certifications && certifications.length > 0 && (
           <div className="mb-10 space-y-3">
             {certifications.map((cert, i) => (
               <div key={i} className="flex gap-3 items-start">
-                <span className="w-2 h-2 mt-2 rounded-full bg-brand-teal flex-shrink-0" />
+                <span className="w-2 h-2 mt-2 rounded-full flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-brand-dark">{cert.title}</p>
+                  <p className="font-semibold text-black">{cert.title}</p>
                   {(cert.institution || cert.year) && (
-                    <p className="text-sm text-brand-dark/60">
+                    <p className="text-sm text-black">
                       {[cert.institution, cert.year].filter(Boolean).join(' · ')}
                     </p>
                   )}
@@ -69,7 +71,7 @@ export function CoachingExperienceBlockComponent({
               </div>
             ))}
           </div>
-        )}
+        )} */}
         {accordionItems && accordionItems.length > 0 && (
           <div>
             {accordionItems.map((item, i) => (

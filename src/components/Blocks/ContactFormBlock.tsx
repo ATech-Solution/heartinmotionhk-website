@@ -60,17 +60,17 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
   }
 
   return (
-    <section className="py-16 px-6 md:px-16 md:pb-[50px] bg-white">
-      <div className="max-w-[1100px] mx-auto">
+    <section className="py-16 px-6 md:px-16 md:pb-[100px] bg-white">
+      <div className="max-w-[1200px] mx-auto">
         {heading && (
           <h1 className="font-display text-[32px] md:text-[48px] text-black leading-[1.5] mb-2 md:mb-2">{heading}</h1>
         )}
         {subheading && (
           <p className="text-[16px] text-black leading-[1.5] mb-10 max-w-2xl">{subheading}</p>
         )}
-        <div className="bg-white rounded-3xl shadow-card-contact p-8 md:p-6 md:pb-12 grid md:grid-cols-[385px_1fr] gap-10 items-start">
+        <div className="bg-white rounded-3xl shadow-card-contact p-8 md:p-8 md:pb-12 grid md:grid-cols-[385px_1fr] gap-10 items-start">
           {sideImage && (
-            <div className="rounded-2xl overflow-hidden bg-brand-teal/10">
+            <div className="rounded-2xl overflow-hidden">
               <MediaImage media={sideImage} className="w-full h-full object-contain" />
             </div>
           )}
@@ -78,13 +78,13 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
             {submitted ? (
               <div className="text-center py-12">
                 <p className="font-display text-[16px] text-brand-teal mb-3">Thank you!</p>
-                <p className="text-brand-dark/60">Your message has been sent. We&apos;ll be in touch soon.</p>
+                <p className="text-black">Your message has been sent. We&apos;ll be in touch soon.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[16px] font-medium text-brand-dark mb-1.5">
+                    <label className="block text-[16px] font-medium text-black mb-1.5">
                       Full Name<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -95,7 +95,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                     />
                   </div>
                   <div>
-                    <label className="block text-[16px] font-medium text-brand-dark mb-1.5">
+                    <label className="block text-[16px] font-medium text-black mb-1.5">
                       Email Address<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -106,7 +106,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                     />
                   </div>
                   <div>
-                    <label className="block text-[16px] font-medium text-brand-dark mb-1.5">
+                    <label className="block text-[16px] font-medium text-black mb-1.5">
                       Phone Number<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -117,7 +117,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                     />
                   </div>
                   <div>
-                    <label className="block text-[16px] font-medium text-brand-dark mb-1.5">
+                    <label className="block text-[16px] font-medium text-black mb-1.5">
                       Subject<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -129,7 +129,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[16px] font-medium text-brand-dark mb-1.5">
+                  <label className="block text-[16px] font-medium text-black mb-1.5">
                     Tell us how we can help
                   </label>
                   <textarea
@@ -142,7 +142,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:w-[320px] px-8 py-3 bg-brand-teal text-white rounded-full font-semibold text-[16px] hover:bg-brand-teal-dark transition-colors duration-200 disabled:opacity-50"
+                  className="w-full sm:w-[320px] px-8 py-3 bg-[#8ec0bd] text-black rounded-[20px] font-semibold text-[16px] hover:text-white hover:bg-[#6C9A97] transition-colors duration-200 disabled:opacity-50"
                 >
                   {loading ? 'Sending…' : 'Submit'}
                 </button>

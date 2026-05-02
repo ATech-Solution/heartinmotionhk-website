@@ -50,19 +50,19 @@ export const AboutHeartInMotionBlock: Block = {
       type: 'richText',
       localized: true,
     },
-    {
-      name: 'coreValues',
-      type: 'array',
-      label: 'Core Values',
-      fields: [
-        {
-          name: 'value',
-          type: 'text',
-          localized: true,
-          required: true,
-        },
-      ],
-    },
+    // {
+    //   name: 'coreValues',
+    //   type: 'array',
+    //   label: 'Core Values',
+    //   fields: [
+    //     {
+    //       name: 'value',
+    //       type: 'text',
+    //       localized: true,
+    //       required: true,
+    //     },
+    //   ],
+    // },
     {
       name: 'image',
       type: 'upload',

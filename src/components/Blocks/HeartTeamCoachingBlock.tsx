@@ -14,7 +14,7 @@ export function HeartTeamCoachingBlockComponent({ heading, body, ctaLabel, ctaUr
       <div className="max-w-[1200px] mx-auto">
         <AnimateOnScroll animation="fade-up">
           {heading && (
-            <h2 className="font-display text-[32px] md:text-[40px] text-black leading-[1.5] mb-[30px] md:mb-6">
+            <h2 className="font-display text-[28px] md:text-[40px] text-black leading-[1.5] mb-[30px] md:mb-3">
               {heading}
             </h2>
           )}

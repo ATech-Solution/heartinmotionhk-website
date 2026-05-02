@@ -52,7 +52,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
         )}
 
         <AnimateOnScroll animation="fade-up" delay={100}>
-          <div className="relative flex items-center gap-2 md:gap-4 md:w-[870px]">
+          <div className="relative flex items-center gap-2 md:gap-4 md:w-[870px] mx-auto">
             {/* Prev arrow — desktop only */}
             {testimonials.length > 1 && (
               <button

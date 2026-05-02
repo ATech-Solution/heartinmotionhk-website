@@ -20,9 +20,11 @@
   --color-brand-yellow-light: #faf3a8;
   --color-brand-beige: #fdf6ee;
   --color-brand-beige-dark: #f5ead8;
-  --color-brand-dark: #2d2d2d;
+  --color-brand-dark: #000;
   --color-brand-pink: #f7aab8;
   --color-brand-blue: #a8c8e8;
+  --color-brand-white: #fff;
+  --color-brand-black: #000;
 
   /* Typography */
   --font-gochi-hand: "Gochi Hand", sans-serif;
@@ -47,8 +49,8 @@
 }
 
 :root {
-  --background: var(--color-brand-beige);
-  --foreground: var(--color-brand-dark);
+  --background: var(--color-brand-white);
+  --foreground: var(--color-brand-black);
 }
 
 * {
@@ -79,6 +81,21 @@ h2.leading-tight{
   color: #000000;
 }
 
+.list-disc {
+    list-style-type: disc;
+    margin-top: -10px;
+    margin-left: 20px;
+}
+
+.service-desc .list-disc{
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+/* 
+.headerBlock, .footerBlock {
+  z-index: 2;
+}
 .max-w-\[1000px\] {
     max-width: 1000px;
 }
@@ -105,7 +122,6 @@ h2.leading-tight{
 .w-\[20px\] {
     width: 20px;
 }
-/* .angle-button {filter: drop-shadow(0.5px 0px 0px black) drop-shadow(-0.5px 0px 0px black);} */
 
 .h-\[20px\] {
     height: 20px;
@@ -122,10 +138,10 @@ h2.leading-tight{
 .pb-\[80px\]{
   padding-bottom: 80px;
 }
-
+*/
 .shadow-card-contact{
-box-shadow: 1px 2px 25px 11px rgba(191.2234375, 191.2234375, 191.2234375, 0.34)
-}
+  box-shadow: 1px 2px 25px 11px rgba(191.2234375, 191.2234375, 191.2234375, 0.34)
+} 
 
 .md\:pb-12 {
   @media (width >= 48rem) {
