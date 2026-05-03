@@ -27,23 +27,23 @@ export function BookingSessionBlockComponent({
   services,
 }: BookingSessionBlockProps) {
   return (
-    <section className="bg-white px-8 py-3 md:px-16 md:py-10">
+    <section className="bg-white px-8 pt-3 pb-13 md:px-16 md:py-10">
       <div className="max-w-[1200px] mx-auto">
         {/* Heading */}
-        <h2 className="font-display text-[36px] md:text-[48px] text-black leading-tight mb-2 md:mb-2">
+        <h2 className="font-display text-[32px] md:text-[48px] text-black mb-2 md:mb-2">
           {sectionTitle}
         </h2>
 
         {/* Subtitle */}
         {sectionSubtitle && (
-          <p className="text-[15px] md:text-[16px] text-black text-justify max-w-[720px] leading-[1.6] mb-8 md:mb-10">
+          <p className="text-[14px] md:text-[16px] text-black text-left md:text-justify max-w-[720px] leading-[1.5] mb-6 md:mb-10">
             {sectionSubtitle}
           </p>
         )}
 
         {/* Service cards */}
         {services && services.length > 0 && (
-          <div className="border border-[#eaecf0] rounded-[3px] max-w-full">
+          <div className="border border-[#eaecf0] rounded-[10px] max-w-full">
             {services.map((service, index) => (
               <div
                 key={service.id ?? index}
@@ -57,20 +57,20 @@ export function BookingSessionBlockComponent({
                       style={{ backgroundColor: DOT_COLORS[index % DOT_COLORS.length] }}
                       aria-hidden="true"
                     />
-                    <p className="font-bold text-[16px] text-black leading-normal">
+                    <p className="font-bold text-[14px] md:text-[16px] text-black leading-normal">
                       {service.name}
                     </p>
                   </div>
                   {service.description && (
-                    <p className="text-[15px] text-black leading-normal ml-[21px]">
+                    <p className="text-[14px] md:text-[16px] text-black leading-normal ml-[21px]">
                       {service.description}
                     </p>
                   )}
                 </div>
 
                 {/* Right: Book now + action buttons */}
-                <div className="flex flex-col items-center gap-[4px] ml-0 md:ml-6 flex-shrink-0">
-                  <span className="text-[16px] font-bold text-black text-center leading-[26px]">
+                <div className="flex flex-col items-center gap-[5px] ml-0 md:ml-6 flex-shrink-0 py-3 md:py-0">
+                  <span className="text-[15px] md:text-[16px] font-bold text-black text-center leading-[26px]">
                     Book Now
                   </span>
                   <div className="flex items-center gap-[9px]">
@@ -81,7 +81,7 @@ export function BookingSessionBlockComponent({
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Book via WhatsApp"
-                        className="flex items-center justify-center size-[47px] rounded-[20px] text-black bg-white border border-black hover:text-white hover:border-white hover:bg-[#7ab0ad] transition-colors duration-150"
+                        className="flex items-center justify-center w-[50px] h-[40px] size-[50px]s rounded-[20px] text-black bg-white border border-black hover:text-white hover:border-white hover:bg-[#7ab0ad] transition-colors duration-150"
                       >
                         <span
                           className="size-[20px]"
@@ -96,9 +96,9 @@ export function BookingSessionBlockComponent({
                         // href={service.email}
                         href={`mailto:${service.email}`}
                         aria-label="Book via Email"
-                        className="flex items-center justify-center size-[47px] rounded-[20px] text-black bg-white border border-black hover:text-white hover:border-white hover:bg-[#7ab0ad] transition-colors duration-150"
+                        className="flex items-center justify-center w-[50px] h-[40px] size-[50px]s rounded-[20px] text-black bg-white border border-black hover:text-white hover:border-white hover:bg-[#7ab0ad] transition-colors duration-150"
                       >
-                        <Mail size={20} />
+                        <Mail size={23} stroke={'white'} fill={'black'} className=''/>
                       </a>
                     )}
                   </div>

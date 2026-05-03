@@ -61,7 +61,7 @@ export function ServicesOverviewBlockComponent({
         )}
         {subheading && (
           <AnimateOnScroll animation="fade-up" delay={100}>
-            <p className="text-[16px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-13">
+            <p className="text-[14px] md:text-[16px] text-[14px] md:text-[16px] text-[#3f3e3e] text-center leading-[1.5] max-w-[729px] mx-auto mb-13">
               {subheading}
             </p>
           </AnimateOnScroll>
@@ -116,7 +116,7 @@ export function ServicesOverviewBlockComponent({
           <AnimateOnScroll animation="fade-up" delay={200} className="mt-3 flex justify-center group transition-all duration-300">
             <Link
               href={ctaUrl}
-              className="inline-flex items-center justify-center gap-4 h-[47px] px-5 bg-[#86d0ef] rounded-[20px] text-[16px] font-bold text-black w-full md:w-[320px] w-[235px] group-hover:text-white group-hover:bg-[#6C9A97] transition-all"
+              className="inline-flex items-center justify-center gap-4 h-[47px] px-5 bg-[#86d0ef] rounded-[20px] text-[14px] md:text-[16px] font-bold text-black w-full md:w-[320px] w-[235px] group-hover:text-white group-hover:bg-[#6C9A97] transition-all"
             >
               {ctaLabel}
               <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
@@ -145,8 +145,8 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
 
       {/* Label badge — white pill below the blob, h-[46px] matching Figma */}
       {svc.title && (
-        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] absolute mt-41 md:mt-55 px-5 h-[40px] md:h-[46px] flex items-center justify-center max-w-[310px]s md:min-w-[310px] max-w-full text-center">
-          <span className="font-bold text-[#01162c] text-[14px] md:text-[16px] leading-[1.48]">
+        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] absolute mt-41 lg:mt-42 xl:mt-55 px-5 h-[40px] md:h-[46px] flex items-center justify-center lg:min-w-[290px] xl:min-w-[310px] max-w-full text-center">
+          <span className="font-bold text-[#01162c] text-[14px] text-[14px] md:text-[16px] leading-[1.48]">
             {svc.title}
           </span>
         </div>

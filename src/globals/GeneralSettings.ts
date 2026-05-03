@@ -16,6 +16,13 @@ export const GeneralSettings: GlobalConfig = {
   },
   fields: [
     {
+      name: 'adminLogo',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Admin Logo',
+      admin: { description: 'Logo displayed on the admin login page.' },
+    },
+    {
       name: 'siteName',
       type: 'text',
       defaultValue: 'Heart in Motion HK',

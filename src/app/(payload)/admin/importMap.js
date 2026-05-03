@@ -35,6 +35,7 @@ import { FieldsToExport as FieldsToExport_cdf7e044479f899a31f804427d568b36 } fro
 import { CollectionField as CollectionField_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { WhereField as WhereField_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { Preview as Preview_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
+import { default as default_89344134860f9bc63867ffefbf33f214 } from '@/components/admin/BeforeLogin'
 import { ImportExportProvider as ImportExportProvider_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { default as default_624c6212846b5ddf2714ce0c505f75bc } from '@/components/admin/BackupRestoreView'
 
@@ -76,6 +77,7 @@ export const importMap = {
   "@payloadcms/plugin-import-export/rsc#CollectionField": CollectionField_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#WhereField": WhereField_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#Preview": Preview_cdf7e044479f899a31f804427d568b36,
+  "@/components/admin/BeforeLogin#default": default_89344134860f9bc63867ffefbf33f214,
   "@payloadcms/plugin-import-export/rsc#ImportExportProvider": ImportExportProvider_cdf7e044479f899a31f804427d568b36,
   "@/components/admin/BackupRestoreView#default": default_624c6212846b5ddf2714ce0c505f75bc
 }

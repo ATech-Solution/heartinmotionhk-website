@@ -52,7 +52,7 @@ export function AboutShortcutBlockComponent({
           <AnimateOnScroll animation="fade-up" delay={200} className='px-5'>
             <Link
               href={ctaUrl}
-              className="flex items-center justify-center gap-3 h-10 px-[15px] bg-[#86d0ef] rounded-[15px] text-[16px] font-bold text-black w-full"
+              className="flex items-center justify-center gap-3 h-10 px-[15px] bg-[#86d0ef] rounded-[15px] text-[14px] md:text-[16px] font-bold text-black w-full"
             >
               {ctaLabel}
               <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />

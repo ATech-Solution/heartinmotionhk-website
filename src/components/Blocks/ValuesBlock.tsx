@@ -30,11 +30,11 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
   if (!values || values.length === 0) return null
 
   return (
-    <section className="bg-white pt-[50px] pb-[60px] md:pt-[60px] md:pb-[80px] px-4 md:px-[52px]">
+    <section className="bg-white px-8 pt-0 pb-8 md:px-16 md:pt-16 md:pb-18 ">
       <div className="max-w-[1000px] mx-auto">
         {sectionIntro && (
           <AnimateOnScroll animation="fade-up" className="mb-8 md:mb-10">
-            <div className="text-[16px] md:text-[16px] text-black text-justify leading-[1.5] max-w-[883px]">
+            <div className="text-[14px] md:text-[16px] text-[14px] md:text-[16px] text-black text-justify leading-[1.5] max-w-[883px]">
               <RichText content={sectionIntro} />
             </div>
           </AnimateOnScroll>
@@ -73,7 +73,7 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
 
                   {/* Body text */}
                   {val.description && (
-                    <p className="mt-5 text-[16px] text-[#3f3e3e] text-justify leading-[1.48]">
+                    <p className="mt-5 text-[14px] md:text-[16px] text-[#3f3e3e] text-justify leading-[1.48]">
                       {val.description}
                     </p>
                   )}
@@ -89,19 +89,31 @@ export function ValuesBlockComponent({ heading, sectionIntro, values }: ValuesBl
             const pillBg = pillColorMap[val.color ?? 'teal'] ?? pillColorMap.teal
             return (
               <AnimateOnScroll key={i} animation="fade-up" delay={i * 100}>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-5">
+                  
+                  {/* Illustration sits above-right, baseline-aligned with pill */}
+                  <div className="flex justify-center h-[135px] items-end">
+                    {val.decorativeImage ? (
+                      <MediaImage
+                        media={val.decorativeImage}
+                        className="max-h-full w-auto object-contain min-w-[85px] max-w-[135px]"
+                      />
+                    ) : (
+                      <span className="block" aria-hidden="true" />
+                    )}
+                  </div>
                   {/* Colored pill — full width, h-[40px] matching Figma button height */}
                   <div
-                    className={`relative h-[40px] w-full rounded-[20px] ${pillBg} flex items-center`}
+                    className={`relative h-[56px] w-full rounded-[30px] ${pillBg} flex items-center justify-center`}
                   >
                     {val.title && (
-                      <span className="font-bold text-[16px] text-black px-5">
+                      <span className="font-bold text-[16px] md:text-[16px] text-black px-5 text-center">
                         {val.title}
                       </span>
                     )}
                   </div>
                   {val.description && (
-                    <p className="text-[16px] text-[#3f3e3e] text-justify leading-[1.5]">
+                    <p className="text-[14px] md:text-[16px] text-[#3f3e3e] text-justify leading-[1.5]">
                       {val.description}
                     </p>
                   )}

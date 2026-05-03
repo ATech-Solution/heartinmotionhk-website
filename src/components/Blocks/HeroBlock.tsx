@@ -40,14 +40,19 @@ export function HeroBlockComponent({
       )}
 
       {/* Rounded image card with gradient + text overlay */}
-      <div className="relative w-[390px] h-[320px] md:w-full md:max-w-[1300px] md:h-[390px] lg:h-[488px] md:mx-auto overflow-hidden">
+      <div className="relative 
+      w-[390px] h-[320px] 
+      md:w-full md:max-w-[1300px] md:h-[440px] md:rounded-[10px]
+      lg:w-full lg:max-w-[1300px] lg:h-[345px] lg:rounded-[0px]
+      xl:w-full xl:max-w-[1300px] xl:h-[488px] xl:rounded-[0px]
+      md:mx-auto overflow-hidden">
 
         {/* Desktop image */}
         {desktopImg && (
           <div className="hidden md:block absolute inset-0">
             <MediaImage
               media={desktopImg}
-              className="w-full h-full object-contain"
+              className="w-full h-full md:object-cover lg:object-contain"
               priority
             />
           </div>
@@ -56,7 +61,9 @@ export function HeroBlockComponent({
         {/* Mobile image */}
         {/* style={{ aspectRatio: '1 / 1.05' }} */}
         {mobileImg && (
-          <div className="block md:hidden absolute inset-0 bg-top-left bg-position-top-left bg-no-repeat bg-size-contain bg-size-[390px_320px]" 
+          <div className="block md:hidden absolute inset-0 bg-top-left bg-position-top-left bg-no-repeat bg-size-contain bg-size-[100%_320px]" 
+          // bg-size-[390px_320px]
+          // 290
           style={{ backgroundImage: `url(${mobileImg.url})` }}>
             {/* <MediaImage
               media={mobileImg}

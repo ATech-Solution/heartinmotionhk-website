@@ -592,7 +592,6 @@ export interface Page {
             heading?: string | null;
             subheading?: string | null;
             sideImage?: (number | null) | Media;
-            form: number | Form;
             /**
              * Control which viewports this block appears on.
              */
@@ -1466,7 +1465,6 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               sideImage?: T;
-              form?: T;
               visibility?:
                 | T
                 | {
@@ -1870,6 +1868,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface GeneralSetting {
   id: number;
+  /**
+   * Logo displayed on the admin login page.
+   */
+  adminLogo?: (number | null) | Media;
   siteName?: string | null;
   siteTagline?: string | null;
   contactEmail?: string | null;
@@ -2039,6 +2041,7 @@ export interface Footer {
  * via the `definition` "general-settings_select".
  */
 export interface GeneralSettingsSelect<T extends boolean = true> {
+  adminLogo?: T;
   siteName?: T;
   siteTagline?: T;
   contactEmail?: T;

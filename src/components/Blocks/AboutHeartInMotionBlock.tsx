@@ -23,13 +23,19 @@ export function AboutHeartInMotionBlockComponent({
   image,
 }: AboutHeartInMotionBlockProps) {
   return (
-    <section className="px-6 py-16 md:px-16 md:py-20 bg-[#FFF5CE]">
+    <section className="bg-white md:bg-[#FFF5CE] px-8 pt-8 pb-13 md:px-16 md:py-20">
       <div className="max-w-[1200px] mx-auto">
+        {image && (
+            <div className="overflow-hidden block md:hidden mb-6">
+              <MediaImage media={image} className="w-[180px] h-auto object-cover mx-auto" />
+            </div>
+        )}
+
         {heading && (
           <h2 className="font-display text-[28px] md:text-[40px] text-black mb-3">{heading}</h2>
         )}
         {body && (
-          <div className="text-[16px] text-black leading-[1.5] w-full mb-10 pl-1">
+          <div className="text-[14px] md:text-[16px] text-black leading-[1.5] w-full mb-10 md:pl-1">
             <RichText content={body} />
           </div>
         )}
@@ -49,7 +55,7 @@ export function AboutHeartInMotionBlockComponent({
             )}
           </div>
           {image && (
-            <div className="overflow-hidden">
+            <div className="overflow-hidden hidden md:block">
               <MediaImage media={image} className="w-[335px] h-auto object-cover mx-auto" />
             </div>
           )}

@@ -31,12 +31,12 @@ export const ContactFormBlock: Block = {
       type: 'upload',
       relationTo: 'media',
     },
-    {
-      name: 'form',
-      type: 'relationship',
-      relationTo: 'forms',
-      required: true,
-    },
+    // {
+    //   name: 'form',
+    //   type: 'relationship',
+    //   relationTo: 'forms',
+    //   required: true,
+    // },
     visibilityGroup,
   ],
 }

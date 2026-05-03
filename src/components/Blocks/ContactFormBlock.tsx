@@ -60,13 +60,13 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
   }
 
   return (
-    <section className="bg-white px-8 py-3 md:px-16 md:py-10 md:pb-[100px]">
+    <section className="bg-white px-8 pt-3 pb-13 md:px-16 md:py-10 md:pb-[100px]">
       <div className="max-w-[1200px] mx-auto">
         {heading && (
           <h1 className="font-display text-[32px] md:text-[48px] text-black leading-[1.5] mb-2 md:mb-2">{heading}</h1>
         )}
         {subheading && (
-          <p className="text-[16px] text-black leading-[1.5] mb-10 max-w-2xl">{subheading}</p>
+          <p className="text-[14px] md:text-[16px] text-black leading-[1.5] mb-10 max-w-2xl">{subheading}</p>
         )}
         <div className="bg-white rounded-3xl shadow-card-contact p-8 md:p-8 md:pb-12 grid md:grid-cols-[385px_1fr] gap-10 items-start">
           {sideImage && (
@@ -76,15 +76,15 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
           )}
           <div>
             {submitted ? (
-              <div className="text-center py-12">
-                <p className="font-display text-[16px] text-brand-teal mb-3">Thank you!</p>
+              <div className="text-center py-12 mt-[8%] md:mt-[12%]">
+                <h2 className="font-display text-[32px] md:text-[40] text-brand-teal mb-3">Thank you!</h2>
                 <p className="text-black">Your message has been sent. We&apos;ll be in touch soon.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="contact-fullName" className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-fullName" className="block text-[14px] md:text-[16px] font-medium text-black mb-1.5">
                       Full Name<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -92,11 +92,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                       name="fullName"
                       type="text"
                       required
-                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
+                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[14px] md:text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
                     />
                   </div>
                   <div>
-                    <label htmlFor="contact-email" className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-email" className="block text-[14px] md:text-[16px] font-medium text-black mb-1.5">
                       Email Address<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -104,11 +104,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                       name="email"
                       type="email"
                       required
-                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
+                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[14px] md:text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
                     />
                   </div>
                   <div>
-                    <label htmlFor="contact-phone" className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-phone" className="block text-[14px] md:text-[16px] font-medium text-black mb-1.5">
                       Phone Number<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -116,11 +116,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                       name="phone"
                       type="tel"
                       required
-                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
+                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[14px] md:text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
                     />
                   </div>
                   <div>
-                    <label htmlFor="contact-subject" className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-subject" className="block text-[14px] md:text-[16px] font-medium text-black mb-1.5">
                       Subject<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -128,26 +128,26 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                       name="subject"
                       type="text"
                       required
-                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
+                      className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[14px] md:text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition"
                     />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="contact-message" className="block text-[16px] font-medium text-black mb-1.5">
+                  <label htmlFor="contact-message" className="block text-[14px] md:text-[16px] font-medium text-black mb-1.5">
                     Tell us how we can help
                   </label>
                   <textarea
                     id="contact-message"
                     name="message"
                     rows={5}
-                    className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition resize-none"
+                    className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[14px] md:text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition resize-none"
                   />
                 </div>
-                {error && <p className="text-red-500 text-[16px]">{error}</p>}
+                {error && <p className="text-red-500 text-[14px] md:text-[16px]">{error}</p>}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:w-[320px] px-8 py-3 bg-[#8ec0bd] text-black rounded-[20px] font-semibold text-[16px] hover:text-white hover:bg-[#6C9A97] transition-colors duration-200 disabled:opacity-50"
+                  className="w-full sm:w-[320px] px-8 py-3 bg-[#8ec0bd] text-black rounded-[20px] font-semibold text-[14px] md:text-[16px] hover:text-white hover:bg-[#6C9A97] transition-colors duration-200 disabled:opacity-50"
                 >
                   {loading ? 'Sending…' : 'Submit'}
                 </button>

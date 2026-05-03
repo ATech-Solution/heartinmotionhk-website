@@ -52,7 +52,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
         )}
 
         <AnimateOnScroll animation="fade-up" delay={100}>
-          <div className="relative flex items-center gap-2 md:gap-4 md:w-[870px] mx-auto">
+          <div className="relative flex items-center gap-2 md:gap-4 lg:w-[870px] mx-auto">
             {/* Prev arrow — desktop only */}
             {testimonials.length > 1 && (
               <button
@@ -71,12 +71,12 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
                   <div key={t.id ?? i} className="flex-[0_0_100%] min-w-0">
                     <div className="flex flex-col items-center gap-3 md:gap-4 px-0 md:px-4">
                       {t.quote && (
-                        <p className="font-body text-[16px] md:text-[20px] text-black text-center leading-normal max-w-[790px]">
+                        <p className="font-body text-[16px] md:text-[16px] md:text-[20px] text-black text-center leading-normal max-w-[790px]">
                           &ldquo;{t.quote}&rdquo;
                         </p>
                       )}
                       {(t.authorName || t.authorTitle || t.authorCompany) && (
-                        <p className="font-bold text-[16px] md:text-[16px] text-black text-center">
+                        <p className="font-bold text-[14px] md:text-[16px] text-[14px] md:text-[16px] text-black text-center">
                           {[
                             t.authorName ? `- ${t.authorName}` : null,
                             t.authorTitle,

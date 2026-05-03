@@ -64,7 +64,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
     <header className="sticky top-0 z-50 headerBlock">
       {/* Desktop header — beige background */}
       <div className="hidden lg:block bg-[#f5eded] h-[110px]">
-        <div className="max-w-[1250px] mx-auto px-16 md:px-0 h-full flex items-center justify-between">
+        <div className="max-w-[1250px] mx-auto px-16 md:px-16 lg:px-16 xl:px-0 h-full flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
             {logoUrl ? (
@@ -83,9 +83,9 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             )}
           </Link>
 
-          <div className="flex gap-[60px]">
+          <div className="flex gap-[20px] md:gap-[20px] lg:gap-[20px] xl:gap-[60px]">
             {/* Desktop Nav */}
-            <nav className="flex items-center gap-[60px]">
+            <nav className="flex items-center gap-[20px] md:gap-[20px] lg:gap-[20px] xl:gap-[60px]">
               {navItems.map((item, i) => {
                 const href =
                   item.linkType === 'external'

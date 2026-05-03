@@ -89,6 +89,9 @@ export default buildConfig({
         access: {
           read: () => true,
         },
+        admin: {
+          hidden: true,
+        },
       },
       formSubmissionOverrides: {
         hooks: {
@@ -98,6 +101,11 @@ export default buildConfig({
     }),
     redirectsPlugin({
       collections: ['pages'],
+      overrides: {
+        admin: {
+          hidden: true,
+        },
+      },
     }),
     nestedDocsPlugin({
       collections: ['pages'],
@@ -108,6 +116,11 @@ export default buildConfig({
         pages: 10,
         services: 8,
       },
+      searchOverrides: {
+        admin: {
+          hidden: true,
+        },
+      },
     }),
     importExportPlugin({}),
   ],
@@ -116,7 +129,7 @@ export default buildConfig({
   admin: {
     user: 'users',
     // prefillOnly: true → only pre-fills the login form; does NOT bypass authentication
-    autoLogin: { email: 'tan@atech.software', prefillOnly: true },
+    // autoLogin: { email: 'tan@atech.software', prefillOnly: false },
     livePreview: {
       breakpoints: [
         { label: 'Mobile', name: 'mobile', width: 375, height: 812 },
@@ -136,6 +149,7 @@ export default buildConfig({
       titleSuffix: '— Heart in Motion HK',
     },
     components: {
+      beforeLogin: ['@/components/admin/BeforeLogin'],
       views: {
         backupRestore: {
           Component: '@/components/admin/BackupRestoreView',

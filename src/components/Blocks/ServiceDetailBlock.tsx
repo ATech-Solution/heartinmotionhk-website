@@ -18,13 +18,13 @@ interface ServiceDetailBlockProps {
 
 export function ServiceDetailBlockComponent({ heading, subheading, services }: ServiceDetailBlockProps) {
   return (
-    <section className="bg-white px-8 py-3 md:px-16 md:py-10">
+    <section className="bg-white px-8 pt-3 pb-13 md:px-16 md:py-10">
       <div className="max-w-[1200px] mx-auto">
         {heading && (
           <h1 className="font-display text-[32px] md:text-[48px] text-black mb-3">{heading}</h1>
         )}
         {subheading && (
-          <p className="text-black text-[14px] md:text-[16px] mb-13 md:mb-12 max-w-[845px]">{subheading}</p>
+          <p className="text-black text-[14px] text-[14px] md:text-[16px] mb-13 md:mb-12 max-w-[845px]">{subheading}</p>
         )}
         <div className="space-y-4 md:space-y-15">
           {services?.map((svc, i) => (
@@ -36,7 +36,7 @@ export function ServiceDetailBlockComponent({ heading, subheading, services }: S
                 {/* {svc.bulletPoints && svc.bulletPoints.length > 0 && (
                   <ul className="space-y-2 mb-4">
                     {svc.bulletPoints.map((bp, j) => (
-                      <li key={j} className="flex gap-2 items-start text-[14px] md:text-[16px] text-black">
+                      <li key={j} className="flex gap-2 items-start text-[14px] text-[14px] md:text-[16px] text-black">
                         <span className="text-black mt-1 flex-shrink-0">›</span>
                         {bp.point}
                       </li>
@@ -44,7 +44,7 @@ export function ServiceDetailBlockComponent({ heading, subheading, services }: S
                   </ul>
                 )} */}
                 {svc.description && (
-                  <RichText content={svc.description} className="text-[14px] md:text-[16px] text-black leading-[1.5] service-desc" />
+                  <RichText content={svc.description} className="text-[14px] text-[14px] md:text-[16px] text-black leading-[1.5] service-desc" />
                 )}
               </div>
               {svc.image && (

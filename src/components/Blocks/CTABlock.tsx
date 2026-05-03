@@ -39,7 +39,7 @@ export function CTABlockComponent({
           )}
           {subheading && (
             <AnimateOnScroll animation="fade-up" delay={100}>
-              <p className="text-[16px] text-[#3f3e3e] leading-[1.5]">
+              <p className="text-[14px] md:text-[16px] text-[#3f3e3e] leading-[1.5]">
                 {subheading}
               </p>
             </AnimateOnScroll>
@@ -48,7 +48,7 @@ export function CTABlockComponent({
             <AnimateOnScroll animation="fade-up" delay={200} className="">
               <a
                 href={ctaUrl}
-                className="inline-flex items-center justify-center gap-4 h-[40px] px-[15px] bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black w-[350px] max-w-full hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center gap-4 h-[40px] px-[15px] bg-[#8ec0bd] rounded-[15px] text-[14px] md:text-[16px] font-bold text-black w-[350px] max-w-full hover:opacity-90 transition-opacity"
               >
                 {ctaLabel}
                 <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />
@@ -66,7 +66,7 @@ export function CTABlockComponent({
               </h2>
             )}
             {subheading && (
-              <p className="text-[16px] text-[#3f3e3e] leading-[1.5] max-w-[675px]">
+              <p className="text-[14px] md:text-[16px] text-[#3f3e3e] leading-[1.5] max-w-[675px]">
                 {subheading}
               </p>
             )}
@@ -75,7 +75,7 @@ export function CTABlockComponent({
           {ctaLabel && ctaUrl && (
             <AnimateOnScroll animation="fade-right" delay={150} className={`group transition-all duration-300 ${subheading ? 'flex-shrink-0': 'mx-auto'}`}>
               <a
-                href={ctaUrl} className="inline-flex items-center justify-center gap-4 h-10 px-6 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black w-[235px] md:w-[320px] group-hover:text-white group-hover:bg-[#6C9A97]">
+                href={ctaUrl} className="inline-flex items-center justify-center gap-4 h-10 px-6 bg-[#8ec0bd] rounded-[15px] text-[14px] md:text-[16px] font-bold text-black w-[235px] md:w-[320px] group-hover:text-white group-hover:bg-[#6C9A97]">
                 {ctaLabel}
                 <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
               </a>

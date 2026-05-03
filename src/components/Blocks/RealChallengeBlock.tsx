@@ -50,7 +50,7 @@ export function RealChallengeBlockComponent({ heading, body, bodyMobile, animate
               </h2>
             )}
             {body && (
-              <div className="text-[16px] text-black text-justify leading-[1.5]">
+              <div className="text-[14px] md:text-[16px] text-black text-justify leading-[1.5]">
                 <RichText content={body} />
               </div>
             )}
