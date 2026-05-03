@@ -27,23 +27,23 @@ export function BookingSessionBlockComponent({
   services,
 }: BookingSessionBlockProps) {
   return (
-    <section className="bg-white py-12 md:py-16 px-6 md:px-[100px]">
-      <div className="max-w-[1440px] mx-auto">
+    <section className="bg-white px-8 py-3 md:px-16 md:py-10">
+      <div className="max-w-[1200px] mx-auto">
         {/* Heading */}
-        <h2 className="font-display text-[36px] md:text-[48px] text-black leading-tight mb-6 md:mb-8">
+        <h2 className="font-display text-[36px] md:text-[48px] text-black leading-tight mb-2 md:mb-2">
           {sectionTitle}
         </h2>
 
         {/* Subtitle */}
         {sectionSubtitle && (
-          <p className="text-[15px] md:text-[16px] text-black text-justify max-w-[656px] leading-[1.6] mb-8 md:mb-10">
+          <p className="text-[15px] md:text-[16px] text-black text-justify max-w-[720px] leading-[1.6] mb-8 md:mb-10">
             {sectionSubtitle}
           </p>
         )}
 
         {/* Service cards */}
         {services && services.length > 0 && (
-          <div className="border border-[#eaecf0] rounded-[3px] max-w-[1069px]">
+          <div className="border border-[#eaecf0] rounded-[3px] max-w-full">
             {services.map((service, index) => (
               <div
                 key={service.id ?? index}
@@ -81,7 +81,7 @@ export function BookingSessionBlockComponent({
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Book via WhatsApp"
-                        className="flex items-center justify-center size-[47px] rounded-[20px] bg-[#8ec0bd] hover:bg-[#7ab0ad] transition-colors duration-150 text-white"
+                        className="flex items-center justify-center size-[47px] rounded-[20px] text-black bg-white border border-black hover:text-white hover:border-white hover:bg-[#7ab0ad] transition-colors duration-150"
                       >
                         <span
                           className="size-[20px]"
@@ -96,7 +96,7 @@ export function BookingSessionBlockComponent({
                         // href={service.email}
                         href={`mailto:${service.email}`}
                         aria-label="Book via Email"
-                        className="flex items-center justify-center size-[47px] rounded-[20px] border border-[#3f3e3e] hover:bg-gray-50 transition-colors duration-150 text-[#3f3e3e]"
+                        className="flex items-center justify-center size-[47px] rounded-[20px] text-black bg-white border border-black hover:text-white hover:border-white hover:bg-[#7ab0ad] transition-colors duration-150"
                       >
                         <Mail size={20} />
                       </a>

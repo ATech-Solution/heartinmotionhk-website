@@ -115,7 +115,8 @@ export default buildConfig({
   // ── Admin ─────────────────────────────────────────────
   admin: {
     user: 'users',
-    autoLogin: { email: 'tan@atech.software', prefillOnly: false },
+    // prefillOnly: true → only pre-fills the login form; does NOT bypass authentication
+    autoLogin: { email: 'tan@atech.software', prefillOnly: true },
     livePreview: {
       breakpoints: [
         { label: 'Mobile', name: 'mobile', width: 375, height: 812 },

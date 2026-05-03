@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { FooterPolicyLinks } from './FooterPolicyLinks'
 
 const SOCIAL_ICONS: Record<string, { label: string; svg: string }> = {
@@ -52,6 +55,7 @@ function getPagePath(page: any) {
 }
 
 export function SiteFooter({ footer, general }: FooterProps) {
+  const pathname = usePathname()
   const navLinks = footer?.navLinks ?? []
   const socialLinks = footer?.socialLinks ?? []
   const logoUrl = footer?.logo?.url ?? null
@@ -65,24 +69,28 @@ export function SiteFooter({ footer, general }: FooterProps) {
 
   return (
     <footer className="bg-[#f5eded] relative footerBlock">
-      <div className="max-w-[1250px] mx-auto px-16  md:px-0 pt-[10px] pb-[30px]">
+      <div className="max-w-[1250px] mx-auto px-16 md:px-0 py-16 md:py-10">
         
         {/* 2-column main content */}
-        <div className="flex flex-col md:flex-row gap-10 md:gap-16 mt-8 pl-20 md:pl-3">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-22 pl-0 md:pl-0">
           {/* Left column — Nav links */}
-          <div className="flex-shrink-0 min-w-[220px]">
+          <div className="flex-shrink-0 min-w-[220px] md:order-1">
             <nav className="space-y-5">
-              {navLinks.map((link, i) => (
-                <Link
-                  key={i}
-                  href={link.url ?? getPagePath(link.page)}
-                  className={`block text-[18px] text-black hover:font-bold ${
-                    i === 0 ? 'font-bold' : 'font-normal'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link, i) => {
+                const href = link.url ?? getPagePath(link.page)
+                const isActive = pathname === href
+                return (
+                  <Link
+                    key={i}
+                    href={href}
+                    className={`block text-[18px] text-black hover:font-bold ${
+                      isActive ? 'font-bold' : 'font-normal'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              })}
               <FooterPolicyLinks
                 privacyPolicy={privacyPolicy}
                 termsConditions={termsConditions}
@@ -91,7 +99,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
           </div>
 
           {/* Right column — Contact */}
-          <div className="flex-1">
+          <div className="flex-1 md:order-2">
             <p className="text-[18px] font-bold text-black mb-5">Contact</p>
             <div className="space-y-[15px]">
               {general?.contactAddress && (
@@ -109,7 +117,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
                   </span>
                   <a
                     href={`tel:${general.contactPhone}`}
-                    className="hover:text-brand-teal transition-colors"
+                    className="hover:text-[#c36] transition-colors"
                   >
                     {general.contactPhone}
                   </a>
@@ -122,7 +130,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
                   </span>
                   <a
                     href={`mailto:${general.contactEmail}`}
-                    className="hover:text-brand-teal transition-colors"
+                    className="hover:text-[#c36] transition-colors"
                   >
                     {general.contactEmail}
                   </a>
@@ -162,7 +170,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
           </div>
 
           {/* Logo top-right */}
-          <div className="flex justify-end mb-2">
+          <div className="flex order-first justify-start mb-2 md:order-3 md:justify-end">
             <div className="flex items-start gap-3">
               {logoUrl ? (
                 <Image
@@ -185,7 +193,7 @@ export function SiteFooter({ footer, general }: FooterProps) {
         </div>
 
         {/* Copyright */}
-        <div className="mt-[30px]">
+        <div className="mt-13 md:mt-8 pl-0 md:pl-0">
           <p className="text-[14px] text-black">
             {footer?.copyrightText ?? `©${new Date().getFullYear()} Heart in Motion - All Rights Reserved`}
           </p>

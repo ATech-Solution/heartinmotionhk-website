@@ -524,12 +524,6 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
-            coreValues?:
-              | {
-                  value: string;
-                  id?: string | null;
-                }[]
-              | null;
             image?: (number | null) | Media;
             /**
              * Control which viewports this block appears on.
@@ -1421,12 +1415,6 @@ export interface PagesSelect<T extends boolean = true> {
               mission?: T;
               visionTitle?: T;
               vision?: T;
-              coreValues?:
-                | T
-                | {
-                    value?: T;
-                    id?: T;
-                  };
               image?: T;
               visibility?:
                 | T

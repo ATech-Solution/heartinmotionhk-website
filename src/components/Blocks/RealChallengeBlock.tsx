@@ -11,7 +11,7 @@ interface RealChallengeBlockProps {
 
 export function RealChallengeBlockComponent({ heading, body, bodyMobile, animatedGif }: RealChallengeBlockProps) {
   return (
-    <section className="bg-white pt-5 md:pt-9 pb-5 md:pb-10 md:py-6 px-4 md:px-[52px]">
+    <section className="bg-white pt-5 md:pt-9 pb-5 md:pb-10 md:py-6 px-4 md:px-16">
       <div className="max-w-[1100px] mx-auto">
 
         {/* Mobile: illustration above, text below */}
@@ -23,7 +23,7 @@ export function RealChallengeBlockComponent({ heading, body, bodyMobile, animate
           )}
           <AnimateOnScroll animation="fade-up" delay={100}>
             {heading && (
-              <h2 className="font-display text-[32px] text-black leading-[0.97] mb-[10px] px-6">
+              <h2 className="font-display text-[32px] text-black leading-[1.5] mb-[10px] px-6">
                 {heading}
               </h2>
             )}
@@ -45,7 +45,7 @@ export function RealChallengeBlockComponent({ heading, body, bodyMobile, animate
 
           <AnimateOnScroll animation="fade-right" delay={150} className="flex-1">
             {heading && (
-              <h2 className="font-display text-[40px] text-black leading-[0.97] mb-6">
+              <h2 className="font-display text-[40px] text-black leading-[1.] mb-6">
                 {heading}
               </h2>
             )}

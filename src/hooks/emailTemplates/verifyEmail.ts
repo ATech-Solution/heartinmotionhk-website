@@ -6,7 +6,7 @@ export function verifyEmailTemplate({
   user: { email: string; name?: string }
 }): string {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-  const verifyUrl = `${process.env.PAYLOAD_PUBLIC_SERVER_URL ?? siteUrl}/api/users/verify/${token}`
+  const verifyUrl = `${siteUrl}/verify-email?token=${token}`
 
   return `
 <!DOCTYPE html>

@@ -10,7 +10,7 @@ interface HeartTeamCoachingBlockProps {
 
 export function HeartTeamCoachingBlockComponent({ heading, body, ctaLabel, ctaUrl }: HeartTeamCoachingBlockProps) {
   return (
-    <section className="bg-white pt-[50px] pb-6 md:pt-6 md:pb-6 px-4 md:px-[52px]">
+    <section className="bg-white pt-[50px] pb-6 md:pt-6 md:pb-6 px-10 md:px-16">
       <div className="max-w-[1200px] mx-auto">
         <AnimateOnScroll animation="fade-up">
           {heading && (

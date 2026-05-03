@@ -26,6 +26,7 @@ export const RealChallengeBlock: Block = {
       name: 'body',
       type: 'richText',
       localized: true,
+      label: 'Description (Desktop)',
       admin: { description: 'Shown on desktop (≥768px).' },
     },
     {

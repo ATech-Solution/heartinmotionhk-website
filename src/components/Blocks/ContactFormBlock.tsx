@@ -60,7 +60,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
   }
 
   return (
-    <section className="py-16 px-6 md:px-16 md:pb-[100px] bg-white">
+    <section className="bg-white px-8 py-3 md:px-16 md:py-10 md:pb-[100px]">
       <div className="max-w-[1200px] mx-auto">
         {heading && (
           <h1 className="font-display text-[32px] md:text-[48px] text-black leading-[1.5] mb-2 md:mb-2">{heading}</h1>
@@ -84,10 +84,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-fullName" className="block text-[16px] font-medium text-black mb-1.5">
                       Full Name<span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="contact-fullName"
                       name="fullName"
                       type="text"
                       required
@@ -95,10 +96,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                     />
                   </div>
                   <div>
-                    <label className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-email" className="block text-[16px] font-medium text-black mb-1.5">
                       Email Address<span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="contact-email"
                       name="email"
                       type="email"
                       required
@@ -106,10 +108,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                     />
                   </div>
                   <div>
-                    <label className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-phone" className="block text-[16px] font-medium text-black mb-1.5">
                       Phone Number<span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="contact-phone"
                       name="phone"
                       type="tel"
                       required
@@ -117,10 +120,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                     />
                   </div>
                   <div>
-                    <label className="block text-[16px] font-medium text-black mb-1.5">
+                    <label htmlFor="contact-subject" className="block text-[16px] font-medium text-black mb-1.5">
                       Subject<span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="contact-subject"
                       name="subject"
                       type="text"
                       required
@@ -129,10 +133,11 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[16px] font-medium text-black mb-1.5">
+                  <label htmlFor="contact-message" className="block text-[16px] font-medium text-black mb-1.5">
                     Tell us how we can help
                   </label>
                   <textarea
+                    id="contact-message"
                     name="message"
                     rows={5}
                     className="w-full px-4 py-2.5 border border-brand-beige-dark rounded-xl text-[16px] focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition resize-none"

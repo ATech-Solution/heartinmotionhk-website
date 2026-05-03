@@ -26,7 +26,7 @@ export function HeroBlockComponent({
   // const ctaLabel = "Learn more"
   // const ctaUrl ="#"
   return (
-    <section className="bg-white px-6 md:px-[52px] pt-7 pb-6 md:py-[48px] w-full">
+    <section className="bg-white px-4 py-8 pb-5 md:px-16 md:py-10 w-full">
 
       {/* Mobile only: CTA button above the hero image card */}
       {ctaLabel && ctaUrl && (
@@ -40,27 +40,29 @@ export function HeroBlockComponent({
       )}
 
       {/* Rounded image card with gradient + text overlay */}
-      <div className="relative w-full max-w-[1300px] md:mx-auto rounded-[20px] overflow-hidden h-[282px] md:h-[390px] lg:h-[488px]">
+      <div className="relative w-[390px] h-[320px] md:w-full md:max-w-[1300px] md:h-[390px] lg:h-[488px] md:mx-auto overflow-hidden">
 
         {/* Desktop image */}
         {desktopImg && (
           <div className="hidden md:block absolute inset-0">
             <MediaImage
               media={desktopImg}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               priority
             />
           </div>
         )}
 
         {/* Mobile image */}
+        {/* style={{ aspectRatio: '1 / 1.05' }} */}
         {mobileImg && (
-          <div className="block md:hidden absolute inset-0">
-            <MediaImage
+          <div className="block md:hidden absolute inset-0 bg-top-left bg-position-top-left bg-no-repeat bg-size-contain bg-size-[390px_320px]" 
+          style={{ backgroundImage: `url(${mobileImg.url})` }}>
+            {/* <MediaImage
               media={mobileImg}
-              className="w-full h-full object-contain object-top"
+              className="w-full h-full object-cover object-top object-position-top rounded-[30px]"
               priority
-            />
+            /> */}
           </div>
         )}
 
@@ -70,7 +72,7 @@ export function HeroBlockComponent({
         {/* Text overlay */}
         <AnimateOnScroll
           animation="fade-up"
-          className="absolute bottom-6 left-[27px] md:bottom-8 w-full pr-8 md:pr-12"
+          className="absolute bottom-6 md:bottom-8 w-full pr-8 md:pr-12 left-[35px]"
         >
           {headline && (
             <h1 className="font-display text-[32px] md:text-[48px] text-black leading-none mb-2 md:mb-3 w-[250px] md:w-full">
@@ -79,7 +81,7 @@ export function HeroBlockComponent({
           )}
           {/* Mobile subheadline */}
           {(subheadlineMobile) && (
-            <p className="md:hidden text-[14px] text-black text-justify leading-[1.25] max-w-[335px]">
+            <p className="md:hidden text-[14px] text-black text-justify leading-[1.25] max-w-[330px]">
               {subheadlineMobile}
             </p>
           )}

@@ -35,7 +35,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
   if (!testimonials || testimonials.length === 0) return null
   // heading = heading || 'What my clients say'
   return (
-    <section className="bg-white pt-[40px] pb-[50px] md:pt-[28px] md:pb-[60px] px-4 md:px-[52px]">
+    <section className="bg-white py-13 md:pt-8 md:pb-16 px-8 md:px-16">
       <div className="max-w-[1337px] mx-auto">
 
         {/* Decorative horizontal gradient line — desktop only */}
@@ -107,7 +107,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
 
           {/* Dot indicators */}
           {testimonials.length > 1 && (
-            <div className="flex justify-center gap-[15px] mt-5 md:mt-10">
+            <div className="flex justify-center gap-[15px] mt-15 md:mt-10">
               {testimonials.map((_, i) => (
                 <button
                   key={i}

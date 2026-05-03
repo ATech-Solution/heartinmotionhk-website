@@ -10,14 +10,14 @@ interface AboutMeBlockProps {
 
 export function AboutMeBlockComponent({ heading, body, profileImage, certImages }: AboutMeBlockProps) {
   return (
-    <section className="px-6 py-10 md:px-16 bg-white">
+    <section className="bg-white px-8 py-3 md:px-16 md:py-10">
       <div className="max-w-[1200px] mx-auto">
-        <div className="grid md:grid-cols-2 gap-15 items-start mb-6 pl-3">
+        <div className="grid md:grid-cols-2 gap-15 items-start mb-6">
           <div>
             {heading && (
               <h2 className="font-display text-[32px] md:text-[48px] text-black mb-2">{heading}</h2>
             )}
-            {body && <RichText content={body} className="text-black text-[16px] mb-10" />}
+            {body && <RichText content={body} className="text-black text-[14px] md:text-[16px] mb-10" />}
 
             {certImages && certImages.length > 0 && (
               <div className="flex flex-wrap gap-1 items-center">
