@@ -24,19 +24,25 @@ jobs:
             cd /home/deploy/dev
 
             echo "--- Pulling latest code from dev ---"
+            git stash
             git pull origin dev
 
             echo "--- Installing dependencies ---"
-            npm install --production=false
+            npm install --production=false --ignore-scripts
+
+            echo "--- Generating Payload types & importmap ---"
+            NODE_OPTIONS='--import tsx --max-old-space-size=512' npx payload generate:types
+            NODE_OPTIONS='--import tsx --max-old-space-size=512' npx payload generate:importmap
 
             echo "--- Running DB migrations ---"
             NODE_OPTIONS='--import tsx' npm run migrate
 
             echo "--- Building ---"
+            rm -rf .next
             npm run build
 
             echo "--- Restarting PM2 ---"
-            pm2 restart heartinmotionhk-dev
+            pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env
 
             echo "--- Deploy complete ---"
             pm2 status
