@@ -4,14 +4,14 @@ module.exports = {
       name: 'heartinmotionhk-dev',
       script: 'node',
       args: '.next/standalone/server.js',
-      cwd: '/home/deploy/heartinmotionhk',
+      cwd: '/home/deploy/dev',
       env: {
         NODE_ENV: 'development',
         PORT: 3001,
         HOSTNAME: '0.0.0.0',
       },
       watch: false,
-      max_memory_restart: '512M',
+      max_memory_restart: '1GB',
       restart_delay: 3000,
     },
     {
