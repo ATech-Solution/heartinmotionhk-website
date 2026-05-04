@@ -1,8 +1,8 @@
 node_modules
 .next
 .env
-data/
+# data/
 public/media/
-*.db
+# *.db
 next.zip
 documentation/admin-manual.html
