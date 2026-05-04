@@ -27,14 +27,14 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000',
-  secret: process.env.PAYLOAD_SECRET ?? 'fallback-dev-secret',
+  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  secret: process.env.PAYLOAD_SECRET || 'fallback-dev-secret',
   sharp,
 
   // ── Database ──────────────────────────────────────────
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URL ?? 'file:./data/payload.db',
+      url: process.env.DATABASE_URL || 'file:./data/payload.db',
     },
   }),
 
@@ -56,12 +56,12 @@ export default buildConfig({
     defaultFromAddress: process.env.EMAIL_FROM ?? 'noreply@heartinmotionhk.com',
     defaultFromName: process.env.EMAIL_FROM_NAME ?? 'Heart in Motion HK',
     transportOptions: {
-      host: process.env.AWS_SES_SMTP_HOST,
-      port: Number(process.env.AWS_SES_SMTP_PORT ?? 587),
-      secure: Number(process.env.AWS_SES_SMTP_PORT ?? 587) === 465,
+      host: process.env.AWS_SES_SMTP_HOST || 'localhost',
+      port: Number(process.env.AWS_SES_SMTP_PORT || 587),
+      secure: Number(process.env.AWS_SES_SMTP_PORT || 587) === 465,
       auth: {
-        user: process.env.AWS_SES_SMTP_USER,
-        pass: process.env.AWS_SES_SMTP_PASSWORD,
+        user: process.env.AWS_SES_SMTP_USER || '',
+        pass: process.env.AWS_SES_SMTP_PASSWORD || '',
       },
     },
   }),
