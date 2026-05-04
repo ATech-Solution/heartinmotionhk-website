@@ -50,8 +50,9 @@ git pull origin dev
 #git checkout origin/main -- package.json
 
 echo "📥 Installing dependencies..."
-npm install --ignore-scripts
-npm rebuild sharp
+npm install
+# npm install --ignore-scripts
+# npm rebuild sharp
 
 echo "skip 🏗️ Building app... make sure already on local and pass .next"
 #npm run build
@@ -88,4 +89,4 @@ pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinm
 
 echo "✅ Deployed successfully!"
 pm2 status
-pm2 logs heartinmotionhk-website-dev
+pm2 logs heartinmotionhk-dev
