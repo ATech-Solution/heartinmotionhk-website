@@ -44,7 +44,8 @@ echo "📦 Pulling latest code..."
 #cd ~/atombondway
 git stash
 git stash drop
-git pull origin main
+# git pull origin main
+git pull origin dev
 #overwrite completely
 #git checkout origin/main -- package.json
 
@@ -82,12 +83,12 @@ npm run generate:types && npm run generate:importmap
 # ln -sfn /home/deploy/atombondway/public/media .next/standalone/public/media
 
 echo "🔄 Restarting app..."
-pm2 stop heartinmotionhk-website || true
-pm2 delete heartinmotionhk-website || true
+pm2 stop heartinmotionhk-website-dev || true
+pm2 delete heartinmotionhk-website-dev || true
 # pm2 start ecosystem.config.js --env production
-pm2 start npm --name "heartinmotionhk-website" -- start
-pm2 restart heartinmotionhk-website --update-env
+pm2 start npm --name "heartinmotionhk-website-dev" -- start
+pm2 restart heartinmotionhk-website-dev --update-env
 
 echo "✅ Deployed successfully!"
 pm2 status
-pm2 logs heartinmotionhk-website
+pm2 logs heartinmotionhk-website-dev
