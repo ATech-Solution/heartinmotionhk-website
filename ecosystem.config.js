@@ -4,7 +4,7 @@ module.exports = {
       name: 'heartinmotionhk-dev',
       script: 'npm',
       args: 'run start',
-      cwd: '/var/www/heartinmotionhk-dev',
+      cwd: '/home/deploy/heartinmotionhk',
       env: {
         NODE_ENV: 'development',
         PORT: 3001,
@@ -12,9 +12,6 @@ module.exports = {
       watch: false,
       max_memory_restart: '512M',
       restart_delay: 3000,
-      log_file: '/var/log/pm2/heartinmotionhk-dev.log',
-      error_file: '/var/log/pm2/heartinmotionhk-dev-error.log',
-      out_file: '/var/log/pm2/heartinmotionhk-dev-out.log',
     },
     {
       name: 'heartinmotionhk-prod',
@@ -28,9 +25,6 @@ module.exports = {
       watch: false,
       max_memory_restart: '1G',
       restart_delay: 3000,
-      log_file: '/var/log/pm2/heartinmotionhk-prod.log',
-      error_file: '/var/log/pm2/heartinmotionhk-prod-error.log',
-      out_file: '/var/log/pm2/heartinmotionhk-prod-out.log',
     },
   ],
 }
