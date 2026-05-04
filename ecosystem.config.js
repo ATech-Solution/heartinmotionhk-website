@@ -2,12 +2,13 @@ module.exports = {
   apps: [
     {
       name: 'heartinmotionhk-dev',
-      script: 'npm',
-      args: 'run start',
+      script: 'node',
+      args: '.next/standalone/server.js',
       cwd: '/home/deploy/heartinmotionhk',
       env: {
         NODE_ENV: 'development',
         PORT: 3001,
+        HOSTNAME: '0.0.0.0',
       },
       watch: false,
       max_memory_restart: '512M',
@@ -15,12 +16,13 @@ module.exports = {
     },
     {
       name: 'heartinmotionhk-prod',
-      script: 'npm',
-      args: 'run start',
+      script: 'node',
+      args: '.next/standalone/server.js',
       cwd: '/var/www/heartinmotionhk-prod',
       env: {
         NODE_ENV: 'production',
         PORT: 3000,
+        HOSTNAME: '0.0.0.0',
       },
       watch: false,
       max_memory_restart: '1G',
