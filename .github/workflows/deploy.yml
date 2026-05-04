@@ -72,10 +72,6 @@ jobs:
             echo "--- Installing dependencies ---"
             npm install --production=false --ignore-scripts
 
-            echo "--- Running DB migrations ---"
-            npm run migrate \
-              || echo "WARNING: migrations failed — run manually on server: npm run migrate"
-
             echo "--- Deploying build artifacts ---"
             rm -rf .next
             tar -xzf next-build.tar.gz
