@@ -13,6 +13,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL_PROD }}
+          NEXT_PUBLIC_SITE_URL_PROD: ${{ secrets.NEXT_PUBLIC_SITE_URL_PROD }}
+          NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN_PROD }}
+          NEXT_PUBLIC_DOMAIN_PROD: ${{ secrets.NEXT_PUBLIC_DOMAIN_PROD }}
+          NEXT_PUBLIC_MEDIA_URL: ${{ secrets.NEXT_PUBLIC_MEDIA_URL }}
+          PAYLOAD_PUBLIC_SERVER_URL: ${{ secrets.PAYLOAD_PUBLIC_SERVER_URL_PROD }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MAINTENANCE_MODE: ${{ secrets.MAINTENANCE_MODE }}
+
+      - name: Package build artifacts
+        run: tar -czf next-build.tar.gz .next
+
+      - name: Upload build artifacts to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "next-build.tar.gz"
+          target: "/home/deploy/dev/"
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -30,16 +66,13 @@ jobs:
             echo "--- Installing dependencies ---"
             npm install --production=false --ignore-scripts
 
-            echo "--- Generating Payload types & importmap ---"
-            NODE_OPTIONS='--import tsx --max-old-space-size=512' npx payload generate:types
-            NODE_OPTIONS='--import tsx --max-old-space-size=512' npx payload generate:importmap
-
             echo "--- Running DB migrations ---"
             NODE_OPTIONS='--import tsx' npm run migrate
 
-            echo "--- Building ---"
+            echo "--- Deploying build artifacts ---"
             rm -rf .next
-            npm run build
+            tar -xzf next-build.tar.gz
+            rm -f next-build.tar.gz
 
             echo "--- Restarting PM2 ---"
             pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env

@@ -11,7 +11,7 @@ module.exports = {
         HOSTNAME: '0.0.0.0',
       },
       watch: false,
-      max_memory_restart: '1GB',
+      max_memory_restart: '1G',
       restart_delay: 3000,
     },
     {
@@ -25,7 +25,7 @@ module.exports = {
         HOSTNAME: '0.0.0.0',
       },
       watch: false,
-      max_memory_restart: '1GB',
+      max_memory_restart: '1G',
       restart_delay: 3000,
     },
   ],
