@@ -130,21 +130,6 @@ export default buildConfig({
     user: 'users',
     // prefillOnly: true → only pre-fills the login form; does NOT bypass authentication
     // autoLogin: { email: 'tan@atech.software', prefillOnly: false },
-    livePreview: {
-      breakpoints: [
-        { label: 'Mobile', name: 'mobile', width: 375, height: 812 },
-        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
-        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
-      ],
-      collections: ['pages'],
-      globals: ['general-settings'],
-      url: ({ data, locale }) => {
-        const base = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000'
-        const slug = data?.slug === 'home' ? '' : (data?.slug ?? '')
-        const localeParam = locale?.code ? `&locale=${locale.code}` : ''
-        return `${base}/api/preview?slug=${slug}${localeParam}`
-      },
-    },
     meta: {
       titleSuffix: '— Heart in Motion HK',
     },

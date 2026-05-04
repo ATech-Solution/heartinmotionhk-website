@@ -35,14 +35,6 @@ export const Pages: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
-    livePreview: {
-      url: ({ data, locale }) => {
-        const base = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000'
-        const slug = data?.slug === 'home' ? '' : (data?.slug ?? '')
-        const localeParam = locale?.code ? `&locale=${locale.code}` : ''
-        return `${base}/api/preview?slug=${slug}${localeParam}`
-      },
-    },
   },
   versions: {
     drafts: {
