@@ -41,10 +41,14 @@ export function HeroBlockComponent({
 
       {/* Rounded image card with gradient + text overlay */}
       <div className="relative 
-      w-[390px] h-[320px] 
-      md:w-full md:max-w-[1300px] md:h-[440px] md:rounded-[10px]
+      w-[390px] h-[320px]
+      max-[321px]:w-[290px]
+      max-[376px]:w-[345px]
+      max-[426px]:w-[390px]
+      sm:w-[390px] sm:h-[320px]
+      md:w-full md:max-w-[1300px] md:h-[440px] md:rounded-[20px]
       lg:w-full lg:max-w-[1300px] lg:h-[345px] lg:rounded-[0px]
-      xl:w-full xl:max-w-[1300px] xl:h-[488px] xl:rounded-[0px]
+      xl:w-full xl:max-w-[1300px] xl:h-[488px] xl:rounded-[0px]      
       md:mx-auto overflow-hidden">
 
         {/* Desktop image */}
@@ -60,16 +64,28 @@ export function HeroBlockComponent({
 
         {/* Mobile image */}
         {/* style={{ aspectRatio: '1 / 1.05' }} */}
-        {mobileImg && (
-          <div className="block md:hidden absolute inset-0 bg-top-left bg-position-top-left bg-no-repeat bg-size-contain bg-size-[100%_320px]" 
-          // bg-size-[390px_320px]
-          // 290
+        {/* <div className="block md:hidden absolute inset-0
+          bg-top-left bg-position-top-left bg-no-repeat bg-size-contain 
+          bg-size-[390px_320px] xxs:bg-size-[390px_320px] sm:bg-size-[390px_320px]"
           style={{ backgroundImage: `url(${mobileImg.url})` }}>
-            {/* <MediaImage
+            
+            xs:bg-size-[320px_100%] 
+            sm:bg-size-[390px_320px]                      
+            md:bg-size-[1300px_440px] 
+            lg:bg-size-[1300px_345px] 
+            xl:bg-size-[1300px_488px] */}
+        {mobileImg && (
+          <div className="block md:hidden absolute inset-0 
+          w-[390px] h-[320px]
+          max-[321px]:w-[290px]
+          max-[376px]:w-[345px]
+          max-[426px]:w-[390px]
+          ">
+            <MediaImage
               media={mobileImg}
               className="w-full h-full object-cover object-top object-position-top rounded-[30px]"
               priority
-            /> */}
+            /> 
           </div>
         )}
 
@@ -88,13 +104,18 @@ export function HeroBlockComponent({
           )}
           {/* Mobile subheadline */}
           {(subheadlineMobile) && (
-            <p className="md:hidden text-[14px] text-black text-justify leading-[1.25] max-w-[330px]">
+            <p className="md:hidden text-[14px] text-black text-justify leading-[1.25] 
+            max-w-[330px]
+            max-[321px]:max-w-[230px]
+            max-[376px]:max-w-[280px]
+            ">
               {subheadlineMobile}
             </p>
           )}
           {/* Desktop subheadline */}
           {subheadline && (
-            <p className="hidden md:block text-[18px] text-black text-justify leading-[1.5] max-w-[1110px]">
+            <p className="hidden md:block text-[18px] text-black text-justify leading-[1.5] 
+            max-w-[1110px]">
               {subheadline}
             </p>
           )}

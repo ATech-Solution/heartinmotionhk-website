@@ -10,6 +10,7 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   sassOptions: {
     silenceDeprecations: ['import', 'legacy-js-api'],

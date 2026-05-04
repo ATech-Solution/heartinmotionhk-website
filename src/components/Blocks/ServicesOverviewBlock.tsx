@@ -116,7 +116,8 @@ export function ServicesOverviewBlockComponent({
           <AnimateOnScroll animation="fade-up" delay={200} className="mt-3 flex justify-center group transition-all duration-300">
             <Link
               href={ctaUrl}
-              className="inline-flex items-center justify-center gap-4 h-[47px] px-5 bg-[#86d0ef] rounded-[20px] text-[14px] md:text-[16px] font-bold text-black w-full md:w-[320px] w-[235px] group-hover:text-white group-hover:bg-[#6C9A97] transition-all"
+              className="inline-flex items-center justify-center gap-4 h-[40px] px-5 bg-[#86d0ef] rounded-[15px] text-[14px] md:text-[16px] font-bold text-black 
+              w-full md:w-[320px] w-[235px] group-hover:text-white group-hover:bg-[#6C9A97] transition-all"
             >
               {ctaLabel}
               <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />

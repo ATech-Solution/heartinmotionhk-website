@@ -25,14 +25,14 @@ export function CTABlockComponent({
   const bgClass = bgStyles[background] ?? bgStyles['teal-gradient']
 
   return (
-    <section className={`${bgClass} px-4 md:px-[52px] min-h-[156px] md:min-h-[215px] flex items-center`}>
+    <section className={`${bgClass} px-10 md:px-16 min-h-[156px] md:min-h-[215px] flex items-center`}>
       <div className="w-full max-w-[1000px] mx-auto py-[28px] md:py-0">
 
         {/* Mobile: stacked, centered — matches Figma 156px banner */}
-        <div className="flex flex-col md:hidden items-center gap-4 text-center">
+        <div className="flex flex-col md:hidden justify-center gap-4 text-center">
           {heading && (
             <AnimateOnScroll animation="fade-up">
-              <h2 className="font-display text-[20px] text-black leading-none">
+              <h2 className="font-display text-[20px] text-black w-[60%] md:w-full mx-auto leading-[1.5]">
                 {heading}
               </h2>
             </AnimateOnScroll>
@@ -45,10 +45,12 @@ export function CTABlockComponent({
             </AnimateOnScroll>
           )}
           {ctaLabel && ctaUrl && (
-            <AnimateOnScroll animation="fade-up" delay={200} className="">
+            <AnimateOnScroll animation="fade-up" delay={200} className="flex">
               <a
                 href={ctaUrl}
-                className="inline-flex items-center justify-center gap-4 h-[40px] px-[15px] bg-[#8ec0bd] rounded-[15px] text-[14px] md:text-[16px] font-bold text-black w-[350px] max-w-full hover:opacity-90 transition-opacity"
+                className="
+                inline-flex items-center justify-center gap-4 h-[40px] px-5 bg-[#8ec0bd] rounded-[15px] text-[14px] md:text-[16px] font-bold text-black 
+                w-full md:w-[320px] w-[235px] hover:opacity-90 transition-opacity"
               >
                 {ctaLabel}
                 <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)]" aria-hidden="true" />
