@@ -73,8 +73,8 @@ jobs:
             npm install --production=false --ignore-scripts
 
             echo "--- Running DB migrations ---"
-            NODE_OPTIONS='--import tsx --max-old-space-size=256' npm run migrate \
-              || echo "WARNING: migrations failed (likely OOM) — run manually: NODE_OPTIONS='--import tsx' npm run migrate"
+            npm run migrate \
+              || echo "WARNING: migrations failed — run manually on server: npm run migrate"
 
             echo "--- Deploying build artifacts ---"
             rm -rf .next
