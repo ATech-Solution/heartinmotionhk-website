@@ -42,8 +42,24 @@ jobs:
           # Secrets
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
 
-      - name: Package build artifacts
-        run: tar -czf next-build.tar.gz .next
+      - name: Bundle standalone with static assets
+        run: |
+          # Next.js standalone server.js changes cwd to .next/standalone/ at runtime,
+          # so static chunks and public assets must live inside that directory.
+          # They are NOT included in the standalone output by Next.js automatically.
+
+          # 1. Copy static chunks (CSS, JS, images optimised by Next)
+          cp -r .next/static .next/standalone/.next/
+
+          # 2. Copy public assets that are tracked in git (font, icon, images, favicon)
+          mkdir -p .next/standalone/public
+          for dir in font icon images; do
+            [ -d "public/$dir" ] && cp -r "public/$dir" .next/standalone/public/
+          done
+          [ -f "public/favicon.ico" ] && cp "public/favicon.ico" .next/standalone/public/
+
+          # Package only the standalone directory
+          tar -czf next-build.tar.gz .next/standalone
 
       - name: Upload build artifacts to server
         uses: appleboy/scp-action@v0.1.7
@@ -72,10 +88,22 @@ jobs:
             echo "--- Installing dependencies ---"
             npm install --production=false --ignore-scripts
 
-            echo "--- Deploying build artifacts ---"
-            rm -rf .next
+            echo "--- Deploying standalone bundle ---"
+            rm -rf .next/standalone
+            mkdir -p .next
             tar -xzf next-build.tar.gz
             rm -f next-build.tar.gz
+
+            echo "--- Patching CI build paths to server paths ---"
+            find .next/standalone -name "*.js" -type f \
+              -exec grep -ql "/home/runner/work/heartinmotionhk-website/heartinmotionhk-website" {} \; \
+              | xargs -r sed -i \
+                "s|/home/runner/work/heartinmotionhk-website/heartinmotionhk-website|/home/deploy/dev|g"
+
+            echo "--- Symlinking persistent media directory ---"
+            mkdir -p /home/deploy/dev/public/media
+            rm -rf .next/standalone/public/media
+            ln -sfn /home/deploy/dev/public/media .next/standalone/public/media
 
             echo "--- Restarting PM2 ---"
             pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env
