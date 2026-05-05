@@ -68,7 +68,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
         {subheading && (
           <p className="text-[14px] md:text-[16px] text-black leading-[1.5] mb-10 max-w-2xl">{subheading}</p>
         )}
-        <div className="bg-white rounded-3xl shadow-card-contact p-8 md:p-8 md:pb-12 grid md:grid-cols-[385px_1fr] gap-10 items-start">
+        <div className="bg-white rounded-3xl shadow-card-contact p-8 md:p-8 md:pb-12 grid lg:grid-cols-[385px_1fr] gap-10 items-start">
           {sideImage && (
             <div className="rounded-2xl overflow-hidden">
               <MediaImage media={sideImage} className="w-full h-full object-contain" />

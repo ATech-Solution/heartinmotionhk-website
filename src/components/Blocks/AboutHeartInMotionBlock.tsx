@@ -39,7 +39,7 @@ export function AboutHeartInMotionBlockComponent({
             <RichText content={body} />
           </div>
         )}
-        <div className="grid md:grid-cols-2 gap-12 items-start pl-1">
+        <div className="grid xl:grid-cols-2 gap-12 items-start pl-1">
           <div className="space-y-8 md:w-[650px]">
             {mission && (
               <div>
@@ -55,8 +55,8 @@ export function AboutHeartInMotionBlockComponent({
             )}
           </div>
           {image && (
-            <div className="overflow-hidden hidden md:block">
-              <MediaImage media={image} className="w-[335px] h-auto object-cover mx-auto" />
+            <div className="overflow-hidden hidden md:block md:mt-10 lg:mt-5">
+              <MediaImage media={image} className="w-[335px] md:w-[290px] h-auto object-cover mx-auto" />
             </div>
           )}
         </div>

@@ -25,7 +25,7 @@ export function AboutMeBlockComponent({ heading, body, profileImage, certImages 
             {certImages && certImages.length > 0 && (
               <div className="hidden md:flex flex-wrap gap-1 items-center">
                 {certImages.map((cert, i) => (
-                  <div key={i} className="w-[100px] h-[100px]">
+                  <div key={i} className="w-[100px] h-[100px] md:w-[90px] md:h-[90px]">
                     <MediaImage
                       media={cert.image}
                       className="w-full h-full object-contain"

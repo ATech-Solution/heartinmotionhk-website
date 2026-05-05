@@ -146,8 +146,8 @@ function ServiceCard({ svc, blobColor }: { svc: Service; blobColor: string }) {
 
       {/* Label badge — white pill below the blob, h-[46px] matching Figma */}
       {svc.title && (
-        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] absolute mt-41 lg:mt-42 xl:mt-55 px-5 h-[40px] md:h-[46px] flex items-center justify-center lg:min-w-[290px] xl:min-w-[310px] max-w-full text-center">
-          <span className="font-bold text-[#01162c] text-[14px] text-[14px] md:text-[16px] leading-[1.48]">
+        <div className="bg-white rounded-[23px] shadow-[0px_4px_2px_rgba(0,0,0,0.25)] absolute mt-41 md:mt-32 lg:mt-42 xl:mt-55 px-5 h-[40px] lg:h-[46px] flex items-center justify-center lg:min-w-[290px] xl:min-w-[310px] max-w-full text-center">
+          <span className="font-bold text-black text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] xl:text-[16px] leading-[1.5]">
             {svc.title}
           </span>
         </div>
