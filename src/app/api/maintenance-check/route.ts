@@ -1,7 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {

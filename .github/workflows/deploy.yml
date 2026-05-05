@@ -43,6 +43,7 @@ jobs:
           DATABASE_URL: file:./data/payload.db
           # Secrets
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
 
       - name: Bundle standalone with static assets
         run: |
@@ -114,6 +115,19 @@ jobs:
               -exec grep -ql "/home/runner/work/heartinmotionhk-website/heartinmotionhk-website" {} \; \
               | xargs -r sed -i \
                 "s|/home/runner/work/heartinmotionhk-website/heartinmotionhk-website|/home/deploy/dev|g"
+
+            echo "--- Injecting server-specific env into standalone ---"
+            node -e "
+            const fs = require('fs');
+            const file = '.next/standalone/server.js';
+            let content = fs.readFileSync(file, 'utf8');
+            if (!content.includes('REVALIDATE_SECRET')) {
+              const patch = [
+                'process.env.REVALIDATE_SECRET ||= process.env.PAYLOAD_SECRET;',
+              ].join('\n') + '\n';
+              fs.writeFileSync(file, patch + content);
+            }
+            "
 
             echo "--- Symlinking persistent media directory ---"
             mkdir -p /home/deploy/dev/public/media
