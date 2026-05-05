@@ -39,7 +39,6 @@ jobs:
           NEXT_PUBLIC_DOMAIN_PROD: dev.heartinmotionhk.com
           NEXT_PUBLIC_MEDIA_URL: /media
           PAYLOAD_PUBLIC_SERVER_URL: https://dev.heartinmotionhk.com
-          MAINTENANCE_MODE: "false"
           DATABASE_URL: file:./data/payload.db
           # Secrets
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}

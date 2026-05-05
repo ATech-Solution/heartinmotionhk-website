@@ -38,20 +38,18 @@ export default async function FrontendLayout({
 
   const payload = await getPayload({ config })
 
-  // Maintenance mode check — skip for admin users, runs before loading layout data
+  // Maintenance mode — admin users (payload-token cookie) always bypass.
+  // NOTE: redirect() throws internally (NEXT_REDIRECT), so it must be called
+  // outside the try/catch or the error gets swallowed and the redirect never fires.
   if (!hasAdminToken) {
-    if (process.env.MAINTENANCE_MODE === 'true') {
-      redirect('/maintenance')
-    } else {
-      let maintenanceEnabled = false
-      try {
-        const maintenance = await payload.findGlobal({ slug: 'maintenance-settings', locale })
-        maintenanceEnabled = Boolean((maintenance as any)?.enabled)
-      } catch {
-        // If check fails, allow through
-      }
-      if (maintenanceEnabled) redirect('/maintenance')
+    let maintenanceEnabled = false
+    try {
+      const maintenance = await payload.findGlobal({ slug: 'maintenance-settings', locale })
+      maintenanceEnabled = Boolean((maintenance as any)?.enabled)
+    } catch {
+      // Fail-open: if the DB check fails, allow through
     }
+    if (maintenanceEnabled) redirect('/maintenance')
   }
 
   const [header, footer, general] = await Promise.all([

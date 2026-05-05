@@ -1,49 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Paths that bypass the maintenance check entirely
-const BYPASS_PREFIXES = [
-  '/admin',
-  '/_next',
-  '/api',
-  '/font',
-  '/icon',
-  '/images',
-  '/media',
-  '/favicon.ico',
-]
+// Maintenance mode is handled in src/app/(frontend)/layout.tsx via direct
+// Payload DB access (Node.js runtime). The middleware has no reliable way to
+// reach the database from the Edge runtime, so no maintenance redirect here.
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  // Maintenance page itself must never be redirected (would loop)
-  if (pathname === '/maintenance') return NextResponse.next()
-
-  // Static assets, API routes, admin panel — skip check
-  if (BYPASS_PREFIXES.some((p) => pathname.startsWith(p))) return NextResponse.next()
-
-  // Logged-in admins always see the live site
-  if (request.cookies.has('payload-token')) return NextResponse.next()
-
-  // Fast path: env var override (no DB call, instant effect on server restart)
-  if (process.env.MAINTENANCE_MODE === 'true') {
-    return NextResponse.redirect(new URL('/maintenance', request.url))
-  }
-
-  // Dynamic path: check DB state via the maintenance-check API (force-dynamic, no cache)
-  try {
-    const apiUrl = new URL('/api/maintenance-check', request.url).toString()
-    const res = await fetch(apiUrl, { cache: 'no-store' })
-    if (res.ok) {
-      const data = (await res.json()) as { enabled: boolean }
-      if (data.enabled) {
-        return NextResponse.redirect(new URL('/maintenance', request.url))
-      }
-    }
-  } catch {
-    // Fail-open: if the check fails, allow the request through
-  }
-
+export function middleware(_request: NextRequest) {
   return NextResponse.next()
 }
 

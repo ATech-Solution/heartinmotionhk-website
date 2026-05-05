@@ -98,7 +98,7 @@ export function BookingSessionBlockComponent({
                         aria-label="Book via Email"
                         className="flex items-center justify-center w-[50px] h-[40px] size-[50px]s rounded-[20px] text-black bg-white border border-black hover:text-white hover:border-white hover:bg-[#7ab0ad] transition-colors duration-150"
                       >
-                        <Mail size={23} stroke={'white'} fill={'black'} className=''/>
+                        <Mail size={23} fill="none" stroke="currentColor" strokeWidth={2} />
                       </a>
                     )}
                   </div>
