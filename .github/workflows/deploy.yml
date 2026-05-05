@@ -30,13 +30,15 @@ jobs:
         env:
           NODE_ENV: production
           NEXT_TELEMETRY_DISABLED: 1
-          # Public / non-sensitive — hardcoded so missing secrets don't become ''
-          NEXT_PUBLIC_SITE_URL: https://heartinmotionhk.com
-          NEXT_PUBLIC_SITE_URL_PROD: https://heartinmotionhk.com
-          NEXT_PUBLIC_DOMAIN: heartinmotionhk.com
-          NEXT_PUBLIC_DOMAIN_PROD: heartinmotionhk.com
+          # Use the dev domain for all URL-bearing vars so Payload generates
+          # correct absolute media URLs on the dev server and Next.js Image
+          # optimization allows the dev domain.
+          NEXT_PUBLIC_SITE_URL: https://dev.heartinmotionhk.com
+          NEXT_PUBLIC_SITE_URL_PROD: https://dev.heartinmotionhk.com
+          NEXT_PUBLIC_DOMAIN: dev.heartinmotionhk.com
+          NEXT_PUBLIC_DOMAIN_PROD: dev.heartinmotionhk.com
           NEXT_PUBLIC_MEDIA_URL: /media
-          PAYLOAD_PUBLIC_SERVER_URL: https://heartinmotionhk.com
+          PAYLOAD_PUBLIC_SERVER_URL: https://dev.heartinmotionhk.com
           MAINTENANCE_MODE: "false"
           DATABASE_URL: file:./data/payload.db
           # Secrets
@@ -51,12 +53,25 @@ jobs:
           # 1. Copy static chunks (CSS, JS, images optimised by Next)
           cp -r .next/static .next/standalone/.next/
 
-          # 2. Copy public assets that are tracked in git (font, icon, images, favicon)
+          # 2. Copy public assets tracked in git (font, icon, images, favicon)
           mkdir -p .next/standalone/public
           for dir in font icon images; do
             [ -d "public/$dir" ] && cp -r "public/$dir" .next/standalone/public/
           done
           [ -f "public/favicon.ico" ] && cp "public/favicon.ico" .next/standalone/public/
+
+          # 3. Inject PAYLOAD_PUBLIC_SERVER_URL default at the top of server.js.
+          #    Next.js standalone does not load .env files; without this injection
+          #    Payload falls back to http://localhost:3000 and admin media URLs break.
+          node -e "
+          const fs = require('fs');
+          const file = '.next/standalone/server.js';
+          let content = fs.readFileSync(file, 'utf8');
+          const patch = 'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://dev.heartinmotionhk.com\";\n';
+          if (!content.includes('PAYLOAD_PUBLIC_SERVER_URL')) {
+            fs.writeFileSync(file, patch + content);
+          }
+          "
 
           # Package only the standalone directory
           tar -czf next-build.tar.gz .next/standalone
