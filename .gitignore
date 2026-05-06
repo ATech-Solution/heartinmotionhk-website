@@ -1,9 +1,12 @@
 node_modules
 .next
 .env
+.env.*
+.env.local
 # data/
 public/media/
 # *.db
 next.zip
 documentation/admin-manual.html
+data/payload.db
 data/payload.db

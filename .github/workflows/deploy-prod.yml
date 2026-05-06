@@ -1,9 +1,9 @@
-name: Deploy to Dev Server
+name: Deploy to Production
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   deploy:
@@ -30,19 +30,16 @@ jobs:
         env:
           NODE_ENV: production
           NEXT_TELEMETRY_DISABLED: 1
-          # Use the dev domain for all URL-bearing vars so Payload generates
-          # correct absolute media URLs on the dev server and Next.js Image
-          # optimization allows the dev domain.
-          NEXT_PUBLIC_SITE_URL: https://dev.heartinmotionhk.com
-          NEXT_PUBLIC_SITE_URL_PROD: https://dev.heartinmotionhk.com
-          NEXT_PUBLIC_DOMAIN: dev.heartinmotionhk.com
-          NEXT_PUBLIC_DOMAIN_PROD: dev.heartinmotionhk.com
+          NEXT_PUBLIC_SITE_URL: https://heartinmotionhk.com
+          NEXT_PUBLIC_SITE_URL_PROD: https://heartinmotionhk.com
+          NEXT_PUBLIC_DOMAIN: heartinmotionhk.com
+          NEXT_PUBLIC_DOMAIN_PROD: heartinmotionhk.com
           NEXT_PUBLIC_MEDIA_URL: /media
-          PAYLOAD_PUBLIC_SERVER_URL: https://dev.heartinmotionhk.com
+          PAYLOAD_PUBLIC_SERVER_URL: https://heartinmotionhk.com
           DATABASE_URL: file:./data/payload.db
           # Secrets
-          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
-          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET_PROD }}
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET_PROD }}
 
       - name: Bundle standalone with static assets
         run: |
@@ -67,7 +64,7 @@ jobs:
           const fs = require('fs');
           const file = '.next/standalone/server.js';
           let content = fs.readFileSync(file, 'utf8');
-          const patch = 'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://dev.heartinmotionhk.com\";\n';
+          const patch = 'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://heartinmotionhk.com\";\n';
           if (!content.includes('PAYLOAD_PUBLIC_SERVER_URL')) {
             fs.writeFileSync(file, patch + content);
           }
@@ -84,7 +81,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "next-build.tar.gz"
-          target: "/home/deploy/dev/"
+          target: "/home/deploy/prod/"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -94,11 +91,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/deploy/dev
+            cd /home/deploy/prod
 
-            echo "--- Pulling latest code from dev ---"
+            echo "--- Pulling latest code from main ---"
             git stash
-            git pull origin dev
+            git pull origin main
 
             echo "--- Installing dependencies ---"
             npm install --production=false --ignore-scripts
@@ -113,7 +110,7 @@ jobs:
             find .next/standalone -name "*.js" -type f \
               -exec grep -ql "/home/runner/work/heartinmotionhk-website/heartinmotionhk-website" {} \; \
               | xargs -r sed -i \
-                "s|/home/runner/work/heartinmotionhk-website/heartinmotionhk-website|/home/deploy/dev|g"
+                "s|/home/runner/work/heartinmotionhk-website/heartinmotionhk-website|/home/deploy/prod|g"
 
             echo "--- Injecting server-specific env into standalone ---"
             node -e "
@@ -129,12 +126,12 @@ jobs:
             "
 
             echo "--- Symlinking persistent media directory ---"
-            mkdir -p /home/deploy/dev/public/media
+            mkdir -p /home/deploy/prod/public/media
             rm -rf .next/standalone/public/media
-            ln -sfn /home/deploy/dev/public/media .next/standalone/public/media
+            ln -sfn /home/deploy/prod/public/media .next/standalone/public/media
 
             echo "--- Restarting PM2 ---"
-            pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env
+            pm2 start ecosystem.config.js --only heartinmotionhk-prod || pm2 restart heartinmotionhk-prod --update-env
 
             echo "--- Deploy complete ---"
             pm2 status
