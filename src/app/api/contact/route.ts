@@ -2,6 +2,32 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
+const CONTACT_FORM_TITLE = 'Contact Us'
+
+async function getOrCreateContactForm(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const existing = await payload.find({
+    collection: 'forms',
+    where: { title: { equals: CONTACT_FORM_TITLE } },
+    limit: 1,
+  })
+  if (existing.docs.length > 0) return existing.docs[0]!
+
+  return payload.create({
+    collection: 'forms',
+    data: {
+      title: CONTACT_FORM_TITLE,
+      fields: [
+        { blockType: 'text', name: 'fullName', label: 'Full Name', required: true },
+        { blockType: 'email', name: 'email', label: 'Email Address', required: true },
+        { blockType: 'text', name: 'phone', label: 'Phone Number', required: true },
+        { blockType: 'text', name: 'subject', label: 'Subject', required: true },
+        { blockType: 'textarea', name: 'message', label: 'Message', required: false },
+      ],
+      submitButtonLabel: 'Submit',
+    },
+  })
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -13,38 +39,22 @@ export async function POST(req: NextRequest) {
 
     const payload = await getPayload({ config })
 
-    const html = `
-      <h2>New contact form submission — Heart in Motion HK</h2>
-      <table style="border-collapse: collapse; width: 100%; font-family: sans-serif;">
-        <tr>
-          <td style="padding: 8px 12px; border: 1px solid #eee; font-weight: 600; background: #f9f9f9; width: 140px;">Full Name</td>
-          <td style="padding: 8px 12px; border: 1px solid #eee;">${fullName}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 12px; border: 1px solid #eee; font-weight: 600; background: #f9f9f9;">Email</td>
-          <td style="padding: 8px 12px; border: 1px solid #eee;">${email}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 12px; border: 1px solid #eee; font-weight: 600; background: #f9f9f9;">Phone</td>
-          <td style="padding: 8px 12px; border: 1px solid #eee;">${phone}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 12px; border: 1px solid #eee; font-weight: 600; background: #f9f9f9;">Subject</td>
-          <td style="padding: 8px 12px; border: 1px solid #eee;">${subject}</td>
-        </tr>
-        ${message ? `
-        <tr>
-          <td style="padding: 8px 12px; border: 1px solid #eee; font-weight: 600; background: #f9f9f9;">Message</td>
-          <td style="padding: 8px 12px; border: 1px solid #eee; white-space: pre-wrap;">${message}</td>
-        </tr>` : ''}
-      </table>
-      <p style="color: #888; font-size: 12px; margin-top: 24px;">Submitted at ${new Date().toISOString()}</p>
-    `
+    const form = await getOrCreateContactForm(payload)
 
-    await payload.sendEmail({
-      to: process.env.EMAIL_FROM!,
-      subject: subject || 'New Contact Form Submission',
-      html,
+    const submissionData: Array<{ field: string; value: string }> = [
+      { field: 'fullName', value: fullName },
+      { field: 'email', value: email },
+      { field: 'phone', value: phone },
+      { field: 'subject', value: subject },
+      ...(message ? [{ field: 'message', value: message }] : []),
+    ]
+
+    await payload.create({
+      collection: 'form-submissions',
+      data: {
+        form: form.id,
+        submissionData,
+      },
     })
 
     return NextResponse.json({ success: true })

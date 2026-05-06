@@ -94,6 +94,15 @@ export default buildConfig({
         },
       },
       formSubmissionOverrides: {
+        labels: {
+          singular: 'Form Submission',
+          plural: 'Form Submissions',
+        },
+        admin: {
+          useAsTitle: 'createdAt',
+          defaultColumns: ['form', 'createdAt'],
+          description: 'All contact form submissions from the website.',
+        },
         hooks: {
           afterChange: [notifyContactFormSubmission],
         },
