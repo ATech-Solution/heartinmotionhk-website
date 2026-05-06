@@ -3,52 +3,34 @@
 import { useState } from 'react'
 import { MediaImage } from '@/components/ui/MediaImage'
 
-interface Field {
-  name: string
-  label?: string
-  blockType: string
-  required?: boolean
-  width?: number
-}
-
-interface Form {
-  id?: string
-  title?: string
-  fields?: Field[]
-  submitButtonLabel?: string
-}
-
 interface ContactFormBlockProps {
   heading?: string
   subheading?: string
   sideImage?: any
-  form?: Form | string | null
+  [key: string]: any
 }
 
-export function ContactFormBlockComponent({ heading, subheading, sideImage, form }: ContactFormBlockProps) {
+export function ContactFormBlockComponent({ heading, subheading, sideImage }: ContactFormBlockProps) {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const formObj = typeof form === 'object' && form !== null ? form : null
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!formObj?.id) return
     setLoading(true)
     setError(null)
 
     const formData = new FormData(e.currentTarget)
-    const submissionData: Array<{ field: string; value: string }> = []
+    const payload: Record<string, string> = {}
     formData.forEach((value, key) => {
-      submissionData.push({ field: key, value: String(value) })
+      payload[key] = String(value)
     })
 
     try {
-      const res = await fetch('/api/form-submissions', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ form: formObj.id, submissionData }),
+        body: JSON.stringify(payload),
       })
       if (!res.ok) throw new Error('Submission failed')
       setSubmitted(true)
@@ -68,7 +50,7 @@ export function ContactFormBlockComponent({ heading, subheading, sideImage, form
         {subheading && (
           <p className="text-[14px] md:text-[16px] text-black leading-[1.5] mb-10 max-w-2xl">{subheading}</p>
         )}
-        <div className="bg-white rounded-3xl shadow-card-contact p-8 md:p-8 md:pb-12 grid md:grid-cols-[385px_1fr] gap-10 items-start">
+        <div className="bg-white rounded-3xl shadow-card-contact p-8 md:p-8 md:pb-12 grid lg:grid-cols-[385px_1fr] gap-10 items-start">
           {sideImage && (
             <div className="rounded-2xl overflow-hidden">
               <MediaImage media={sideImage} className="w-full h-full object-contain" />

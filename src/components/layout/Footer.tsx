@@ -69,10 +69,10 @@ export function SiteFooter({ footer, general }: FooterProps) {
 
   return (
     <footer className="bg-[#f5eded] relative footerBlock">
-      <div className="max-w-[1250px] mx-auto px-16 py-16 md:px-8 md:py-16 lg:px-16 lg:py-16 xl:px-0 xl:py-16">
-        
+      <div className="max-w-[1250px] mx-auto 
+      max-[321px]:px-10 max-[376px]:px-12 max-[426px]:px-16 px-10 py-16 md:px-8 md:py-16 lg:px-16 lg:py-16 xl:px-0 xl:py-16">        
         {/* 2-column main content */}
-        <div className="flex flex-col md:flex-row gap-10 md:gap-22 pl-0 md:pl-0">
+        <div className="flex flex-col md:flex-row gap-10 lg:gap-22 pl-0 md:pl-0">
           {/* Left column — Nav links */}
           <div className="flex-shrink-0 min-w-[220px] md:order-1">
             <nav className="space-y-5">

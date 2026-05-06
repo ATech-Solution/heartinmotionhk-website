@@ -27,14 +27,14 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000',
-  secret: process.env.PAYLOAD_SECRET ?? 'fallback-dev-secret',
+  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  secret: process.env.PAYLOAD_SECRET || 'fallback-dev-secret',
   sharp,
 
   // ── Database ──────────────────────────────────────────
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URL ?? 'file:./data/payload.db',
+      url: process.env.DATABASE_URL || 'file:./data/payload.db',
     },
   }),
 
@@ -56,12 +56,12 @@ export default buildConfig({
     defaultFromAddress: process.env.EMAIL_FROM ?? 'noreply@heartinmotionhk.com',
     defaultFromName: process.env.EMAIL_FROM_NAME ?? 'Heart in Motion HK',
     transportOptions: {
-      host: process.env.AWS_SES_SMTP_HOST,
-      port: Number(process.env.AWS_SES_SMTP_PORT ?? 587),
-      secure: Number(process.env.AWS_SES_SMTP_PORT ?? 587) === 465,
+      host: process.env.AWS_SES_SMTP_HOST || 'localhost',
+      port: Number(process.env.AWS_SES_SMTP_PORT || 587),
+      secure: Number(process.env.AWS_SES_SMTP_PORT || 587) === 465,
       auth: {
-        user: process.env.AWS_SES_SMTP_USER,
-        pass: process.env.AWS_SES_SMTP_PASSWORD,
+        user: process.env.AWS_SES_SMTP_USER || '',
+        pass: process.env.AWS_SES_SMTP_PASSWORD || '',
       },
     },
   }),
@@ -88,12 +88,24 @@ export default buildConfig({
       formOverrides: {
         access: {
           read: () => true,
+          create: () => true,
         },
         admin: {
           hidden: true,
         },
       },
       formSubmissionOverrides: {
+        labels: {
+          singular: 'Form Submission',
+          plural: 'Form Submissions',
+        },
+        access: {
+          create: () => true,
+        },
+        admin: {
+          defaultColumns: ['form', 'createdAt'],
+          description: 'All contact form submissions from the website.',
+        },
         hooks: {
           afterChange: [notifyContactFormSubmission],
         },
@@ -130,21 +142,6 @@ export default buildConfig({
     user: 'users',
     // prefillOnly: true → only pre-fills the login form; does NOT bypass authentication
     // autoLogin: { email: 'tan@atech.software', prefillOnly: false },
-    livePreview: {
-      breakpoints: [
-        { label: 'Mobile', name: 'mobile', width: 375, height: 812 },
-        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
-        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
-      ],
-      collections: ['pages'],
-      globals: ['general-settings'],
-      url: ({ data, locale }) => {
-        const base = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000'
-        const slug = data?.slug === 'home' ? '' : (data?.slug ?? '')
-        const localeParam = locale?.code ? `&locale=${locale.code}` : ''
-        return `${base}/api/preview?slug=${slug}${localeParam}`
-      },
-    },
     meta: {
       titleSuffix: '— Heart in Motion HK',
     },

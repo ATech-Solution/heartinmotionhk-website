@@ -1,0 +1,140 @@
+name: Deploy to Dev Server
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create data directory for SQLite
+        run: mkdir -p data
+
+      - name: Build
+        run: npm run build
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+          # Use the dev domain for all URL-bearing vars so Payload generates
+          # correct absolute media URLs on the dev server and Next.js Image
+          # optimization allows the dev domain.
+          NEXT_PUBLIC_SITE_URL: https://dev.heartinmotionhk.com
+          NEXT_PUBLIC_SITE_URL_PROD: https://dev.heartinmotionhk.com
+          NEXT_PUBLIC_DOMAIN: dev.heartinmotionhk.com
+          NEXT_PUBLIC_DOMAIN_PROD: dev.heartinmotionhk.com
+          NEXT_PUBLIC_MEDIA_URL: /media
+          PAYLOAD_PUBLIC_SERVER_URL: https://dev.heartinmotionhk.com
+          DATABASE_URL: file:./data/payload.db
+          # Secrets
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+
+      - name: Bundle standalone with static assets
+        run: |
+          # Next.js standalone server.js changes cwd to .next/standalone/ at runtime,
+          # so static chunks and public assets must live inside that directory.
+          # They are NOT included in the standalone output by Next.js automatically.
+
+          # 1. Copy static chunks (CSS, JS, images optimised by Next)
+          cp -r .next/static .next/standalone/.next/
+
+          # 2. Copy public assets tracked in git (font, icon, images, favicon)
+          mkdir -p .next/standalone/public
+          for dir in font icon images; do
+            [ -d "public/$dir" ] && cp -r "public/$dir" .next/standalone/public/
+          done
+          [ -f "public/favicon.ico" ] && cp "public/favicon.ico" .next/standalone/public/
+
+          # 3. Inject PAYLOAD_PUBLIC_SERVER_URL default at the top of server.js.
+          #    Next.js standalone does not load .env files; without this injection
+          #    Payload falls back to http://localhost:3000 and admin media URLs break.
+          node -e "
+          const fs = require('fs');
+          const file = '.next/standalone/server.js';
+          let content = fs.readFileSync(file, 'utf8');
+          const patch = 'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://dev.heartinmotionhk.com\";\n';
+          if (!content.includes('PAYLOAD_PUBLIC_SERVER_URL')) {
+            fs.writeFileSync(file, patch + content);
+          }
+          "
+
+          # Package only the standalone directory
+          tar -czf next-build.tar.gz .next/standalone
+
+      - name: Upload build artifacts to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "next-build.tar.gz"
+          target: "/home/deploy/dev/"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/deploy/dev
+
+            echo "--- Pulling latest code from dev ---"
+            git stash
+            git pull origin dev
+
+            echo "--- Installing dependencies ---"
+            npm install --production=false --ignore-scripts
+
+            echo "--- Deploying standalone bundle ---"
+            rm -rf .next/standalone
+            mkdir -p .next
+            tar -xzf next-build.tar.gz
+            rm -f next-build.tar.gz
+
+            echo "--- Patching CI build paths to server paths ---"
+            find .next/standalone -name "*.js" -type f \
+              -exec grep -ql "/home/runner/work/heartinmotionhk-website/heartinmotionhk-website" {} \; \
+              | xargs -r sed -i \
+                "s|/home/runner/work/heartinmotionhk-website/heartinmotionhk-website|/home/deploy/dev|g"
+
+            echo "--- Injecting server-specific env into standalone ---"
+            node -e "
+            const fs = require('fs');
+            const file = '.next/standalone/server.js';
+            let content = fs.readFileSync(file, 'utf8');
+            if (!content.includes('REVALIDATE_SECRET')) {
+              const patch = [
+                'process.env.REVALIDATE_SECRET ||= process.env.PAYLOAD_SECRET;',
+              ].join('\n') + '\n';
+              fs.writeFileSync(file, patch + content);
+            }
+            "
+
+            echo "--- Symlinking persistent media directory ---"
+            mkdir -p /home/deploy/dev/public/media
+            rm -rf .next/standalone/public/media
+            ln -sfn /home/deploy/dev/public/media .next/standalone/public/media
+
+            echo "--- Restarting PM2 ---"
+            pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env
+
+            echo "--- Deploy complete ---"
+            pm2 status

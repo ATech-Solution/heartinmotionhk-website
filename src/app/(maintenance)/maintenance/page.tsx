@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { RichText } from '@/components/ui/RichText'
 import type { Metadata } from 'next'
 
@@ -10,6 +11,7 @@ export default async function MaintenancePage() {
   const cookieStore = await cookies()
   const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
 
+  let maintenanceEnabled = true // safe default: show the page if DB is unreachable
   let logo = null
   let title = 'We are under maintenance'
   let message = null
@@ -18,6 +20,7 @@ export default async function MaintenancePage() {
   try {
     const payload = await getPayload({ config })
     const settings = await payload.findGlobal({ slug: 'maintenance-settings', locale })
+    maintenanceEnabled = Boolean((settings as any)?.enabled)
     title = (settings as any)?.title ?? title
     message = (settings as any)?.message
     estimatedReturn = (settings as any)?.estimatedReturn
@@ -25,6 +28,10 @@ export default async function MaintenancePage() {
   } catch {
     // Proceed with defaults if Payload is unavailable
   }
+
+  // Redirect home if maintenance is no longer active.
+  // Called outside try/catch so Next.js NEXT_REDIRECT propagates correctly.
+  if (!maintenanceEnabled) redirect('/')
 
   return (
     <div className="min-h-screen bg-brand-beige flex items-center justify-center px-6">

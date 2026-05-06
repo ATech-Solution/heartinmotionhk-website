@@ -64,7 +64,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
     <header className="sticky top-0 z-50 headerBlock">
       {/* Desktop header — beige background */}
       <div className="hidden lg:block bg-[#f5eded] h-[110px]">
-        <div className="max-w-[1250px] mx-auto px-16 md:px-16 lg:px-16 xl:px-0 h-full flex items-center justify-between">
+        <div className="max-w-[1250px] mx-auto px-12 lg:px-12 xl:px-0 xl:px-0 h-full flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
             {logoUrl ? (
@@ -115,7 +115,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                 <div className="group transition-all duration-300">
                   <a
                     href={connectUrl}
-                    className="flex items-center justify-center gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[16px] font-bold text-black px-6 group-hover:text-white group-hover:bg-[#6C9A97]"
+                    className="flex items-center justify-center px-4 xl:px-6 lg:gap-1 xl:gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] lg:text-[14px] xl:text-[16px] font-bold text-black group-hover:text-white group-hover:bg-[#6C9A97]"
                   >
                     {connectLabel}
                     <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
@@ -124,7 +124,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                 <div className="group transition-all duration-300">
                   <a
                     href={emailUrl}
-                    className="flex items-center justify-center gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[16px] font-bold text-black px-6 group-hover:text-white group-hover:bg-[#9C8A40]"
+                    className="flex items-center justify-center px-6 xl:px-6 lg:gap-1 xl:gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[14px] lg:text-[14px] xl:text-[16px] font-bold text-black group-hover:text-white group-hover:bg-[#9C8A40]"
                   >
                     {emailLabel}
                     <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
@@ -258,7 +258,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <div className="hidden pt-2 border-t border-gray-100">
+        <div className="hidden pt-2 border-t border-gray-100 w-[100px] mx-auto">
           <LocaleSwitcher currentLocale={locale ?? 'en'} />
         </div>
       </div>

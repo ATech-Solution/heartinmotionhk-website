@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
 import { isAdminOrEditor } from '@/access/isAdminOrEditor'
+import { revalidateGlobal } from '@/hooks/revalidateGlobal'
 
 export const MaintenanceSettings: GlobalConfig = {
   slug: 'maintenance-settings',
@@ -21,6 +22,9 @@ export const MaintenanceSettings: GlobalConfig = {
   access: {
     read: isAdminOrEditor,
     update: isAdmin,
+  },
+  hooks: {
+    afterChange: [revalidateGlobal],
   },
   fields: [
     {

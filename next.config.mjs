@@ -1,4 +1,9 @@
 import { withPayload } from '@payloadcms/next/withPayload'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -31,10 +36,25 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_DOMAIN_PROD ?? 'heartinmotionhk.com',
+        hostname: process.env.NEXT_PUBLIC_DOMAIN_PROD || 'heartinmotionhk.com',
       },
     ],
   },
+  // Ensure libsql native binaries are included in standalone output.
+  // withPayload's outputFileTracingIncludes uses non-glob module names that
+  // @vercel/nft can't resolve, so we add explicit globs here.
+  outputFileTracingIncludes: {
+    '**/*': [
+      './node_modules/libsql/**',
+      './node_modules/@libsql/client/**',
+      './node_modules/@libsql/core/**',
+      './node_modules/@libsql/linux-x64-gnu/**',
+      './node_modules/@libsql/linux-x64-musl/**',
+      './node_modules/@libsql/linux-arm64-gnu/**',
+      './node_modules/@libsql/linux-arm64-musl/**',
+    ],
+  },
+  outputFileTracingRoot: path.join(__dirname, './'),
   webpack: (config) => {
     // @payloadcms/ui ships .scss files alongside its dist JS.
     // Those styles are pre-compiled into @payloadcms/ui/dist/styles.css so the
