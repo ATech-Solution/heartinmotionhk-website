@@ -6,3 +6,4 @@ public/media/
 *.db
 .DS_Store
 next.zip
+documentation/admin-manual.html
