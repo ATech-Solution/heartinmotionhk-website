@@ -88,6 +88,7 @@ export default buildConfig({
       formOverrides: {
         access: {
           read: () => true,
+          create: () => true,
         },
         admin: {
           hidden: true,
@@ -98,8 +99,10 @@ export default buildConfig({
           singular: 'Form Submission',
           plural: 'Form Submissions',
         },
+        access: {
+          create: () => true,
+        },
         admin: {
-          useAsTitle: 'createdAt',
           defaultColumns: ['form', 'createdAt'],
           description: 'All contact form submissions from the website.',
         },

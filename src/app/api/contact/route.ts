@@ -9,11 +9,13 @@ async function getOrCreateContactForm(payload: Awaited<ReturnType<typeof getPayl
     collection: 'forms',
     where: { title: { equals: CONTACT_FORM_TITLE } },
     limit: 1,
+    overrideAccess: true,
   })
   if (existing.docs.length > 0) return existing.docs[0]!
 
   return payload.create({
     collection: 'forms',
+    overrideAccess: true,
     data: {
       title: CONTACT_FORM_TITLE,
       fields: [
@@ -24,6 +26,26 @@ async function getOrCreateContactForm(payload: Awaited<ReturnType<typeof getPayl
         { blockType: 'textarea', name: 'message', label: 'Message', required: false },
       ],
       submitButtonLabel: 'Submit',
+      confirmationType: 'message',
+      confirmationMessage: {
+        root: {
+          type: 'root',
+          children: [
+            {
+              type: 'paragraph',
+              children: [{ type: 'text', text: 'Thank you! Your message has been received.', version: 1 }],
+              direction: 'ltr',
+              format: '',
+              indent: 0,
+              version: 1,
+            },
+          ],
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          version: 1,
+        },
+      },
     },
   })
 }
@@ -51,6 +73,7 @@ export async function POST(req: NextRequest) {
 
     await payload.create({
       collection: 'form-submissions',
+      overrideAccess: true,
       data: {
         form: form.id,
         submissionData,
@@ -59,7 +82,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (err) {
-    console.error('Contact form submission error:', err)
-    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('Contact form submission error:', message, err)
+    return NextResponse.json({ error: 'Failed to send message', detail: message }, { status: 500 })
   }
 }
