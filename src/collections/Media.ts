@@ -7,6 +7,7 @@ export const Media: CollectionConfig = {
   labels: { singular: 'Media', plural: 'Media' },
   upload: {
     staticDir: process.env.PAYLOAD_MEDIA_DIR ?? 'public/media',
+    focalPoint: true,
     imageSizes: [
       { name: 'thumbnail', width: 400, height: 300, position: 'centre' },
       { name: 'card', width: 768, height: 512, position: 'centre' },

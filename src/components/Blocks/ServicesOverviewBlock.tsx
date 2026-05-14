@@ -13,6 +13,7 @@ interface Service {
   image?: any
   description?: any
   bulletPoints?: Array<{ point: string }>
+  order?: number | null
 }
 
 interface ServicesOverviewBlockProps {
@@ -47,6 +48,8 @@ export function ServicesOverviewBlockComponent({
 
   if (!services || services.length === 0) return null
 
+  const sorted = [...services].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
   return (
     <section className="bg-[#fff5ce] px-10 md:px-16 py-12 md:py-10">
       <div className="max-w-[1200px] mx-auto">
@@ -71,7 +74,7 @@ export function ServicesOverviewBlockComponent({
         <div className="md:hidden">
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-4">
-              {services.map((svc, i) => (
+              {sorted.map((svc, i) => (
                 <div key={svc.id ?? i} className="flex-[0_0_100%] min-w-0">
                   <AnimateOnScroll animation="fade-up" delay={i * 100}>
                     <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
@@ -82,9 +85,9 @@ export function ServicesOverviewBlockComponent({
           </div>
 
           {/* Dot indicators */}
-          {services.length > 1 && (
+          {sorted.length > 1 && (
             <div className="flex justify-center gap-[4px] mt-4 mb-13">
-              {services.map((_, i) => (
+              {sorted.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => scrollTo(i)}
@@ -104,7 +107,7 @@ export function ServicesOverviewBlockComponent({
 
         {/* Desktop — 3-column flex */}
         <div className="hidden md:flex gap-8 lg:gap-20">
-          {services.map((svc, i) => (
+          {sorted.map((svc, i) => (
             <AnimateOnScroll key={svc.id ?? i} animation="fade-up" delay={i * 120} className="flex-1 max-w-[345px]">
               <ServiceCard svc={svc} blobColor={blobColors[i % blobColors.length]} />
             </AnimateOnScroll>

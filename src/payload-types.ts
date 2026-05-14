@@ -736,12 +736,6 @@ export interface Service {
     };
     [k: string]: unknown;
   } | null;
-  bulletPoints?:
-    | {
-        point: string;
-        id?: string | null;
-      }[]
-    | null;
   order?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -756,8 +750,7 @@ export interface Testimonial {
   authorName: string;
   authorTitle?: string | null;
   authorCompany?: string | null;
-  rating?: number | null;
-  featured?: boolean | null;
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -927,6 +920,8 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * All contact form submissions from the website.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -1582,12 +1577,6 @@ export interface ServicesSelect<T extends boolean = true> {
   category?: T;
   image?: T;
   description?: T;
-  bulletPoints?:
-    | T
-    | {
-        point?: T;
-        id?: T;
-      };
   order?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1601,8 +1590,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
   authorName?: T;
   authorTitle?: T;
   authorCompany?: T;
-  rating?: T;
-  featured?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }

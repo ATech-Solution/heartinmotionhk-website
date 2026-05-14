@@ -112,24 +112,47 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                 <LocaleSwitcher currentLocale={locale ?? 'en'} />
               </div>
               <div className="px-4 flex gap-3">
-                <div className="group transition-all duration-300">
-                  <a
-                    href={connectUrl}
-                    className="flex items-center justify-center px-4 xl:px-6 lg:gap-1 xl:gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] lg:text-[14px] xl:text-[16px] font-bold text-black group-hover:text-white group-hover:bg-[#6C9A97]"
-                  >
-                    {connectLabel}
-                    <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
-                  </a>
-                </div>
-                <div className="group transition-all duration-300">
-                  <a
-                    href={emailUrl}
-                    className="flex items-center justify-center px-6 xl:px-6 lg:gap-1 xl:gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[14px] lg:text-[14px] xl:text-[16px] font-bold text-black group-hover:text-white group-hover:bg-[#9C8A40]"
-                  >
-                    {emailLabel}
-                    <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
-                  </a>
-                </div>
+                {ctaButtons.length > 0 ? (
+                  ctaButtons.map((btn, i) => {
+                    const isPrimary = (btn.style ?? 'primary') === 'primary'
+                    return (
+                      <div key={btn.id ?? i} className="group transition-all duration-300">
+                        <a
+                          href={btn.url ?? '#'}
+                          className={`flex items-center justify-center px-4 xl:px-6 lg:gap-1 xl:gap-5 h-10 rounded-[15px] text-[14px] lg:text-[14px] xl:text-[16px] font-bold text-black group-hover:text-white transition-all ${
+                            isPrimary
+                              ? 'bg-[#8ec0bd] group-hover:bg-[#6C9A97]'
+                              : 'bg-[#fae17a] group-hover:bg-[#9C8A40]'
+                          }`}
+                        >
+                          {btn.label}
+                          <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
+                        </a>
+                      </div>
+                    )
+                  })
+                ) : (
+                  <>
+                    <div className="group transition-all duration-300">
+                      <a
+                        href={connectUrl}
+                        className="flex items-center justify-center px-4 xl:px-6 lg:gap-1 xl:gap-5 h-10 bg-[#8ec0bd] rounded-[15px] text-[14px] lg:text-[14px] xl:text-[16px] font-bold text-black group-hover:text-white group-hover:bg-[#6C9A97]"
+                      >
+                        {connectLabel}
+                        <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
+                      </a>
+                    </div>
+                    <div className="group transition-all duration-300">
+                      <a
+                        href={emailUrl}
+                        className="flex items-center justify-center px-6 xl:px-6 lg:gap-1 xl:gap-5 h-10 bg-[#fae17a] rounded-[15px] text-[14px] lg:text-[14px] xl:text-[16px] font-bold text-black group-hover:text-white group-hover:bg-[#9C8A40]"
+                      >
+                        {emailLabel}
+                        <img src="/icon/angle-right.svg" alt="" className="w-[20px] h-[20px] flex-shrink-0 group-hover:invert [filter:drop-shadow(0.5px_0px_0px_black)_drop-shadow(-0.5px_0px_0px_black)] transition-all" aria-hidden="true" />
+                      </a>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

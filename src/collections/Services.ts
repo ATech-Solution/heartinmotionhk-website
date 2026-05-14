@@ -44,18 +44,6 @@ export const Services: CollectionConfig = {
       localized: true,
     },
     {
-      name: 'bulletPoints',
-      type: 'array',
-      localized: true,
-      fields: [
-        {
-          name: 'point',
-          type: 'text',
-          required: true,
-        },
-      ],
-    },
-    {
       name: 'order',
       type: 'number',
       defaultValue: 0,

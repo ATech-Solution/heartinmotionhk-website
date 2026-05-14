@@ -8,6 +8,7 @@ interface Service {
   image?: any
   description?: any
   bulletPoints?: Array<{ point: string }>
+  order?: number | null
 }
 
 interface ServiceDetailBlockProps {
@@ -17,6 +18,8 @@ interface ServiceDetailBlockProps {
 }
 
 export function ServiceDetailBlockComponent({ heading, subheading, services }: ServiceDetailBlockProps) {
+  const sorted = [...(services ?? [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
   return (
     <section className="bg-white px-8 pt-3 pb-13 md:px-16 md:py-10">
       <div className="max-w-[1200px] mx-auto">
@@ -27,7 +30,7 @@ export function ServiceDetailBlockComponent({ heading, subheading, services }: S
           <p className="text-black text-[14px] text-[14px] md:text-[16px] mb-13 md:mb-12 max-w-[845px]">{subheading}</p>
         )}
         <div className="space-y-4 md:space-y-15">
-          {services?.map((svc, i) => (
+          {sorted.map((svc, i) => (
             <div key={svc.id ?? i} className={`max-w-[1100px] mx-auto grid md:grid-cols-2s gap-8 md:gap-8 items-center ${i % 2 === 1 ? 'md:grid-flow-denses md:grid-cols-[1fr_285px]' : 'md:grid-cols-[285px_1fr]'}`}>
               <div className={i % 2 === 1 ? '' : 'md:col-start-2'}>
                 {svc.title && (

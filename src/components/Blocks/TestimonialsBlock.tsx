@@ -11,6 +11,7 @@ interface Testimonial {
   authorName?: string
   authorTitle?: string
   authorCompany?: string
+  order?: number | null
 }
 
 interface TestimonialsBlockProps {
@@ -33,6 +34,9 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
   }, [emblaApi])
 
   if (!testimonials || testimonials.length === 0) return null
+
+  const sorted = [...testimonials].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
   // heading = heading || 'What my clients say'
   return (
     <section className="bg-white py-13 md:pt-8 md:pb-16 px-8 md:px-16">
@@ -54,7 +58,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
         <AnimateOnScroll animation="fade-up" delay={100}>
           <div className="relative flex items-center gap-2 md:gap-4 lg:w-[870px] mx-auto">
             {/* Prev arrow — desktop only */}
-            {testimonials.length > 1 && (
+            {sorted.length > 1 && (
               <button
                 onClick={scrollPrev}
                 aria-label="Previous testimonial"
@@ -67,7 +71,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
             {/* Carousel viewport */}
             <div className="overflow-hidden flex-1" ref={emblaRef}>
               <div className="flex">
-                {testimonials.map((t, i) => (
+                {sorted.map((t, i) => (
                   <div key={t.id ?? i} className="flex-[0_0_100%] min-w-0">
                     <div className="flex flex-col items-center gap-3 md:gap-4 px-0 md:px-4">
                       {t.quote && (
@@ -94,7 +98,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
             </div>
 
             {/* Next arrow — desktop only */}
-            {testimonials.length > 1 && (
+            {sorted.length > 1 && (
               <button
                 onClick={scrollNext}
                 aria-label="Next testimonial"
@@ -106,9 +110,9 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
           </div>
 
           {/* Dot indicators */}
-          {testimonials.length > 1 && (
+          {sorted.length > 1 && (
             <div className="flex justify-center gap-[15px] mt-15 md:mt-10">
-              {testimonials.map((_, i) => (
+              {sorted.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => emblaApi?.scrollTo(i)}
