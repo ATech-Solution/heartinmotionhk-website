@@ -84,90 +84,106 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.run(sql`DROP TABLE IF EXISTS \`general_settings_social_links\`;`)
 
   // ── Recreate pages_blocks_values_values (remove icon_id column) ─────────
-  await db.run(sql`PRAGMA foreign_keys=OFF;`)
-  await db.run(sql`CREATE TABLE \`__new_pages_blocks_values_values\` (
-  	\`_order\` integer NOT NULL,
-  	\`_parent_id\` text NOT NULL,
-  	\`id\` text PRIMARY KEY NOT NULL,
-  	\`decorative_image_id\` integer,
-  	\`color\` text DEFAULT 'teal',
-  	FOREIGN KEY (\`decorative_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
-  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages_blocks_values\`(\`id\`) ON UPDATE no action ON DELETE cascade
-  );
-  `)
-  await db.run(sql`INSERT INTO \`__new_pages_blocks_values_values\`("_order", "_parent_id", "id", "decorative_image_id", "color") SELECT "_order", "_parent_id", "id", "decorative_image_id", "color" FROM \`pages_blocks_values_values\`;`)
-  await db.run(sql`DROP TABLE \`pages_blocks_values_values\`;`)
-  await db.run(sql`ALTER TABLE \`__new_pages_blocks_values_values\` RENAME TO \`pages_blocks_values_values\`;`)
-  await db.run(sql`PRAGMA foreign_keys=ON;`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_values_values_order_idx\` ON \`pages_blocks_values_values\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_values_values_parent_id_idx\` ON \`pages_blocks_values_values\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_values_values_decorative_image_idx\` ON \`pages_blocks_values_values\` (\`decorative_image_id\`);`)
+  // Guard: only recreate if icon_id still exists (dev-push may have already removed it)
+  if (await hasCol(db, 'pages_blocks_values_values', 'icon_id')) {
+    await db.run(sql`DROP TABLE IF EXISTS \`__new_pages_blocks_values_values\`;`)
+    await db.run(sql`PRAGMA foreign_keys=OFF;`)
+    await db.run(sql`CREATE TABLE \`__new_pages_blocks_values_values\` (
+    	\`_order\` integer NOT NULL,
+    	\`_parent_id\` text NOT NULL,
+    	\`id\` text PRIMARY KEY NOT NULL,
+    	\`decorative_image_id\` integer,
+    	\`color\` text DEFAULT 'teal',
+    	FOREIGN KEY (\`decorative_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
+    	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages_blocks_values\`(\`id\`) ON UPDATE no action ON DELETE cascade
+    );
+    `)
+    await db.run(sql`INSERT INTO \`__new_pages_blocks_values_values\`("_order", "_parent_id", "id", "decorative_image_id", "color") SELECT "_order", "_parent_id", "id", "decorative_image_id", "color" FROM \`pages_blocks_values_values\`;`)
+    await db.run(sql`DROP TABLE \`pages_blocks_values_values\`;`)
+    await db.run(sql`ALTER TABLE \`__new_pages_blocks_values_values\` RENAME TO \`pages_blocks_values_values\`;`)
+    await db.run(sql`PRAGMA foreign_keys=ON;`)
+  }
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_values_values_order_idx\` ON \`pages_blocks_values_values\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_values_values_parent_id_idx\` ON \`pages_blocks_values_values\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_values_values_decorative_image_idx\` ON \`pages_blocks_values_values\` (\`decorative_image_id\`);`)
 
   // ── Recreate pages_blocks_contact_form (remove form_id column) ──────────
-  await db.run(sql`CREATE TABLE \`__new_pages_blocks_contact_form\` (
-  	\`_order\` integer NOT NULL,
-  	\`_parent_id\` integer NOT NULL,
-  	\`_path\` text NOT NULL,
-  	\`id\` text PRIMARY KEY NOT NULL,
-  	\`side_image_id\` integer,
-  	\`visibility_show_on_desktop\` integer DEFAULT true,
-  	\`visibility_show_on_tablet\` integer DEFAULT true,
-  	\`visibility_show_on_mobile\` integer DEFAULT true,
-  	\`block_name\` text,
-  	FOREIGN KEY (\`side_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
-  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages\`(\`id\`) ON UPDATE no action ON DELETE cascade
-  );
-  `)
-  await db.run(sql`INSERT INTO \`__new_pages_blocks_contact_form\`("_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "block_name") SELECT "_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "block_name" FROM \`pages_blocks_contact_form\`;`)
-  await db.run(sql`DROP TABLE \`pages_blocks_contact_form\`;`)
-  await db.run(sql`ALTER TABLE \`__new_pages_blocks_contact_form\` RENAME TO \`pages_blocks_contact_form\`;`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_contact_form_order_idx\` ON \`pages_blocks_contact_form\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_contact_form_parent_id_idx\` ON \`pages_blocks_contact_form\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_contact_form_path_idx\` ON \`pages_blocks_contact_form\` (\`_path\`);`)
-  await db.run(sql`CREATE INDEX \`pages_blocks_contact_form_side_image_idx\` ON \`pages_blocks_contact_form\` (\`side_image_id\`);`)
+  // Guard: only recreate if form_id still exists
+  if (await hasCol(db, 'pages_blocks_contact_form', 'form_id')) {
+    await db.run(sql`DROP TABLE IF EXISTS \`__new_pages_blocks_contact_form\`;`)
+    await db.run(sql`CREATE TABLE \`__new_pages_blocks_contact_form\` (
+    	\`_order\` integer NOT NULL,
+    	\`_parent_id\` integer NOT NULL,
+    	\`_path\` text NOT NULL,
+    	\`id\` text PRIMARY KEY NOT NULL,
+    	\`side_image_id\` integer,
+    	\`visibility_show_on_desktop\` integer DEFAULT true,
+    	\`visibility_show_on_tablet\` integer DEFAULT true,
+    	\`visibility_show_on_mobile\` integer DEFAULT true,
+    	\`block_name\` text,
+    	FOREIGN KEY (\`side_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
+    	FOREIGN KEY (\`_parent_id\`) REFERENCES \`pages\`(\`id\`) ON UPDATE no action ON DELETE cascade
+    );
+    `)
+    await db.run(sql`INSERT INTO \`__new_pages_blocks_contact_form\`("_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "block_name") SELECT "_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "block_name" FROM \`pages_blocks_contact_form\`;`)
+    await db.run(sql`DROP TABLE \`pages_blocks_contact_form\`;`)
+    await db.run(sql`ALTER TABLE \`__new_pages_blocks_contact_form\` RENAME TO \`pages_blocks_contact_form\`;`)
+  }
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_contact_form_order_idx\` ON \`pages_blocks_contact_form\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_contact_form_parent_id_idx\` ON \`pages_blocks_contact_form\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_contact_form_path_idx\` ON \`pages_blocks_contact_form\` (\`_path\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`pages_blocks_contact_form_side_image_idx\` ON \`pages_blocks_contact_form\` (\`side_image_id\`);`)
 
   // ── Recreate _pages_v_blocks_values_values ──────────────────────────────
-  await db.run(sql`CREATE TABLE \`__new__pages_v_blocks_values_values\` (
-  	\`_order\` integer NOT NULL,
-  	\`_parent_id\` integer NOT NULL,
-  	\`id\` integer PRIMARY KEY NOT NULL,
-  	\`decorative_image_id\` integer,
-  	\`color\` text DEFAULT 'teal',
-  	\`_uuid\` text,
-  	FOREIGN KEY (\`decorative_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
-  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_pages_v_blocks_values\`(\`id\`) ON UPDATE no action ON DELETE cascade
-  );
-  `)
-  await db.run(sql`INSERT INTO \`__new__pages_v_blocks_values_values\`("_order", "_parent_id", "id", "decorative_image_id", "color", "_uuid") SELECT "_order", "_parent_id", "id", "decorative_image_id", "color", "_uuid" FROM \`_pages_v_blocks_values_values\`;`)
-  await db.run(sql`DROP TABLE \`_pages_v_blocks_values_values\`;`)
-  await db.run(sql`ALTER TABLE \`__new__pages_v_blocks_values_values\` RENAME TO \`_pages_v_blocks_values_values\`;`)
-  await db.run(sql`CREATE INDEX \`_pages_v_blocks_values_values_order_idx\` ON \`_pages_v_blocks_values_values\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`_pages_v_blocks_values_values_parent_id_idx\` ON \`_pages_v_blocks_values_values\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`_pages_v_blocks_values_values_decorative_image_idx\` ON \`_pages_v_blocks_values_values\` (\`decorative_image_id\`);`)
+  // Guard: only recreate if icon_id still exists
+  if (await hasCol(db, '_pages_v_blocks_values_values', 'icon_id')) {
+    await db.run(sql`DROP TABLE IF EXISTS \`__new__pages_v_blocks_values_values\`;`)
+    await db.run(sql`CREATE TABLE \`__new__pages_v_blocks_values_values\` (
+    	\`_order\` integer NOT NULL,
+    	\`_parent_id\` integer NOT NULL,
+    	\`id\` integer PRIMARY KEY NOT NULL,
+    	\`decorative_image_id\` integer,
+    	\`color\` text DEFAULT 'teal',
+    	\`_uuid\` text,
+    	FOREIGN KEY (\`decorative_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
+    	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_pages_v_blocks_values\`(\`id\`) ON UPDATE no action ON DELETE cascade
+    );
+    `)
+    await db.run(sql`INSERT INTO \`__new__pages_v_blocks_values_values\`("_order", "_parent_id", "id", "decorative_image_id", "color", "_uuid") SELECT "_order", "_parent_id", "id", "decorative_image_id", "color", "_uuid" FROM \`_pages_v_blocks_values_values\`;`)
+    await db.run(sql`DROP TABLE \`_pages_v_blocks_values_values\`;`)
+    await db.run(sql`ALTER TABLE \`__new__pages_v_blocks_values_values\` RENAME TO \`_pages_v_blocks_values_values\`;`)
+  }
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`_pages_v_blocks_values_values_order_idx\` ON \`_pages_v_blocks_values_values\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`_pages_v_blocks_values_values_parent_id_idx\` ON \`_pages_v_blocks_values_values\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`_pages_v_blocks_values_values_decorative_image_idx\` ON \`_pages_v_blocks_values_values\` (\`decorative_image_id\`);`)
 
   // ── Recreate _pages_v_blocks_contact_form ───────────────────────────────
-  await db.run(sql`CREATE TABLE \`__new__pages_v_blocks_contact_form\` (
-  	\`_order\` integer NOT NULL,
-  	\`_parent_id\` integer NOT NULL,
-  	\`_path\` text NOT NULL,
-  	\`id\` integer PRIMARY KEY NOT NULL,
-  	\`side_image_id\` integer,
-  	\`visibility_show_on_desktop\` integer DEFAULT true,
-  	\`visibility_show_on_tablet\` integer DEFAULT true,
-  	\`visibility_show_on_mobile\` integer DEFAULT true,
-  	\`_uuid\` text,
-  	\`block_name\` text,
-  	FOREIGN KEY (\`side_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
-  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_pages_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
-  );
-  `)
-  await db.run(sql`INSERT INTO \`__new__pages_v_blocks_contact_form\`("_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "_uuid", "block_name") SELECT "_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "_uuid", "block_name" FROM \`_pages_v_blocks_contact_form\`;`)
-  await db.run(sql`DROP TABLE \`_pages_v_blocks_contact_form\`;`)
-  await db.run(sql`ALTER TABLE \`__new__pages_v_blocks_contact_form\` RENAME TO \`_pages_v_blocks_contact_form\`;`)
-  await db.run(sql`CREATE INDEX \`_pages_v_blocks_contact_form_order_idx\` ON \`_pages_v_blocks_contact_form\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`_pages_v_blocks_contact_form_parent_id_idx\` ON \`_pages_v_blocks_contact_form\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`_pages_v_blocks_contact_form_path_idx\` ON \`_pages_v_blocks_contact_form\` (\`_path\`);`)
-  await db.run(sql`CREATE INDEX \`_pages_v_blocks_contact_form_side_image_idx\` ON \`_pages_v_blocks_contact_form\` (\`side_image_id\`);`)
+  // Guard: only recreate if form_id still exists
+  if (await hasCol(db, '_pages_v_blocks_contact_form', 'form_id')) {
+    await db.run(sql`DROP TABLE IF EXISTS \`__new__pages_v_blocks_contact_form\`;`)
+    await db.run(sql`CREATE TABLE \`__new__pages_v_blocks_contact_form\` (
+    	\`_order\` integer NOT NULL,
+    	\`_parent_id\` integer NOT NULL,
+    	\`_path\` text NOT NULL,
+    	\`id\` integer PRIMARY KEY NOT NULL,
+    	\`side_image_id\` integer,
+    	\`visibility_show_on_desktop\` integer DEFAULT true,
+    	\`visibility_show_on_tablet\` integer DEFAULT true,
+    	\`visibility_show_on_mobile\` integer DEFAULT true,
+    	\`_uuid\` text,
+    	\`block_name\` text,
+    	FOREIGN KEY (\`side_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
+    	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_pages_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+    );
+    `)
+    await db.run(sql`INSERT INTO \`__new__pages_v_blocks_contact_form\`("_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "_uuid", "block_name") SELECT "_order", "_parent_id", "_path", "id", "side_image_id", "visibility_show_on_desktop", "visibility_show_on_tablet", "visibility_show_on_mobile", "_uuid", "block_name" FROM \`_pages_v_blocks_contact_form\`;`)
+    await db.run(sql`DROP TABLE \`_pages_v_blocks_contact_form\`;`)
+    await db.run(sql`ALTER TABLE \`__new__pages_v_blocks_contact_form\` RENAME TO \`_pages_v_blocks_contact_form\`;`)
+  }
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`_pages_v_blocks_contact_form_order_idx\` ON \`_pages_v_blocks_contact_form\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`_pages_v_blocks_contact_form_parent_id_idx\` ON \`_pages_v_blocks_contact_form\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`_pages_v_blocks_contact_form_path_idx\` ON \`_pages_v_blocks_contact_form\` (\`_path\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`_pages_v_blocks_contact_form_side_image_idx\` ON \`_pages_v_blocks_contact_form\` (\`side_image_id\`);`)
 
   // ── Add new columns (skip if already added by dev-push) ─────────────────
   if (!await hasCol(db, 'pages_blocks_hero_locales', 'subheadline_mobile'))
