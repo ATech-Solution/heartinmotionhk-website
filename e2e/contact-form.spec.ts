@@ -55,7 +55,7 @@ test.describe('Contact form — UI validation', () => {
   })
 
   test('form shows loading state on submit', async ({ page }) => {
-    await page.route('/api/form-submissions', async (route) => {
+    await page.route('/api/contact', async (route) => {
       await new Promise((r) => setTimeout(r, 600))
       await route.fulfill({ status: 200, body: JSON.stringify({ id: 'test-id' }) })
     })
@@ -70,7 +70,7 @@ test.describe('Contact form — successful submission', () => {
     await page.goto('/contact')
     await expect(page.locator('form')).toBeVisible({ timeout: 15_000 })
 
-    await page.route('/api/form-submissions', (route) =>
+    await page.route('/api/contact', (route) =>
       route.fulfill({ status: 200, body: JSON.stringify({ id: 'mock-sub-123' }) }),
     )
     await fillForm(page, { message: 'Automated e2e test message.' })
@@ -84,7 +84,7 @@ test.describe('Contact form — successful submission', () => {
     await page.goto('/contact')
     await expect(page.locator('form')).toBeVisible({ timeout: 15_000 })
 
-    await page.route('/api/form-submissions', (route) =>
+    await page.route('/api/contact', (route) =>
       route.fulfill({ status: 500, body: JSON.stringify({ error: 'Server error' }) }),
     )
     await fillForm(page)
