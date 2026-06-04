@@ -7,6 +7,8 @@ interface MediaImageProps {
     width?: number | null
     height?: number | null
     filename?: string | null
+    focalX?: number | null
+    focalY?: number | null
     sizes?: {
       thumbnail?: { url?: string | null }
       card?: { url?: string | null }
@@ -22,7 +24,7 @@ interface MediaImageProps {
 export function MediaImage({ media, className, priority, unoptimized, size }: MediaImageProps) {
   if (!media?.url) return null
 
-  const url = size && media.sizes?.[size]?.url ? media.sizes[size]!.url! : media.url
+  const url = size && media.sizes?.[size]?.url ? media.sizes[size]!.url! : media.url!
 
   return (
     <Image

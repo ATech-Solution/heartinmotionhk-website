@@ -8,7 +8,7 @@ export const Testimonials: CollectionConfig = {
   labels: { singular: 'Testimonial', plural: 'Testimonials' },
   admin: {
     useAsTitle: 'authorName',
-    defaultColumns: ['authorName', 'authorTitle', 'rating', 'featured'],
+    defaultColumns: ['authorName', 'authorTitle', 'order'],
   },
   access: {
     create: isAdminOrEditor,
@@ -40,17 +40,10 @@ export const Testimonials: CollectionConfig = {
       localized: true,
     },
     {
-      name: 'rating',
+      name: 'order',
       type: 'number',
-      min: 1,
-      max: 5,
-      defaultValue: 5,
-    },
-    {
-      name: 'featured',
-      type: 'checkbox',
-      defaultValue: false,
+      defaultValue: 0,
       admin: { position: 'sidebar' },
-    },
+    }
   ],
 }
