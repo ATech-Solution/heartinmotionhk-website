@@ -9,5 +9,10 @@ public/media/
 next.zip
 documentation/admin-manual.html
 data/payload.db
-data/payload.db
-data/payload.db
+
+# OS artifacts
+.DS_Store
+**/.DS_Store
+
+# Playwright test artifacts
+test-results/
