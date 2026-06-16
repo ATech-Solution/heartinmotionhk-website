@@ -62,6 +62,19 @@ function FallbackPrivacyContent() {
           significant changes.
         </p>
       </div>
+      <div>
+        <p className="font-bold mb-1">7. Contact Us</p>
+        <p>
+          If you have any questions about this Privacy Policy, please contact us at{' '}
+          <a
+            href="mailto:contact@heartinmotionhk.com"
+            className="underline text-blue-600 hover:text-blue-800"
+          >
+            contact@heartinmotionhk.com
+          </a>
+          .
+        </p>
+      </div>
     </>
   )
 }

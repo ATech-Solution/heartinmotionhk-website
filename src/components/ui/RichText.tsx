@@ -51,6 +51,33 @@ function renderNode(node: DefaultNodeTypes, index: number): React.ReactNode {
       if (format & 16) el = <s>{el}</s>
       return <span key={index}>{el}</span>
     }
+    case 'link': {
+      const url = (node as any).fields?.url ?? (node as any).url ?? '#'
+      const newTab = (node as any).fields?.newTab ?? false
+      return (
+        <a
+          key={index}
+          href={url}
+          target={newTab ? '_blank' : undefined}
+          rel={newTab ? 'noopener noreferrer' : undefined}
+          className="underline text-blue-600 hover:text-blue-800"
+        >
+          {(node as any).children?.map((child: any, i: number) => renderNode(child, i))}
+        </a>
+      )
+    }
+    case 'autolink': {
+      const url = (node as any).fields?.url ?? (node as any).url ?? '#'
+      return (
+        <a
+          key={index}
+          href={url}
+          className="underline text-blue-600 hover:text-blue-800"
+        >
+          {(node as any).children?.map((child: any, i: number) => renderNode(child, i))}
+        </a>
+      )
+    }
     case 'linebreak':
       return <br key={index} />
     default:
