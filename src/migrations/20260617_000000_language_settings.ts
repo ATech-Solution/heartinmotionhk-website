@@ -10,12 +10,12 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     \`show_switcher\` integer DEFAULT true,
     \`switcher_position\` text DEFAULT 'header',
     \`hreflang_enabled\` integer DEFAULT true,
-    \`_status\` text DEFAULT 'published',
-    \`updated_at\` text,
-    \`created_at\` text
+    \`updated_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+    \`created_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL
   );`)
 
-  await db.run(sql`CREATE INDEX IF NOT EXISTS \`language_settings__status_idx\` ON \`language_settings\` (\`_status\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`language_settings_updated_at_idx\` ON \`language_settings\` (\`updated_at\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`language_settings_created_at_idx\` ON \`language_settings\` (\`created_at\`);`)
 
   await db.run(sql`CREATE TABLE IF NOT EXISTS \`language_settings_active_locales\` (
     \`_order\` integer NOT NULL,
