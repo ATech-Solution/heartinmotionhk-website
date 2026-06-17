@@ -22,6 +22,7 @@ import { GeneralSettings } from '@/globals/GeneralSettings'
 import { MaintenanceSettings } from '@/globals/MaintenanceSettings'
 import { Header } from '@/globals/Header'
 import { Footer } from '@/globals/Footer'
+import { AISettings } from '@/globals/AISettings'
 import { notifyContactFormSubmission } from '@/hooks/notifyContactFormSubmission'
 
 const filename = fileURLToPath(import.meta.url)
@@ -71,7 +72,7 @@ export default buildConfig({
   collections: [Users, Pages, Media, Services, Testimonials],
 
   // ── Globals ───────────────────────────────────────────
-  globals: [GeneralSettings, MaintenanceSettings, Header, Footer],
+  globals: [GeneralSettings, MaintenanceSettings, Header, Footer, AISettings],
 
   // ── Plugins ───────────────────────────────────────────
   plugins: [
