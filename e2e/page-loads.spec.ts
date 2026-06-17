@@ -5,13 +5,13 @@ import { test, expect } from '@playwright/test'
  */
 
 const pages = [
-  { name: 'Home',          path: '/' },
-  { name: 'About',         path: '/about' },
-  { name: 'Services',      path: '/services' },
-  { name: 'Contact',       path: '/contact' },
-  { name: 'Privacy Policy', path: '/privacy-policy' },
-  { name: 'Terms',         path: '/terms' },
-  { name: 'Reset Password', path: '/reset-password' },
+  { name: 'Home',          path: '/en' },
+  { name: 'About',         path: '/en/about' },
+  { name: 'Services',      path: '/en/services' },
+  { name: 'Contact',       path: '/en/contact' },
+  { name: 'Privacy Policy', path: '/en/privacy-policy' },
+  { name: 'Terms',         path: '/en/terms' },
+  { name: 'Reset Password', path: '/en/reset-password' },
 ]
 
 for (const { name, path } of pages) {
@@ -26,7 +26,7 @@ for (const { name, path } of pages) {
 }
 
 test('Home page has site name or logo', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/en')
   // Header should have site name or logo image
   const header = page.locator('header')
   await expect(header).toBeVisible()
@@ -36,43 +36,43 @@ test('Home page has site name or logo', async ({ page }) => {
 })
 
 test('Home page has a main section', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/en')
   await expect(page.locator('main')).toBeVisible()
   const sectionCount = await page.locator('section').count()
   expect(sectionCount).toBeGreaterThan(0)
 })
 
 test('Services page renders service content', async ({ page }) => {
-  await page.goto('/services')
+  await page.goto('/en/services')
   await expect(page.locator('main')).toBeVisible()
 })
 
 test('Contact page has a form', async ({ page }) => {
-  await page.goto('/contact')
+  await page.goto('/en/contact')
   await expect(page.locator('form, [data-block-type="contact-form"]')).toBeVisible({ timeout: 10_000 })
 })
 
 test('Privacy policy page has policy content', async ({ page }) => {
-  await page.goto('/privacy-policy')
+  await page.goto('/en/privacy-policy')
   await expect(page.locator('main')).toBeVisible()
   // heading may start hidden due to scroll animations — check DOM presence
   await expect(page.locator('h1, h2').first()).toBeAttached()
 })
 
 test('Terms page has terms content', async ({ page }) => {
-  await page.goto('/terms')
+  await page.goto('/en/terms')
   await expect(page.locator('main')).toBeVisible()
   await expect(page.locator('h1, h2').first()).toBeAttached()
 })
 
 test('Reset password page renders form when token present', async ({ page }) => {
-  await page.goto('/reset-password?token=test-token-for-ui')
+  await page.goto('/en/reset-password?token=test-token-for-ui')
   await expect(page.locator('h1')).toContainText('Reset Password')
   await expect(page.locator('input[type="password"]').first()).toBeVisible()
 })
 
 test('Reset password page shows error without token', async ({ page }) => {
-  await page.goto('/reset-password')
+  await page.goto('/en/reset-password')
   const submitBtn = page.getByRole('button', { name: /reset password/i })
   if (await submitBtn.isVisible()) {
     // Fill valid-length passwords so native minLength doesn't interfere
