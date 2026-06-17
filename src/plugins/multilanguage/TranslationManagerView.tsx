@@ -13,7 +13,6 @@ interface StatusData {
 const COLLECTION_LABELS: Record<string, string> = {
   pages: 'Pages',
   services: 'Services',
-  testimonials: 'Testimonials',
 }
 
 function StatusBadge({ status }: { status: LocaleStatus }) {
