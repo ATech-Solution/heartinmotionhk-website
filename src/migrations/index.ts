@@ -11,6 +11,7 @@ import * as migration_20260514_074808 from './20260514_074808';
 import * as migration_20260514_113135 from './20260514_113135';
 import * as migration_20260604_052917 from './20260604_052917';
 import * as migration_20260616_074245 from './20260616_074245';
+import * as migration_20260617_000000_language_settings from './20260617_000000_language_settings';
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20260616_074245.up,
     down: migration_20260616_074245.down,
     name: '20260616_074245'
+  },
+  {
+    up: migration_20260617_000000_language_settings.up,
+    down: migration_20260617_000000_language_settings.down,
+    name: '20260617_000000_language_settings',
   },
 ];

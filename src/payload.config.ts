@@ -11,6 +11,7 @@ import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { importExportPlugin } from '@payloadcms/plugin-import-export'
+import { multilanguagePlugin } from './plugins/multilanguagePlugin'
 
 import { Users } from '@/collections/Users'
 import { Pages } from '@/collections/Pages'
@@ -135,6 +136,7 @@ export default buildConfig({
       },
     }),
     importExportPlugin({}),
+    multilanguagePlugin(),
   ],
 
   // ── Admin ─────────────────────────────────────────────
