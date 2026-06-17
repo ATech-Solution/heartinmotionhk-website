@@ -77,7 +77,7 @@ export const migrations = [
   {
     up: migration_20260616_074245.up,
     down: migration_20260616_074245.down,
-    name: '20260616_074245'
+    name: '20260616_074245',
   },
   {
     up: migration_20260617_000000_language_settings.up,
