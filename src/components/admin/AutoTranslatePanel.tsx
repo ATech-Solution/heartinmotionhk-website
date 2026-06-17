@@ -32,8 +32,6 @@ export default function AutoTranslatePanel() {
     }
   }
 
-  if (!id) return null
-
   return (
     <div
       style={{
@@ -48,36 +46,44 @@ export default function AutoTranslatePanel() {
       <p style={{ fontSize: 13, fontWeight: 600, margin: '0 0 10px 0', color: '#1a3a6e' }}>
         🌐 AI Translation
       </p>
-      <button
-        onClick={handleTranslate}
-        disabled={status === 'loading'}
-        style={{
-          padding: '8px 16px',
-          background: status === 'loading' ? '#9aaecf' : '#2563eb',
-          color: '#fff',
-          border: 'none',
-          borderRadius: 6,
-          cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-          fontSize: 13,
-          fontWeight: 500,
-          width: '100%',
-        }}
-      >
-        {status === 'loading' ? '⏳ Translating…' : 'Translate to 繁體中文'}
-      </button>
-      {message && (
-        <p
-          style={{
-            marginTop: 10,
-            marginBottom: 0,
-            fontSize: 12,
-            color: status === 'error' ? '#b91c1c' : '#15803d',
-            lineHeight: 1.4,
-          }}
-        >
-          {status === 'error' ? '❌ ' : '✅ '}
-          {message}
+      {!id ? (
+        <p style={{ fontSize: 12, color: '#6b7280', margin: 0 }}>
+          Save the document first to enable translation.
         </p>
+      ) : (
+        <>
+          <button
+            onClick={handleTranslate}
+            disabled={status === 'loading'}
+            style={{
+              padding: '8px 16px',
+              background: status === 'loading' ? '#9aaecf' : '#2563eb',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 6,
+              cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+              fontSize: 13,
+              fontWeight: 500,
+              width: '100%',
+            }}
+          >
+            {status === 'loading' ? '⏳ Translating…' : 'Translate to 繁體中文'}
+          </button>
+          {message && (
+            <p
+              style={{
+                marginTop: 10,
+                marginBottom: 0,
+                fontSize: 12,
+                color: status === 'error' ? '#b91c1c' : '#15803d',
+                lineHeight: 1.4,
+              }}
+            >
+              {status === 'error' ? '❌ ' : '✅ '}
+              {message}
+            </p>
+          )}
+        </>
       )}
     </div>
   )

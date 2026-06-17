@@ -37,13 +37,6 @@ export const Pages: CollectionConfig = {
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
     components: {
       beforeList: ['@/components/admin/AutoTranslateBulkAction'],
-      views: {
-        edit: {
-          default: {
-            actions: ['@/components/admin/AutoTranslatePanel'],
-          },
-        },
-      },
     },
   },
   versions: {
@@ -98,6 +91,16 @@ export const Pages: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Auto-generated from the title. Edit to override.',
+      },
+    },
+    {
+      name: 'aiTranslatePanel',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/components/admin/AutoTranslatePanel',
+        },
       },
     },
     {
