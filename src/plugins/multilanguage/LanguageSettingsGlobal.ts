@@ -1,11 +1,12 @@
 import type { GlobalConfig } from 'payload'
+import { isAdmin } from '@/access/isAdmin'
 
 export const LanguageSettingsGlobal: GlobalConfig = {
   slug: 'language-settings',
   label: 'Language Settings',
   access: {
     read: () => true,
-    update: ({ req }) => req.user?.role === 'admin',
+    update: isAdmin,
   },
   admin: {
     group: 'System',
