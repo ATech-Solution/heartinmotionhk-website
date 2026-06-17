@@ -4,19 +4,19 @@ export async function seedMultilanguage(payload: Payload): Promise<void> {
   // Seed plugin entry into Plugins collection if it exists
   try {
     const existing = await payload.find({
-      collection: 'plugins',
+      collection: 'plugins' as any,
       where: { slug: { equals: 'multilanguage' } },
       limit: 1,
     })
 
     if (existing.totalDocs === 0) {
       await payload.create({
-        collection: 'plugins',
+        collection: 'plugins' as any,
         data: {
           name: 'Multilanguage',
           slug: 'multilanguage',
           pluginType: 'built-in',
-          category: 'utility',
+          category: 'utility' as any,
           status: 'active',
           version: '1.0.0',
           author: 'ATech',

@@ -71,10 +71,10 @@ export default async function LocaleLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         {hreflangEnabled && siteUrl && activeLocales.map((l) => (
-          <link key={l.code} rel="alternate" hreflang={l.code} href={`${siteUrl}/${l.code}/`} />
+          <link key={l.code} rel="alternate" hrefLang={l.code} href={`${siteUrl}/${l.code}/`} />
         ))}
         {hreflangEnabled && siteUrl && (
-          <link rel="alternate" hreflang="x-default" href={`${siteUrl}/en/`} />
+          <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en/`} />
         )}
       </head>
       <body className="font-body bg-white text-black antialiased">
