@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "postbuild": "npm run generate:importmap",
+    "build": "npm run generate:importmap && next build",
     "postinstall": "npm run generate:types && npm run generate:importmap",
     "start": "next start",
     "start:prod": "npm run build && npm run start",
