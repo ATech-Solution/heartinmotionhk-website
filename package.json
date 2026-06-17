@@ -30,6 +30,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.2",
     "@payloadcms/db-sqlite": "3.33.0",
     "@payloadcms/email-nodemailer": "3.33.0",
     "@payloadcms/next": "3.33.0",

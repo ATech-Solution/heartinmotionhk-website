@@ -35,6 +35,16 @@ export const Pages: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
+    components: {
+      beforeList: ['@/components/admin/AutoTranslateBulkAction'],
+      views: {
+        edit: {
+          default: {
+            actions: ['@/components/admin/AutoTranslatePanel'],
+          },
+        },
+      },
+    },
   },
   versions: {
     drafts: {
