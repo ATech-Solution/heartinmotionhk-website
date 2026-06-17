@@ -108,7 +108,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
 
             {/* Locale switcher */}
             <div className="flex items-center gap-3">
-              <div className='hidden'>
+              <div>
                 <LocaleSwitcher currentLocale={locale ?? 'en'} />
               </div>
               <div className="px-4 flex gap-3">
@@ -200,10 +200,10 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <div className='hidden'>
+        <div>
           <LocaleSwitcher currentLocale={locale ?? 'en'} />
         </div>
-        
+
       </div>
 
       {/* Mobile header — white background */}
@@ -281,7 +281,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <div className="hidden pt-2 border-t border-gray-100 w-[100px] mx-auto">
+        <div className="pt-2 border-t border-gray-100 w-[100px] mx-auto">
           <LocaleSwitcher currentLocale={locale ?? 'en'} />
         </div>
       </div>
