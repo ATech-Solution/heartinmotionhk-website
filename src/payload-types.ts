@@ -107,14 +107,14 @@ export interface Config {
     'maintenance-settings': MaintenanceSetting;
     header: Header;
     footer: Footer;
-    'language-settings': LanguageSetting;
+    'ai-settings': AiSetting;
   };
   globalsSelect: {
     'general-settings': GeneralSettingsSelect<false> | GeneralSettingsSelect<true>;
     'maintenance-settings': MaintenanceSettingsSelect<false> | MaintenanceSettingsSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
-    'language-settings': LanguageSettingsSelect<false> | LanguageSettingsSelect<true>;
+    'ai-settings': AiSettingsSelect<false> | AiSettingsSelect<true>;
   };
   locale: 'en' | 'zh-HK';
   user: User & {
@@ -2027,35 +2027,23 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
- * Configure multilanguage routing, switcher, and active locales.
- *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "language-settings".
+ * via the `definition` "ai-settings".
  */
-export interface LanguageSetting {
+export interface AiSetting {
   id: number;
   /**
-   * Enable or disable specific locales. Must match locales in payload.config.ts.
+   * When disabled, the translate button is hidden from all editors.
    */
-  activeLocales?:
-    | {
-        /**
-         * e.g. en, zh-HK — must match a code in payload.config.ts
-         */
-        code: string;
-        label: string;
-        enabled?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  defaultLocale?: string | null;
-  autoDetect?: boolean | null;
-  showSwitcher?: boolean | null;
-  switcherPosition?: ('header' | 'footer') | null;
+  enabled?: boolean | null;
   /**
-   * Add <link rel="alternate" hreflang="..."> tags for multilanguage SEO.
+   * Your Claude API key (sk-ant-...). Get one at console.anthropic.com.
    */
-  hreflangEnabled?: boolean | null;
+  anthropicApiKey?: string | null;
+  /**
+   * Haiku is recommended for most translation tasks.
+   */
+  model?: ('claude-haiku-4-5-20251001' | 'claude-sonnet-4-6') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2167,22 +2155,12 @@ export interface FooterSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "language-settings_select".
+ * via the `definition` "ai-settings_select".
  */
-export interface LanguageSettingsSelect<T extends boolean = true> {
-  activeLocales?:
-    | T
-    | {
-        code?: T;
-        label?: T;
-        enabled?: T;
-        id?: T;
-      };
-  defaultLocale?: T;
-  autoDetect?: T;
-  showSwitcher?: T;
-  switcherPosition?: T;
-  hreflangEnabled?: T;
+export interface AiSettingsSelect<T extends boolean = true> {
+  enabled?: T;
+  anthropicApiKey?: T;
+  model?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
