@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LocaleSwitcher } from '@/components/language/LocaleSwitcher'
+import { LanguageSwitcher } from '@/components/language/LanguageSwitcher'
 
 interface NavItem {
   label?: string
@@ -28,6 +28,11 @@ interface MobileCta {
   emailUrl?: string | null
 }
 
+interface Locale {
+  code: string
+  label: string
+}
+
 interface HeaderProps {
   header?: {
     logo?: any
@@ -37,14 +42,17 @@ interface HeaderProps {
   } | null
   general?: any
   locale?: string
+  activeLocales?: Locale[]
+  showSwitcher?: boolean
 }
 
-function getPagePath(slug?: string) {
-  if (!slug || slug === 'home') return '/'
-  return `/${slug}`
+function getPagePath(slug?: string, locale?: string) {
+  const prefix = locale ? `/${locale}` : ''
+  if (!slug || slug === 'home') return `${prefix}/`
+  return `${prefix}/${slug}`
 }
 
-export function SiteHeader({ header, general, locale }: HeaderProps) {
+export function SiteHeader({ header, general, locale, activeLocales = [], showSwitcher = false }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
 
@@ -66,7 +74,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
       <div className="hidden lg:block bg-[#f5eded] h-[110px]">
         <div className="max-w-[1250px] mx-auto px-12 lg:px-12 xl:px-0 xl:px-0 h-full flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <Link href={locale ? `/${locale}` : '/'} className="flex items-center gap-2.5 flex-shrink-0">
             {logoUrl ? (
               <Image
                 src={logoUrl}
@@ -90,7 +98,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                 const href =
                   item.linkType === 'external'
                     ? (item.url ?? '#')
-                    : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+                    : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined, locale)
                 const isActive = pathname === href
                 return (
                   <Link
@@ -108,9 +116,9 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
 
             {/* Locale switcher */}
             <div className="flex items-center gap-3">
-              <div className='hidden'>
-                <LocaleSwitcher currentLocale={locale ?? 'en'} />
-              </div>
+              {showSwitcher && (
+                <LanguageSwitcher activeLocales={activeLocales} currentLocale={locale ?? 'en'} />
+              )}
               <div className="px-4 flex gap-3">
                 {ctaButtons.length > 0 ? (
                   ctaButtons.map((btn, i) => {
@@ -162,7 +170,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
 
       {/* Tablet header */}
       <div className="hidden md:flex lg:hidden bg-[#f5eded] h-[80px] items-center px-8 justify-between">
-        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+        <Link href={locale ? `/${locale}` : '/'} className="flex items-center gap-2 flex-shrink-0">
           {logoUrl ? (
             <Image
               src={logoUrl}
@@ -184,7 +192,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             const href =
               item.linkType === 'external'
                 ? (item.url ?? '#')
-                : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+                : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined, locale)
             const isActive = pathname === href
             return (
               <Link
@@ -200,16 +208,16 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <div className='hidden'>
-          <LocaleSwitcher currentLocale={locale ?? 'en'} />
-        </div>
+        {showSwitcher && (
+          <LanguageSwitcher activeLocales={activeLocales} currentLocale={locale ?? 'en'} />
+        )}
         
       </div>
 
       {/* Mobile header — white background */}
       <div className="md:hidden bg-white h-[80px] flex items-center px-4 justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+        <Link href={locale ? `/${locale}` : '/'} className="flex items-center gap-2.5 flex-shrink-0">
           {logoUrl ? (
             <Image
               src={logoUrl}
@@ -264,7 +272,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
             const href =
               item.linkType === 'external'
                 ? (item.url ?? '#')
-                : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+                : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined, locale)
             const isActive = pathname === href
             return (
               <Link
@@ -281,9 +289,11 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <div className="hidden pt-2 border-t border-gray-100 w-[100px] mx-auto">
-          <LocaleSwitcher currentLocale={locale ?? 'en'} />
-        </div>
+        {showSwitcher && (
+          <div className="pt-2 border-t border-gray-100 flex justify-center">
+            <LanguageSwitcher activeLocales={activeLocales} currentLocale={locale ?? 'en'} />
+          </div>
+        )}
       </div>
 
       {/* Mobile CTA bar — always visible below mobile navbar */}
