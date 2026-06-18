@@ -116,13 +116,6 @@ jobs:
             echo "--- Installing dependencies ---"
             npm install --production=false --ignore-scripts
 
-            echo "--- Regenerating Payload types and importmap on server ---"
-            export PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
-            export DATABASE_URL="file:./data/payload.db"
-            export PAYLOAD_PUBLIC_SERVER_URL="https://dev.heartinmotionhk.com"
-            npm run generate:types
-            npm run generate:importmap
-
             echo "--- Deploying standalone bundle ---"
             rm -rf .next/standalone
             mkdir -p .next
@@ -155,6 +148,8 @@ jobs:
 
             echo "--- Running DB migrations ---"
             mkdir -p data
+            export PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
+            export DATABASE_URL="file:./data/payload.db"
             npm run migrate
             echo "--- DB migrations complete ---"
 
