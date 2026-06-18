@@ -3,8 +3,6 @@ module.exports = {
     {
       name: 'heartinmotionhk-dev',
       script: '.next/standalone/server.js',
-      interpreter: '/usr/bin/env',
-      interpreter_args: 'node',
       cwd: '/home/deploy/dev',
       env: {
         NODE_ENV: 'development',
@@ -18,8 +16,6 @@ module.exports = {
     {
       name: 'heartinmotionhk-prod',
       script: '.next/standalone/server.js',
-      interpreter: '/usr/bin/env',
-      interpreter_args: 'node',
       cwd: '/home/deploy/prod',
       env: {
         NODE_ENV: 'production',
