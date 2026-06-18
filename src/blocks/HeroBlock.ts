@@ -54,6 +54,7 @@ export const HeroBlock: Block = {
     {
       name: 'ctaUrl',
       type: 'text',
+      localized: true,
     },
     visibilityGroup,
   ],

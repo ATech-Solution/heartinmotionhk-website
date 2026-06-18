@@ -5,10 +5,15 @@ const SKIP_KEYS = new Set([
   'createdAt', 'updatedAt', '__v', 'mimeType', 'filename', 'filesize',
   'width', 'height', 'focalX', 'focalY', 'relationTo',
   // Select / enum field names — values are codes, not user-facing text
-  'linkType', 'platform', 'style', 'status', 'type',
+  'linkType', 'platform', 'style', 'status', 'type', 'category',
+  'alignment', 'size', 'color', 'variant', 'format', 'mode',
 ])
 
-const SKIP_KEY_SUFFIXES = ['Url', 'url', 'href', 'email', 'phone', 'whatsapp', 'src', 'alt']
+// Only skip keys whose values are always non-translatable paths/references.
+// Do NOT add 'email', 'phone', 'alt' here — those can be form labels ("Email Address",
+// "Phone Number", image alt text) that MUST be translated. Their values are caught by
+// SKIP_VALUE_PATTERNS if they are actual email addresses / phone numbers.
+const SKIP_KEY_SUFFIXES = ['Url', 'url', 'href', 'src']
 
 const SKIP_VALUE_PATTERNS = [
   /^https?:\/\//,
@@ -128,7 +133,10 @@ export function applyTranslations(
 ): unknown {
   if (obj === null || obj === undefined) return obj
   if (typeof obj === 'string') {
-    return translations[prefix] !== undefined ? translations[prefix] : obj
+    // Only apply a translation if it is a non-empty string — empty/whitespace
+    // results from Claude must fall back to the original so fields never become blank.
+    const t = translations[prefix]
+    return (t !== undefined && t !== null && t.trim() !== '') ? t : obj
   }
   if (Array.isArray(obj)) {
     return obj.map((item, i) =>
@@ -198,10 +206,12 @@ async function callClaude(
     tool_choice: { type: 'tool', name: 'return_translations' },
     system: `You are a professional translator specialising in Simplified Chinese (zh-CN).
 You will receive a JSON object where keys are opaque tokens (k0, k1, …) and values are English text.
-Translate each value to Simplified Chinese (zh-CN).
+Translate EVERY value to Simplified Chinese (zh-CN) — including headlines, taglines, marketing copy, body text, button labels, and section headings.
 Return ALL keys unchanged — do not skip, rename, or nest them.
-Do not translate: proper nouns, brand names, URLs, email addresses, or phone numbers.
-Preserve all formatting characters (newlines, spaces, punctuation style).`,
+Rules:
+- The ONLY text to preserve exactly as-is: the string "Heart in Motion HK" (exact brand name), URLs starting with http/https, email addresses, and phone numbers.
+- All other text MUST be translated, even if it sounds like a slogan or contains a common English word like "heart" or "motion".
+- Preserve all formatting characters (newlines, spaces, punctuation style).`,
     messages: [{ role: 'user', content: JSON.stringify(indexed) }],
   })
 
@@ -210,6 +220,15 @@ Preserve all formatting characters (newlines, spaces, punctuation style).`,
     throw new Error('Claude did not return a tool_use response')
   }
   const raw = (toolUse.input as { translations?: Record<string, string> }).translations ?? {}
+
+  // Log any keys Claude returned unchanged (same English value) so we can spot non-translations
+  for (const [ki, translated] of Object.entries(raw)) {
+    const i = parseInt(ki.slice(1), 10)
+    const origKey = origKeys[i]
+    if (origKey && translated === fieldMap[origKey]) {
+      console.warn(`[callClaude] Key ${ki} (${origKey}) was NOT translated: "${translated}"`)
+    }
+  }
 
   // Remap indexed keys back to original dot-path keys
   const result: Record<string, string> = {}
@@ -240,13 +259,17 @@ export async function translateWithClaude(
   doc: Record<string, unknown>,
   apiKey: string,
   model: string,
-): Promise<{ translated: Record<string, unknown>; count: number }> {
+  // When provided, translations are applied to this doc instead of `doc`.
+  // Pass the zh-CN version of the document so block IDs match the DB and
+  // Payload can UPDATE locale rows in-place rather than DELETE + INSERT.
+  applyTo?: Record<string, unknown>,
+): Promise<{ translated: Record<string, unknown>; count: number; fieldMap: Record<string, string> }> {
   const client = new Anthropic({ apiKey })
   const fieldMap = extractStrings(doc)
   const keys = Object.keys(fieldMap)
   const count = keys.length
 
-  if (count === 0) return { translated: doc, count: 0 }
+  if (count === 0) return { translated: applyTo ?? doc, count: 0, fieldMap }
 
   // Split into chunks to avoid hitting Claude's output token limit
   const translations: Record<string, string> = {}
@@ -258,6 +281,7 @@ export async function translateWithClaude(
     Object.assign(translations, result)
   }
 
-  const translated = applyTranslations(doc, translations) as Record<string, unknown>
-  return { translated, count }
+  const base = applyTo ?? doc
+  const translated = applyTranslations(base, translations) as Record<string, unknown>
+  return { translated, count, fieldMap }
 }

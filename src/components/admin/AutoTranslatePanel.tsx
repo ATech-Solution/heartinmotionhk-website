@@ -39,15 +39,12 @@ export default function AutoTranslatePanel() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Translation failed')
       setStatus('success')
-      setMessage(`✅ ${data.fieldsTranslated} fields translated. Opening 简体中文…`)
-      // Redirect quickly to zh-CN so the admin loads the saved content.
-      // Translation is saved to published state (not draft) so autosave
-      // draft versions cannot overwrite it.
-      setTimeout(() => {
-        const url = new URL(window.location.href)
-        url.searchParams.set('locale', 'zh-CN')
-        window.location.href = url.toString()
-      }, 800)
+      setMessage(`✅ ${data.fieldsTranslated} fields translated to 简体中文 and saved.`)
+      // Stay on English locale — zh-CN is saved in the DB and visible when switching locale.
+      // Force a page reload so the admin refreshes its state without changing locale.
+      const url = new URL(window.location.href)
+      url.searchParams.set('locale', 'en')
+      window.location.href = url.toString()
     } catch (err) {
       setStatus('error')
       setMessage(err instanceof Error ? err.message : 'Something went wrong')

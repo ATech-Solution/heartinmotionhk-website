@@ -21,6 +21,13 @@ import * as migration_20260618_012332 from './20260618_012332';
 import * as migration_20260618_013802 from './20260618_013802';
 import * as migration_20260618_014203 from './20260618_014203';
 import * as migration_20260618_024101 from './20260618_024101';
+import * as migration_20260618_061311 from './20260618_061311';
+import * as migration_20260618_070222 from './20260618_070222';
+import * as migration_20260618_080832 from './20260618_080832';
+import * as migration_20260618_081256 from './20260618_081256';
+import * as migration_20260618_091140 from './20260618_091140';
+import * as migration_20260618_093524 from './20260618_093524';
+import * as migration_20260618_093819 from './20260618_093819';
 
 export const migrations = [
   {
@@ -136,6 +143,41 @@ export const migrations = [
   {
     up: migration_20260618_024101.up,
     down: migration_20260618_024101.down,
-    name: '20260618_024101'
+    name: '20260618_024101',
+  },
+  {
+    up: migration_20260618_061311.up,
+    down: migration_20260618_061311.down,
+    name: '20260618_061311',
+  },
+  {
+    up: migration_20260618_070222.up,
+    down: migration_20260618_070222.down,
+    name: '20260618_070222',
+  },
+  {
+    up: migration_20260618_080832.up,
+    down: migration_20260618_080832.down,
+    name: '20260618_080832',
+  },
+  {
+    up: migration_20260618_081256.up,
+    down: migration_20260618_081256.down,
+    name: '20260618_081256',
+  },
+  {
+    up: migration_20260618_091140.up,
+    down: migration_20260618_091140.down,
+    name: '20260618_091140',
+  },
+  {
+    up: migration_20260618_093524.up,
+    down: migration_20260618_093524.down,
+    name: '20260618_093524',
+  },
+  {
+    up: migration_20260618_093819.up,
+    down: migration_20260618_093819.down,
+    name: '20260618_093819'
   },
 ];

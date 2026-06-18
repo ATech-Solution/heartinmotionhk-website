@@ -1,6 +1,8 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { draftMode } from 'next/headers'
+
+export const dynamic = 'force-dynamic'
 import { RenderBlocks } from '@/components/Blocks/RenderBlocks'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'

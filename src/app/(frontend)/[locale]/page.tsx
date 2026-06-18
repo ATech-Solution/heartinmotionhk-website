@@ -5,6 +5,8 @@ import { RenderBlocks } from '@/components/Blocks/RenderBlocks'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 type Props = { params: Promise<{ locale: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

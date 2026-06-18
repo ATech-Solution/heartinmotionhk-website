@@ -35,6 +35,7 @@ export const CTABlock: Block = {
     {
       name: 'ctaUrl',
       type: 'text',
+      localized: true,
     },
     {
       name: 'background',
