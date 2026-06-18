@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LanguageSwitcher } from '@/components/language/LanguageSwitcher'
+import { LocaleSwitcher } from '@/components/language/LocaleSwitcher'
 
 interface NavItem {
   label?: string
