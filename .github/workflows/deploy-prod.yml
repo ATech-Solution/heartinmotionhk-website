@@ -135,7 +135,7 @@ jobs:
             DATABASE_URL="file:///home/deploy/prod/data/payload.db" python3 scripts/migrate-db.py
 
             echo "--- Restarting PM2 ---"
-            pm2 start ecosystem.config.js --only heartinmotionhk-prod || pm2 restart heartinmotionhk-prod --update-env
+            pm2 startOrRestart ecosystem.config.js --only heartinmotionhk-prod --update-env
 
             echo "--- Deploy complete ---"
             pm2 status
