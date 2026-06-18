@@ -72,15 +72,20 @@ jobs:
           done
           [ -f "public/favicon.ico" ] && cp "public/favicon.ico" .next/standalone/public/
 
-          # 3. Inject PAYLOAD_PUBLIC_SERVER_URL default at the top of server.js.
+          # 3. Inject env defaults at the top of server.js.
           #    Next.js standalone does not load .env files; without this injection
           #    Payload falls back to http://localhost:3000 and admin media URLs break.
+          #    DATABASE_URL is set to an absolute path so the server always resolves
+          #    the SQLite file correctly regardless of its cwd at startup.
           node -e "
           const fs = require('fs');
           const file = '.next/standalone/server.js';
           let content = fs.readFileSync(file, 'utf8');
-          const patch = 'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://dev.heartinmotionhk.com\";\n';
-          if (!content.includes('PAYLOAD_PUBLIC_SERVER_URL')) {
+          const patch = [
+            'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://dev.heartinmotionhk.com\";',
+            'process.env.DATABASE_URL ||= \"file:///home/deploy/dev/data/payload.db\";',
+          ].join('\n') + '\n';
+          if (!content.includes('DATABASE_URL')) {
             fs.writeFileSync(file, patch + content);
           }
           "
@@ -141,16 +146,20 @@ jobs:
             }
             "
 
+            echo "--- Symlinking persistent data directory ---"
+            mkdir -p /home/deploy/dev/data
+            rm -rf .next/standalone/data
+            ln -sfn /home/deploy/dev/data .next/standalone/data
+
             echo "--- Symlinking persistent media directory ---"
             mkdir -p /home/deploy/dev/public/media
             rm -rf .next/standalone/public/media
             ln -sfn /home/deploy/dev/public/media .next/standalone/public/media
 
             echo "--- Running DB migrations ---"
-            mkdir -p data
-            # Python3 + stdlib sqlite3 are always available on Ubuntu.
-            # No npm, no tsx, no esbuild, no native Node binaries that can bus-error.
-            DATABASE_URL="file:./data/payload.db" python3 scripts/migrate-db.py
+            mkdir -p /home/deploy/dev/data
+            # Use absolute DB path — matches the path injected into standalone/server.js.
+            DATABASE_URL="file:///home/deploy/dev/data/payload.db" python3 scripts/migrate-db.py
             echo "--- DB migrations complete ---"
 
             echo "--- Restarting PM2 ---"
