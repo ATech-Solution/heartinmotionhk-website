@@ -184,6 +184,12 @@ async function callClaude(
   model: string,
   fieldMap: Record<string, string>,
 ): Promise<Record<string, string>> {
+  // Remap dot-path keys to simple numeric tokens (k0, k1, …) so Claude
+  // cannot mistake them for nested JSON paths and return a nested object.
+  const origKeys = Object.keys(fieldMap)
+  const indexed: Record<string, string> = {}
+  origKeys.forEach((k, i) => { indexed[`k${i}`] = fieldMap[k]! })
+
   const response = await client.messages.create({
     model,
     max_tokens: 8096,
@@ -191,19 +197,26 @@ async function callClaude(
     tools: [TRANSLATE_TOOL],
     tool_choice: { type: 'tool', name: 'return_translations' },
     system: `You are a professional translator specialising in Simplified Chinese (zh-CN).
-Translate the values in the provided JSON object from English to Simplified Chinese (zh-CN).
+You will receive a JSON object where keys are opaque tokens (k0, k1, …) and values are English text.
+Translate each value to Simplified Chinese (zh-CN).
+Return ALL keys unchanged — do not skip, rename, or nest them.
 Do not translate: proper nouns, brand names, URLs, email addresses, or phone numbers.
-Preserve all formatting characters (newlines, spaces, punctuation style).
-Return ALL keys from the input — do not omit any.`,
-    messages: [{ role: 'user', content: JSON.stringify(fieldMap) }],
+Preserve all formatting characters (newlines, spaces, punctuation style).`,
+    messages: [{ role: 'user', content: JSON.stringify(indexed) }],
   })
 
   const toolUse = response.content.find((b) => b.type === 'tool_use')
   if (!toolUse || toolUse.type !== 'tool_use') {
     throw new Error('Claude did not return a tool_use response')
   }
-  const input = toolUse.input as { translations?: Record<string, string> }
-  return input.translations ?? {}
+  const raw = (toolUse.input as { translations?: Record<string, string> }).translations ?? {}
+
+  // Remap indexed keys back to original dot-path keys
+  const result: Record<string, string> = {}
+  origKeys.forEach((k, i) => {
+    if (raw[`k${i}`] !== undefined) result[k] = raw[`k${i}`]!
+  })
+  return result
 }
 
 async function callClaudeWithRetry(

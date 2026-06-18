@@ -39,11 +39,14 @@ export default function AutoTranslatePanel() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Translation failed')
       setStatus('success')
-      setMessage(`${data.fieldsTranslated} fields translated. Switch to 简中 tab to review.`)
+      setMessage(`✅ ${data.fieldsTranslated} fields translated. Switching to 简体中文…`)
+      // Redirect to zh-CN locale immediately so the admin loads the translated
+      // draft before autosave can create a newer version without zh-CN data.
       setTimeout(() => {
-        setStatus('idle')
-        setMessage('')
-      }, 8000)
+        const url = new URL(window.location.href)
+        url.searchParams.set('locale', 'zh-CN')
+        window.location.href = url.toString()
+      }, 1500)
     } catch (err) {
       setStatus('error')
       setMessage(err instanceof Error ? err.message : 'Something went wrong')
