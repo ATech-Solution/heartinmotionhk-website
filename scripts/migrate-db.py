@@ -85,6 +85,56 @@ for tbl in form_tables:
         for col, defn in form_cols:
             add_column(tbl, col, defn)
 
+# ── hero locales: subheadline_mobile ────────────────────────────────────────
+for tbl in ("pages_blocks_hero_locales", "_pages_v_blocks_hero_locales"):
+    if table_exists(tbl):
+        add_column(tbl, "subheadline_mobile", "text")
+
+# ── real_challenge locales: body_mobile ─────────────────────────────────────
+for tbl in ("pages_blocks_real_challenge_locales", "_pages_v_blocks_real_challenge_locales"):
+    if table_exists(tbl):
+        add_column(tbl, "body_mobile", "text")
+
+# ── about_him locales: body ──────────────────────────────────────────────────
+for tbl in ("pages_blocks_about_him_locales", "_pages_v_blocks_about_him_locales"):
+    if table_exists(tbl):
+        add_column(tbl, "body", "text")
+
+# ── booking_session: button_url ──────────────────────────────────────────────
+for tbl in ("pages_blocks_booking_session", "_pages_v_blocks_booking_session"):
+    if table_exists(tbl):
+        add_column(tbl, "button_url", "text")
+
+# ── booking_session locales: section_title, section_subtitle, quote, body, button_label ──
+booking_session_locale_cols = [
+    ("section_title",  "text DEFAULT 'Booking Session'"),
+    ("section_subtitle", "text"),
+    ("quote",          "text"),
+    ("body",           "text"),
+    ("button_label",   "text DEFAULT 'Book a session'"),
+]
+for tbl in ("pages_blocks_booking_session_locales", "_pages_v_blocks_booking_session_locales"):
+    if table_exists(tbl):
+        for col, defn in booking_session_locale_cols:
+            add_column(tbl, col, defn)
+
+# ── values_values: icon_id ───────────────────────────────────────────────────
+for tbl in ("pages_blocks_values_values", "_pages_v_blocks_values_values"):
+    if table_exists(tbl):
+        add_column(tbl, "icon_id", "integer REFERENCES `media`(`id`) ON DELETE set null")
+
+# ── testimonials: order ──────────────────────────────────────────────────────
+if table_exists("testimonials"):
+    add_column("testimonials", "order", "numeric DEFAULT 0")
+
+# ── general_settings: admin_logo_id ─────────────────────────────────────────
+if table_exists("general_settings"):
+    add_column("general_settings", "admin_logo_id", "integer REFERENCES `media`(`id`) ON DELETE set null")
+
+# ── maintenance_settings: logo_id ────────────────────────────────────────────
+if table_exists("maintenance_settings"):
+    add_column("maintenance_settings", "logo_id", "integer REFERENCES `media`(`id`) ON DELETE set null")
+
 # ── localized URL fields: cta_url in block locales tables ───────────────────
 cta_url_tables = [
     "pages_blocks_hero_locales",
