@@ -15,6 +15,77 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ enabled: Boolean(aiSettings.enabled) })
 }
 
+// Translate a single collection document and save zh-CN to published state.
+// Returns the number of fields translated.
+async function translateDoc(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  collection: string,
+  docId: string | number,
+  apiKey: string,
+  model: string,
+): Promise<number> {
+  const doc = await payload.findByID({
+    collection: collection as any,
+    id: docId as any,
+    locale: 'en' as any,
+    depth: 0,
+    overrideAccess: true,
+  })
+
+  const { translated, count } = await translateWithClaude(
+    doc as Record<string, unknown>,
+    apiKey,
+    model,
+  )
+
+  for (const key of STRIP_KEYS) delete (translated as Record<string, unknown>)[key]
+
+  // Save directly to the published document (no draft: true) so autosave
+  // draft versions cannot overwrite this locale's content.
+  await payload.update({
+    collection: collection as any,
+    id: docId as any,
+    locale: 'zh-CN' as any,
+    data: translated as Record<string, unknown>,
+    overrideAccess: true,
+  })
+
+  return count
+}
+
+// Extract relationship IDs from page blocks for known collection fields.
+function extractRelationshipIds(
+  doc: Record<string, unknown>,
+): { collection: string; ids: (string | number)[] }[] {
+  const result: Record<string, Set<string | number>> = {}
+
+  const blocks = Array.isArray(doc.layout) ? (doc.layout as any[]) : []
+  for (const block of blocks) {
+    // TestimonialsBlock → relationTo: 'testimonials'
+    if (block.blockType === 'testimonials' && Array.isArray(block.testimonials)) {
+      if (!result['testimonials']) result['testimonials'] = new Set()
+      for (const t of block.testimonials) {
+        const id = typeof t === 'object' && t !== null ? t.id : t
+        if (id != null) result['testimonials'].add(id)
+      }
+    }
+    // ServicesOverviewBlock → relationTo: 'services'
+    if (block.blockType === 'services-overview' && Array.isArray(block.services)) {
+      if (!result['services']) result['services'] = new Set()
+      for (const s of block.services) {
+        const id = typeof s === 'object' && s !== null ? s.id : s
+        if (id != null) result['services'].add(id)
+      }
+    }
+    // BookingSessionBlock services array is inline (not a relationship)
+  }
+
+  return Object.entries(result).map(([collection, ids]) => ({
+    collection,
+    ids: [...ids],
+  }))
+}
+
 export async function POST(request: NextRequest) {
   const payload = await getPayload({ config: configPromise })
 
@@ -45,6 +116,7 @@ export async function POST(request: NextRequest) {
   }
 
   const model = aiSettings.model ?? 'claude-haiku-4-5-20251001'
+  const apiKey = aiSettings.anthropicApiKey
 
   try {
     if (isGlobal) {
@@ -57,7 +129,7 @@ export async function POST(request: NextRequest) {
 
       const { translated, count } = await translateWithClaude(
         doc as Record<string, unknown>,
-        aiSettings.anthropicApiKey,
+        apiKey,
         model,
       )
 
@@ -73,7 +145,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, fieldsTranslated: count })
     }
 
-    // Collection document
+    // Collection document — translate the page itself
     const doc = await payload.findByID({
       collection: collection as any,
       id: id!,
@@ -84,10 +156,9 @@ export async function POST(request: NextRequest) {
 
     const { translated, count } = await translateWithClaude(
       doc as Record<string, unknown>,
-      aiSettings.anthropicApiKey,
+      apiKey,
       model,
     )
-
     for (const key of STRIP_KEYS) delete (translated as Record<string, unknown>)[key]
 
     await payload.update({
@@ -95,11 +166,24 @@ export async function POST(request: NextRequest) {
       id: id!,
       locale: 'zh-CN' as any,
       data: translated as Record<string, unknown>,
-      draft: true,
       overrideAccess: true,
     })
 
-    return NextResponse.json({ success: true, fieldsTranslated: count })
+    // Also translate any related documents referenced in the page's blocks
+    // (Testimonials, Services) so all visible content is translated.
+    const related = extractRelationshipIds(doc as Record<string, unknown>)
+    let relatedCount = 0
+    for (const { collection: relCollection, ids } of related) {
+      for (const relId of ids) {
+        try {
+          relatedCount += await translateDoc(payload, relCollection, relId, apiKey, model)
+        } catch (err) {
+          console.error(`[auto-translate] Failed to translate ${relCollection}/${relId}:`, err)
+        }
+      }
+    }
+
+    return NextResponse.json({ success: true, fieldsTranslated: count + relatedCount })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Translation failed'
     return NextResponse.json({ error: message }, { status: 500 })
