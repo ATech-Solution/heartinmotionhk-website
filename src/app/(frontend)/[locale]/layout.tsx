@@ -52,11 +52,20 @@ export default async function LocaleLayout({
     if (maintenanceEnabled) redirect('/maintenance')
   }
 
-  const [header, footer, general] = await Promise.all([
-    payload.findGlobal({ slug: 'header', locale }),
-    payload.findGlobal({ slug: 'footer', locale }),
-    payload.findGlobal({ slug: 'general-settings', locale }),
-  ])
+  // Wrap global fetches so a missing DB column (pending migration) never crashes the whole page.
+  // SiteHeader and SiteFooter both handle null props gracefully via optional chaining.
+  let header: any = null
+  let footer: any = null
+  let general: any = null
+  try {
+    ;[header, footer, general] = await Promise.all([
+      payload.findGlobal({ slug: 'header', locale }),
+      payload.findGlobal({ slug: 'footer', locale }),
+      payload.findGlobal({ slug: 'general-settings', locale }),
+    ])
+  } catch (err) {
+    console.error('[layout] Failed to load globals — DB migration may be pending:', err)
+  }
 
   return (
     <html lang={locale === 'zh-CN' ? 'zh-Hans' : 'en'} className={`${inter.variable} ${caveat.variable}`}>

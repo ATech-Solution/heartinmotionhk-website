@@ -28,6 +28,15 @@ jobs:
       - name: Clean Next.js cache
         run: rm -rf .next
 
+      - name: Generate Payload types and importmap
+        run: npm run generate:types && npm run generate:importmap
+        env:
+          NODE_ENV: production
+          DATABASE_URL: file:./data/payload.db
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          NEXT_PUBLIC_SITE_URL: https://dev.heartinmotionhk.com
+          PAYLOAD_PUBLIC_SERVER_URL: https://dev.heartinmotionhk.com
+
       - name: Build
         run: npm run build
         env:
@@ -97,6 +106,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            set -e
             cd /home/deploy/dev
 
             echo "--- Pulling latest code from dev ---"
@@ -105,6 +115,13 @@ jobs:
 
             echo "--- Installing dependencies ---"
             npm install --production=false --ignore-scripts
+
+            echo "--- Regenerating Payload types and importmap on server ---"
+            export PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
+            export DATABASE_URL="file:./data/payload.db"
+            export PAYLOAD_PUBLIC_SERVER_URL="https://dev.heartinmotionhk.com"
+            npm run generate:types
+            npm run generate:importmap
 
             echo "--- Deploying standalone bundle ---"
             rm -rf .next/standalone
@@ -138,8 +155,6 @@ jobs:
 
             echo "--- Running DB migrations ---"
             mkdir -p data
-            export PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
-            export DATABASE_URL="file:./data/payload.db"
             npm run migrate
             echo "--- DB migrations complete ---"
 
