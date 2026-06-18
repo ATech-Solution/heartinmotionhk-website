@@ -159,54 +159,24 @@ export function applyTranslations(
 // Max fields per Claude call — keeps response well within 4096 tokens
 const CHUNK_SIZE = 30
 
-function repairJson(text: string): string {
-  // Replace literal control characters inside JSON string values.
-  // Walk char-by-char tracking string context so we only modify string contents.
-  let out = ''
-  let inString = false
-  let escaped = false
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i]!
-    if (escaped) {
-      out += ch
-      escaped = false
-    } else if (ch === '\\') {
-      out += ch
-      escaped = true
-    } else if (ch === '"') {
-      out += ch
-      inString = !inString
-    } else if (inString && ch === '\n') {
-      out += '\\n'
-    } else if (inString && ch === '\r') {
-      out += '\\r'
-    } else if (inString && ch === '\t') {
-      out += '\\t'
-    } else {
-      out += ch
-    }
-  }
-  return out
-}
+import type { Tool } from '@anthropic-ai/sdk/resources/messages'
 
-function extractJson(raw: string): Record<string, string> {
-  // Strip markdown code fences
-  let text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
-
-  // If Claude added preamble/postamble, extract the first {...} block
-  const start = text.indexOf('{')
-  const end = text.lastIndexOf('}')
-  if (start !== -1 && end !== -1 && end > start) {
-    text = text.slice(start, end + 1)
-  }
-
-  // Try direct parse first
-  try {
-    return JSON.parse(text)
-  } catch {
-    // Repair literal newlines / control chars inside string values then retry
-    return JSON.parse(repairJson(text))
-  }
+// Tool-use schema forces the SDK to parse the response as JSON automatically —
+// no manual JSON parsing, no unescaped-quote / literal-newline parse failures.
+const TRANSLATE_TOOL: Tool = {
+  name: 'return_translations',
+  description: 'Return translated key-value pairs',
+  input_schema: {
+    type: 'object',
+    properties: {
+      translations: {
+        type: 'object',
+        additionalProperties: { type: 'string' },
+        description: 'Object mapping each original key to its translated value',
+      },
+    },
+    required: ['translations'],
+  },
 }
 
 async function callClaude(
@@ -218,16 +188,22 @@ async function callClaude(
     model,
     max_tokens: 8096,
     temperature: 0,
+    tools: [TRANSLATE_TOOL],
+    tool_choice: { type: 'tool', name: 'return_translations' },
     system: `You are a professional translator specialising in Simplified Chinese (zh-CN).
-Translate the JSON values from English to Simplified Chinese (zh-CN).
-Return ONLY valid JSON — no markdown, no explanation, no code fences — with identical keys and translated values.
+Translate the values in the provided JSON object from English to Simplified Chinese (zh-CN).
 Do not translate: proper nouns, brand names, URLs, email addresses, or phone numbers.
-Preserve all formatting characters (\\n, spaces, punctuation style).`,
+Preserve all formatting characters (newlines, spaces, punctuation style).
+Return ALL keys from the input — do not omit any.`,
     messages: [{ role: 'user', content: JSON.stringify(fieldMap) }],
   })
 
-  const raw = response.content[0].type === 'text' ? response.content[0].text : ''
-  return extractJson(raw)
+  const toolUse = response.content.find((b) => b.type === 'tool_use')
+  if (!toolUse || toolUse.type !== 'tool_use') {
+    throw new Error('Claude did not return a tool_use response')
+  }
+  const input = toolUse.input as { translations?: Record<string, string> }
+  return input.translations ?? {}
 }
 
 async function callClaudeWithRetry(
