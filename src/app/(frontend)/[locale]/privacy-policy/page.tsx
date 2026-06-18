@@ -8,8 +8,6 @@ type Props = { params: Promise<{ locale: string }> }
 
 export const metadata: Metadata = { title: 'Privacy Policy' }
 
-type Props = { params: Promise<{ locale: string }> }
-
 export default async function PrivacyPolicyPage({ params }: Props) {
   const { locale } = await params
   const payload = await getPayload({ config })
