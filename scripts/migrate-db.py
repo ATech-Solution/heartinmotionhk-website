@@ -85,6 +85,65 @@ for tbl in form_tables:
         for col, defn in form_cols:
             add_column(tbl, col, defn)
 
+# ── localized URL fields: cta_url in block locales tables ───────────────────
+cta_url_tables = [
+    "pages_blocks_hero_locales",
+    "pages_blocks_cta_locales",
+    "pages_blocks_services_overview_locales",
+    "_pages_v_blocks_hero_locales",
+    "_pages_v_blocks_cta_locales",
+    "_pages_v_blocks_services_overview_locales",
+]
+for tbl in cta_url_tables:
+    if table_exists(tbl):
+        add_column(tbl, "cta_url", "text")
+
+# about_shortcut has a default
+for tbl in ("pages_blocks_about_shortcut_locales", "_pages_v_blocks_about_shortcut_locales"):
+    if table_exists(tbl):
+        add_column(tbl, "cta_url", "text DEFAULT '/about'")
+
+# booking_session services: whatsapp_url and email
+for tbl in ("pages_blocks_booking_session_services_locales", "_pages_v_blocks_booking_session_services_locales"):
+    if table_exists(tbl):
+        add_column(tbl, "whatsapp_url", "text")
+        add_column(tbl, "email", "text")
+
+# Copy existing non-localized cta_url values into en locale rows (data preservation)
+copy_map = [
+    ("pages_blocks_hero_locales",              "pages_blocks_hero",              "cta_url"),
+    ("pages_blocks_cta_locales",               "pages_blocks_cta",               "cta_url"),
+    ("pages_blocks_services_overview_locales", "pages_blocks_services_overview", "cta_url"),
+    ("pages_blocks_about_shortcut_locales",    "pages_blocks_about_shortcut",    "cta_url"),
+]
+for locale_tbl, parent_tbl, col in copy_map:
+    if table_exists(locale_tbl) and table_exists(parent_tbl) and column_exists(parent_tbl, col):
+        print(f"[migrate-db]   copy {parent_tbl}.{col} → {locale_tbl} (en)")
+        conn.execute(f"""
+            UPDATE `{locale_tbl}`
+            SET `{col}` = (
+                SELECT `{col}` FROM `{parent_tbl}`
+                WHERE `{parent_tbl}`.`id` = `{locale_tbl}`.`_parent_id`
+            )
+            WHERE `_locale` = 'en' AND `{col}` IS NULL
+        """)
+
+for locale_tbl, parent_tbl in [
+    ("pages_blocks_booking_session_services_locales", "pages_blocks_booking_session_services"),
+]:
+    if table_exists(locale_tbl) and table_exists(parent_tbl):
+        for col in ("whatsapp_url", "email"):
+            if column_exists(parent_tbl, col):
+                print(f"[migrate-db]   copy {parent_tbl}.{col} → {locale_tbl} (en)")
+                conn.execute(f"""
+                    UPDATE `{locale_tbl}`
+                    SET `{col}` = (
+                        SELECT `{col}` FROM `{parent_tbl}`
+                        WHERE `{parent_tbl}`.`id` = `{locale_tbl}`.`_parent_id`
+                    )
+                    WHERE `_locale` = 'en' AND `{col}` IS NULL
+                """)
+
 conn.commit()
 conn.close()
 print("[migrate-db] All schema migrations complete.")
