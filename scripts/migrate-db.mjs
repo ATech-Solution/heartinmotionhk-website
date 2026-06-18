@@ -87,6 +87,74 @@ async function main() {
     }
   }
 
+  // --- localized URL fields: cta_url in block locales tables ---
+  // Added when ctaUrl, whatsappUrl, email were made localized: true
+  const ctaUrlTables = [
+    'pages_blocks_hero_locales',
+    'pages_blocks_cta_locales',
+    'pages_blocks_services_overview_locales',
+    '_pages_v_blocks_hero_locales',
+    '_pages_v_blocks_cta_locales',
+    '_pages_v_blocks_services_overview_locales',
+  ]
+  for (const table of ctaUrlTables) {
+    if (!(await hasTable(table))) continue
+    if (!(await hasColumn(table, 'cta_url'))) {
+      console.log(`[migrate-db] Adding ${table}.cta_url...`)
+      await exec(`ALTER TABLE \`${table}\` ADD \`cta_url\` text`)
+    }
+  }
+
+  // about_shortcut has a default value
+  for (const table of ['pages_blocks_about_shortcut_locales', '_pages_v_blocks_about_shortcut_locales']) {
+    if (!(await hasTable(table))) continue
+    if (!(await hasColumn(table, 'cta_url'))) {
+      console.log(`[migrate-db] Adding ${table}.cta_url...`)
+      await exec(`ALTER TABLE \`${table}\` ADD \`cta_url\` text DEFAULT '/about'`)
+    }
+  }
+
+  // booking_session services: whatsapp_url and email
+  for (const table of ['pages_blocks_booking_session_services_locales', '_pages_v_blocks_booking_session_services_locales']) {
+    if (!(await hasTable(table))) continue
+    if (!(await hasColumn(table, 'whatsapp_url'))) {
+      console.log(`[migrate-db] Adding ${table}.whatsapp_url...`)
+      await exec(`ALTER TABLE \`${table}\` ADD \`whatsapp_url\` text`)
+    }
+    if (!(await hasColumn(table, 'email'))) {
+      console.log(`[migrate-db] Adding ${table}.email...`)
+      await exec(`ALTER TABLE \`${table}\` ADD \`email\` text`)
+    }
+  }
+
+  // Copy existing non-localized cta_url values into en locale rows (data preservation)
+  const copyMap = [
+    ['pages_blocks_hero_locales', 'pages_blocks_hero', 'cta_url'],
+    ['pages_blocks_cta_locales', 'pages_blocks_cta', 'cta_url'],
+    ['pages_blocks_services_overview_locales', 'pages_blocks_services_overview', 'cta_url'],
+    ['pages_blocks_about_shortcut_locales', 'pages_blocks_about_shortcut', 'cta_url'],
+  ]
+  for (const [localeTable, parentTable, col] of copyMap) {
+    if (!(await hasTable(localeTable)) || !(await hasTable(parentTable))) continue
+    if (!(await hasColumn(parentTable, col))) continue  // already dropped — migration already ran
+    console.log(`[migrate-db] Copying ${parentTable}.${col} → ${localeTable} (en)...`)
+    await exec(`UPDATE \`${localeTable}\`
+      SET \`${col}\` = (SELECT \`${col}\` FROM \`${parentTable}\` WHERE \`${parentTable}\`.\`id\` = \`${localeTable}\`.\`_parent_id\`)
+      WHERE \`_locale\` = 'en' AND \`${col}\` IS NULL`)
+  }
+
+  for (const table of ['pages_blocks_booking_session_services']) {
+    const localeTable = `${table}_locales`
+    if (!(await hasTable(localeTable)) || !(await hasTable(table))) continue
+    for (const col of ['whatsapp_url', 'email']) {
+      if (!(await hasColumn(table, col))) continue  // already dropped
+      console.log(`[migrate-db] Copying ${table}.${col} → ${localeTable} (en)...`)
+      await exec(`UPDATE \`${localeTable}\`
+        SET \`${col}\` = (SELECT \`${col}\` FROM \`${table}\` WHERE \`${table}\`.\`id\` = \`${localeTable}\`.\`_parent_id\`)
+        WHERE \`_locale\` = 'en' AND \`${col}\` IS NULL`)
+    }
+  }
+
   console.log('[migrate-db] All schema migrations complete.')
   client.close()
 }
