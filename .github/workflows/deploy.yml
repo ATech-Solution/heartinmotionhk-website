@@ -25,6 +25,9 @@ jobs:
       - name: Create data directory for SQLite
         run: mkdir -p data
 
+      - name: Clean Next.js cache
+        run: rm -rf .next
+
       - name: Build
         run: npm run build
         env:
@@ -135,11 +138,9 @@ jobs:
 
             echo "--- Running DB migrations ---"
             mkdir -p data
-            PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
-              DATABASE_URL="file:./data/payload.db" \
-              PAYLOAD_CONFIG_PATH=src/payload.migrate.config.ts \
-              NODE_OPTIONS='--import tsx' \
-              npx payload migrate
+            export PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
+            export DATABASE_URL="file:./data/payload.db"
+            npm run migrate
             echo "--- DB migrations complete ---"
 
             echo "--- Restarting PM2 ---"
