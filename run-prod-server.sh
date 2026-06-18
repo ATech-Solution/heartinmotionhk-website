@@ -84,6 +84,9 @@ echo "skip 🏗️ Building app... make sure already on local and pass .next"
 # rm -rf .next/standalone/public/media
 # ln -sfn /home/deploy/atombondway/public/media .next/standalone/public/media
 
+echo "🗄️ Running database migrations..."
+npm run migrate
+
 echo "🔄 Restarting app..."
 pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env
 

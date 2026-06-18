@@ -71,5 +71,13 @@ export const GeneralSettings: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'aiTranslatePanel',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: { Field: '@/components/admin/AutoTranslatePanel' },
+      },
+    },
   ],
 }

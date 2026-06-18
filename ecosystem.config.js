@@ -2,8 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'heartinmotionhk-dev',
-      script: 'node',
-      args: '.next/standalone/server.js',
+      script: '.next/standalone/server.js',
       cwd: '/home/deploy/dev',
       env: {
         NODE_ENV: 'development',
@@ -16,8 +15,7 @@ module.exports = {
     },
     {
       name: 'heartinmotionhk-prod',
-      script: 'node',
-      args: '.next/standalone/server.js',
+      script: '.next/standalone/server.js',
       cwd: '/home/deploy/prod',
       env: {
         NODE_ENV: 'production',

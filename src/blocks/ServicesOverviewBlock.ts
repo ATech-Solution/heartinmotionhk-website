@@ -43,6 +43,7 @@ export const ServicesOverviewBlock: Block = {
       name: 'ctaUrl',
       type: 'text',
       label: 'Button URL',
+      localized: true,
     },
     visibilityGroup,
   ],

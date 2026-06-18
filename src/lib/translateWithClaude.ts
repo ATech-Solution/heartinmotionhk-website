@@ -4,9 +4,16 @@ const SKIP_KEYS = new Set([
   'id', '_id', 'blockType', 'blockName', 'slug', '_status', 'locale',
   'createdAt', 'updatedAt', '__v', 'mimeType', 'filename', 'filesize',
   'width', 'height', 'focalX', 'focalY', 'relationTo',
+  // Select / enum field names — values are codes, not user-facing text
+  'linkType', 'platform', 'style', 'status', 'type', 'category',
+  'alignment', 'size', 'color', 'variant', 'format', 'mode',
 ])
 
-const SKIP_KEY_SUFFIXES = ['Url', 'url', 'href', 'email', 'phone', 'whatsapp', 'src', 'alt']
+// Only skip keys whose values are always non-translatable paths/references.
+// Do NOT add 'email', 'phone', 'alt' here — those can be form labels ("Email Address",
+// "Phone Number", image alt text) that MUST be translated. Their values are caught by
+// SKIP_VALUE_PATTERNS if they are actual email addresses / phone numbers.
+const SKIP_KEY_SUFFIXES = ['Url', 'url', 'href', 'src']
 
 const SKIP_VALUE_PATTERNS = [
   /^https?:\/\//,
@@ -20,15 +27,71 @@ const BRAND_NAMES = ['Heart in Motion HK']
 
 function shouldSkipKey(key: string): boolean {
   if (SKIP_KEYS.has(key)) return true
-  if (SKIP_KEY_SUFFIXES.some((s) => key.endsWith(s) || key.toLowerCase().endsWith(s.toLowerCase()))) return true
-  return false
+  return SKIP_KEY_SUFFIXES.some((s) => key.endsWith(s))
 }
 
-function shouldSkipValue(value: string): boolean {
-  if (value.trim().length === 0) return true
-  if (SKIP_VALUE_PATTERNS.some((p) => p.test(value.trim()))) return true
-  if (BRAND_NAMES.some((b) => value === b)) return true
-  return false
+function shouldSkipValue(val: string): boolean {
+  if (BRAND_NAMES.includes(val)) return true
+  return SKIP_VALUE_PATTERNS.some((p) => p.test(val))
+}
+
+// Detect Lexical richText root objects (shape: { root: { type: 'root', children: [...] } })
+function isLexicalRoot(val: unknown): val is { root: Record<string, unknown> } {
+  if (typeof val !== 'object' || val === null) return false
+  const obj = val as Record<string, unknown>
+  return (
+    'root' in obj &&
+    typeof obj.root === 'object' &&
+    obj.root !== null &&
+    (obj.root as Record<string, unknown>).type === 'root'
+  )
+}
+
+// Extract ONLY text content from Lexical leaf text nodes, leaving structural keys untouched
+function extractLexicalStrings(
+  node: unknown,
+  prefix: string,
+  map: Record<string, string>,
+): void {
+  if (!node || typeof node !== 'object') return
+  const obj = node as Record<string, unknown>
+
+  if (obj.type === 'text' && typeof obj.text === 'string' && obj.text.trim()) {
+    if (!shouldSkipValue(obj.text)) {
+      map[`${prefix}.__text`] = obj.text
+    }
+  }
+
+  if (Array.isArray(obj.children)) {
+    obj.children.forEach((child, i) => {
+      extractLexicalStrings(child, `${prefix}.children.${i}`, map)
+    })
+  }
+}
+
+// Re-apply translations to Lexical text leaf nodes only
+function applyLexicalTranslations(
+  node: unknown,
+  prefix: string,
+  translations: Record<string, string>,
+): unknown {
+  if (!node || typeof node !== 'object') return node
+  const obj = { ...(node as Record<string, unknown>) }
+
+  if (obj.type === 'text' && typeof obj.text === 'string') {
+    const key = `${prefix}.__text`
+    if (translations[key] !== undefined) {
+      obj.text = translations[key]
+    }
+  }
+
+  if (Array.isArray(obj.children)) {
+    obj.children = (obj.children as unknown[]).map((child, i) =>
+      applyLexicalTranslations(child, `${prefix}.children.${i}`, translations),
+    )
+  }
+
+  return obj
 }
 
 export function extractStrings(
@@ -36,26 +99,30 @@ export function extractStrings(
   prefix = '',
   map: Record<string, string> = {},
 ): Record<string, string> {
-  if (!obj || typeof obj !== 'object') return map
-
+  if (obj === null || obj === undefined) return map
+  if (typeof obj === 'string') {
+    if (obj.trim() && !shouldSkipValue(obj)) {
+      map[prefix] = obj
+    }
+    return map
+  }
   if (Array.isArray(obj)) {
     obj.forEach((item, i) => extractStrings(item, prefix ? `${prefix}.${i}` : String(i), map))
     return map
   }
+  if (typeof obj === 'object') {
+    for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
+      if (shouldSkipKey(k)) continue
+      const path = prefix ? `${prefix}.${k}` : k
 
-  for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
-    if (shouldSkipKey(key)) continue
-    const path = prefix ? `${prefix}.${key}` : key
-
-    if (typeof value === 'string') {
-      if (!shouldSkipValue(value)) {
-        map[path] = value
+      if (isLexicalRoot(v)) {
+        // Lexical richText: only extract text from leaf nodes
+        extractLexicalStrings((v as { root: Record<string, unknown> }).root, `${path}.root`, map)
+      } else {
+        extractStrings(v, path, map)
       }
-    } else if (value && typeof value === 'object') {
-      extractStrings(value, path, map)
     }
   }
-
   return map
 }
 
@@ -64,81 +131,157 @@ export function applyTranslations(
   translations: Record<string, string>,
   prefix = '',
 ): unknown {
-  if (!obj || typeof obj !== 'object') return obj
-
+  if (obj === null || obj === undefined) return obj
+  if (typeof obj === 'string') {
+    // Only apply a translation if it is a non-empty string — empty/whitespace
+    // results from Claude must fall back to the original so fields never become blank.
+    const t = translations[prefix]
+    return (t !== undefined && t !== null && t.trim() !== '') ? t : obj
+  }
   if (Array.isArray(obj)) {
     return obj.map((item, i) =>
       applyTranslations(item, translations, prefix ? `${prefix}.${i}` : String(i)),
     )
   }
+  if (typeof obj === 'object') {
+    const result: Record<string, unknown> = {}
+    for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
+      const path = prefix ? `${prefix}.${k}` : k
 
-  const clone: Record<string, unknown> = { ...(obj as Record<string, unknown>) }
-  for (const key of Object.keys(clone)) {
-    const path = prefix ? `${prefix}.${key}` : key
-    if (translations[path] !== undefined) {
-      clone[key] = translations[path]
-    } else if (clone[key] && typeof clone[key] === 'object') {
-      clone[key] = applyTranslations(clone[key], translations, path)
+      if (isLexicalRoot(v)) {
+        // Lexical richText: apply translations only to leaf text nodes
+        const lexVal = v as { root: Record<string, unknown> }
+        result[k] = {
+          ...lexVal,
+          root: applyLexicalTranslations(lexVal.root, `${path}.root`, translations),
+        }
+      } else {
+        result[k] = applyTranslations(v, translations, path)
+      }
     }
+    return result
   }
-  return clone
+  return obj
+}
+
+// Max fields per Claude call — keeps response well within 4096 tokens
+const CHUNK_SIZE = 30
+
+import type { Tool } from '@anthropic-ai/sdk/resources/messages'
+
+// Tool-use schema forces the SDK to parse the response as JSON automatically —
+// no manual JSON parsing, no unescaped-quote / literal-newline parse failures.
+const TRANSLATE_TOOL: Tool = {
+  name: 'return_translations',
+  description: 'Return translated key-value pairs',
+  input_schema: {
+    type: 'object',
+    properties: {
+      translations: {
+        type: 'object',
+        additionalProperties: { type: 'string' },
+        description: 'Object mapping each original key to its translated value',
+      },
+    },
+    required: ['translations'],
+  },
 }
 
 async function callClaude(
   client: Anthropic,
   model: string,
   fieldMap: Record<string, string>,
-  strict = false,
 ): Promise<Record<string, string>> {
-  const system = `You are a professional translator specialising in Traditional Chinese (zh-HK).
-Translate the JSON values from English to Traditional Chinese (zh-HK).
-Return ONLY a valid JSON object with identical keys and translated values — no markdown, no explanation.
-Do not translate: "Heart in Motion HK", URLs, email addresses, phone numbers, or technical identifiers.
-Preserve all whitespace and newlines exactly as in the source.${strict ? '\n\nCRITICAL: Output ONLY raw JSON. No code blocks. No extra text.' : ''}`
+  // Remap dot-path keys to simple numeric tokens (k0, k1, …) so Claude
+  // cannot mistake them for nested JSON paths and return a nested object.
+  const origKeys = Object.keys(fieldMap)
+  const indexed: Record<string, string> = {}
+  origKeys.forEach((k, i) => { indexed[`k${i}`] = fieldMap[k]! })
 
   const response = await client.messages.create({
     model,
-    max_tokens: 4096,
+    max_tokens: 8096,
     temperature: 0,
-    system,
-    messages: [{ role: 'user', content: JSON.stringify(fieldMap, null, 2) }],
+    tools: [TRANSLATE_TOOL],
+    tool_choice: { type: 'tool', name: 'return_translations' },
+    system: `You are a professional translator specialising in Simplified Chinese (zh-CN).
+You will receive a JSON object where keys are opaque tokens (k0, k1, …) and values are English text.
+Translate EVERY value to Simplified Chinese (zh-CN) — including headlines, taglines, marketing copy, body text, button labels, and section headings.
+Return ALL keys unchanged — do not skip, rename, or nest them.
+Rules:
+- The ONLY text to preserve exactly as-is: the string "Heart in Motion HK" (exact brand name), URLs starting with http/https, email addresses, and phone numbers.
+- All other text MUST be translated, even if it sounds like a slogan or contains a common English word like "heart" or "motion".
+- Preserve all formatting characters (newlines, spaces, punctuation style).`,
+    messages: [{ role: 'user', content: JSON.stringify(indexed) }],
   })
 
-  const raw = (response.content[0] as Anthropic.TextBlock).text.trim()
+  const toolUse = response.content.find((b) => b.type === 'tool_use')
+  if (!toolUse || toolUse.type !== 'tool_use') {
+    throw new Error('Claude did not return a tool_use response')
+  }
+  const raw = (toolUse.input as { translations?: Record<string, string> }).translations ?? {}
 
-  // Strip ```json ... ``` wrapper if present
-  const jsonMatch = raw.match(/```(?:json)?\s*([\s\S]+?)\s*```/)
-  const jsonStr = jsonMatch ? jsonMatch[1] : raw
+  // Log any keys Claude returned unchanged (same English value) so we can spot non-translations
+  for (const [ki, translated] of Object.entries(raw)) {
+    const i = parseInt(ki.slice(1), 10)
+    const origKey = origKeys[i]
+    if (origKey && translated === fieldMap[origKey]) {
+      console.warn(`[callClaude] Key ${ki} (${origKey}) was NOT translated: "${translated}"`)
+    }
+  }
 
-  return JSON.parse(jsonStr)
+  // Remap indexed keys back to original dot-path keys
+  const result: Record<string, string> = {}
+  origKeys.forEach((k, i) => {
+    if (raw[`k${i}`] !== undefined) result[k] = raw[`k${i}`]!
+  })
+  return result
+}
+
+async function callClaudeWithRetry(
+  client: Anthropic,
+  model: string,
+  fieldMap: Record<string, string>,
+): Promise<Record<string, string>> {
+  try {
+    return await callClaude(client, model, fieldMap)
+  } catch (firstErr) {
+    // Retry once on any error (JSON parse failure, rate limit, timeout)
+    try {
+      return await callClaude(client, model, fieldMap)
+    } catch {
+      throw firstErr
+    }
+  }
 }
 
 export async function translateWithClaude(
   doc: Record<string, unknown>,
   apiKey: string,
   model: string,
-): Promise<{ translated: Record<string, unknown>; count: number }> {
-  const fieldMap = extractStrings(doc)
-  const count = Object.keys(fieldMap).length
-
-  if (count === 0) return { translated: doc, count: 0 }
-
+  // When provided, translations are applied to this doc instead of `doc`.
+  // Pass the zh-CN version of the document so block IDs match the DB and
+  // Payload can UPDATE locale rows in-place rather than DELETE + INSERT.
+  applyTo?: Record<string, unknown>,
+): Promise<{ translated: Record<string, unknown>; count: number; fieldMap: Record<string, string> }> {
   const client = new Anthropic({ apiKey })
+  const fieldMap = extractStrings(doc)
+  const keys = Object.keys(fieldMap)
+  const count = keys.length
 
-  let translations: Record<string, string>
-  try {
-    translations = await callClaude(client, model, fieldMap, false)
-  } catch {
-    // Retry with stricter prompt
-    try {
-      translations = await callClaude(client, model, fieldMap, true)
-    } catch (retryErr) {
-      throw new Error(
-        `Claude returned invalid JSON after retry: ${(retryErr as Error).message}`,
-      )
-    }
+  if (count === 0) return { translated: applyTo ?? doc, count: 0, fieldMap }
+
+  // Split into chunks to avoid hitting Claude's output token limit
+  const translations: Record<string, string> = {}
+  for (let i = 0; i < keys.length; i += CHUNK_SIZE) {
+    const chunkKeys = keys.slice(i, i + CHUNK_SIZE)
+    const chunk: Record<string, string> = {}
+    for (const k of chunkKeys) chunk[k] = fieldMap[k]!
+    const result = await callClaudeWithRetry(client, model, chunk)
+    Object.assign(translations, result)
   }
 
-  const translated = applyTranslations(doc, translations) as Record<string, unknown>
-  return { translated, count }
+  const base = applyTo ?? doc
+  const translated = applyTranslations(base, translations) as Record<string, unknown>
+  return { translated, count, fieldMap }
 }

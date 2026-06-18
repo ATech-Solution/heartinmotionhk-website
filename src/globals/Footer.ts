@@ -117,5 +117,13 @@ export const Footer: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'aiTranslatePanel',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: { Field: '@/components/admin/AutoTranslatePanel' },
+      },
+    },
   ],
 }

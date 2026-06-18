@@ -45,6 +45,7 @@ export const AboutShortcutBlock: Block = {
     {
       name: 'ctaUrl',
       type: 'text',
+      localized: true,
       defaultValue: '/about',
     },
     visibilityGroup,

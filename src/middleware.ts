@@ -1,28 +1,23 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const SUPPORTED_LOCALES = ['en', 'zh-HK'] as const
+const SUPPORTED_LOCALES = ['en', 'zh-CN'] as const
 type Locale = (typeof SUPPORTED_LOCALES)[number]
 
-const SKIP_PREFIXES = [
-  '/admin',
-  '/api',
-  '/_next',
-  '/maintenance',
+const SKIP_PREFIXES = ['/admin', '/api', '/_next', '/maintenance']
+const SKIP_EXTENSIONS = [
+  '.ico', '.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp',
+  '.woff', '.woff2', '.ttf', '.otf', '.css', '.js',
 ]
-
-const SKIP_EXTENSIONS = ['.ico', '.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp', '.woff', '.woff2', '.ttf', '.otf', '.css', '.js']
 
 function isSupportedLocale(segment: string): segment is Locale {
   return (SUPPORTED_LOCALES as readonly string[]).includes(segment)
 }
 
-function detectLocale(request: NextRequest, defaultLocale: Locale = 'en'): Locale {
-  // 1. Cookie
-  const cookie = request.cookies.get('NEXT_LOCALE')?.value
-  if (cookie && isSupportedLocale(cookie)) return cookie
-
-  // 2. Accept-Language header
+// Detect locale from browser's Accept-Language header only.
+// No cookie — the URL prefix carries the locale once the user navigates.
+// Browser language is the source of truth; English is the fallback.
+function detectLocale(request: NextRequest): Locale {
   const acceptLang = request.headers.get('accept-language')
   if (acceptLang) {
     const languages = acceptLang
@@ -35,71 +30,40 @@ function detectLocale(request: NextRequest, defaultLocale: Locale = 'en'): Local
 
     for (const { code } of languages) {
       if (isSupportedLocale(code)) return code
-      // Match zh-TW, zh-HK, zh-Hant etc. → zh-HK
-      if (code.toLowerCase().startsWith('zh')) return 'zh-HK'
+      // zh-TW, zh-HK, zh-Hant, zh-Hans, zh → zh-CN
+      if (code.toLowerCase().startsWith('zh')) return 'zh-CN'
     }
   }
 
-  return defaultLocale
+  return 'en'
 }
 
-async function getLocaleConfig(origin: string): Promise<{
-  isActive: boolean
-  autoDetect: boolean
-  defaultLocale: Locale
-}> {
-  try {
-    const res = await fetch(`${origin}/api/plugins/multilanguage/settings`, {
-      cache: 'no-store',
-    })
-    if (!res.ok) return { isActive: false, autoDetect: false, defaultLocale: 'en' }
-    const data = await res.json()
-    return {
-      isActive: Boolean(data.isActive),
-      autoDetect: Boolean(data.autoDetect),
-      defaultLocale: isSupportedLocale(data.defaultLocale) ? data.defaultLocale : 'en',
-    }
-  } catch {
-    return { isActive: false, autoDetect: false, defaultLocale: 'en' }
-  }
-}
-
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Skip admin, api, _next, static files, and maintenance page
-  if (SKIP_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
-    return NextResponse.next()
-  }
-  if (SKIP_EXTENSIONS.some((ext) => pathname.endsWith(ext))) {
-    return NextResponse.next()
-  }
+  if (SKIP_PREFIXES.some((p) => pathname.startsWith(p))) return NextResponse.next()
+  if (SKIP_EXTENSIONS.some((ext) => pathname.endsWith(ext))) return NextResponse.next()
 
-  // If first segment is already a supported locale, pass through
   const segments = pathname.split('/').filter(Boolean)
-  if (segments.length > 0 && isSupportedLocale(segments[0])) {
-    return NextResponse.next()
-  }
+  const alreadyLocalized = segments.length > 0 && isSupportedLocale(segments[0])
 
-  // Fetch plugin config (fail-open: defaults to inactive if fetch fails)
-  const origin = request.nextUrl.origin
-  const pluginConfig = await getLocaleConfig(origin)
+  let response: NextResponse
 
-  if (pluginConfig.isActive) {
-    // Detect locale when autoDetect is on, otherwise use defaultLocale
-    const locale = pluginConfig.autoDetect
-      ? detectLocale(request, pluginConfig.defaultLocale)
-      : pluginConfig.defaultLocale
-
+  if (alreadyLocalized) {
+    response = NextResponse.next()
+  } else {
+    const locale = detectLocale(request)
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}${pathname}`
-    return NextResponse.redirect(url, 307)
-  } else {
-    // Plugin inactive: silently rewrite to /en (no visible redirect)
-    const url = request.nextUrl.clone()
-    url.pathname = `/en${pathname}`
-    return NextResponse.rewrite(url)
+    response = NextResponse.redirect(url, 307)
   }
+
+  // Erase any NEXT_LOCALE cookie left over from the old cookie-based locale approach
+  if (request.cookies.get('NEXT_LOCALE')) {
+    response.cookies.set('NEXT_LOCALE', '', { path: '/', maxAge: 0 })
+  }
+
+  return response
 }
 
 export const config = {

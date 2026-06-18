@@ -25,6 +25,18 @@ jobs:
       - name: Create data directory for SQLite
         run: mkdir -p data
 
+      - name: Clean Next.js cache
+        run: rm -rf .next
+
+      - name: Generate Payload types and importmap
+        run: npm run generate:types && npm run generate:importmap
+        env:
+          NODE_ENV: production
+          DATABASE_URL: file:./data/payload.db
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          NEXT_PUBLIC_SITE_URL: https://dev.heartinmotionhk.com
+          PAYLOAD_PUBLIC_SERVER_URL: https://dev.heartinmotionhk.com
+
       - name: Build
         run: npm run build
         env:
@@ -60,15 +72,20 @@ jobs:
           done
           [ -f "public/favicon.ico" ] && cp "public/favicon.ico" .next/standalone/public/
 
-          # 3. Inject PAYLOAD_PUBLIC_SERVER_URL default at the top of server.js.
+          # 3. Inject env defaults at the top of server.js.
           #    Next.js standalone does not load .env files; without this injection
           #    Payload falls back to http://localhost:3000 and admin media URLs break.
+          #    DATABASE_URL is set to an absolute path so the server always resolves
+          #    the SQLite file correctly regardless of its cwd at startup.
           node -e "
           const fs = require('fs');
           const file = '.next/standalone/server.js';
           let content = fs.readFileSync(file, 'utf8');
-          const patch = 'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://dev.heartinmotionhk.com\";\n';
-          if (!content.includes('PAYLOAD_PUBLIC_SERVER_URL')) {
+          const patch = [
+            'process.env.PAYLOAD_PUBLIC_SERVER_URL ||= \"https://dev.heartinmotionhk.com\";',
+            'process.env.DATABASE_URL ||= \"file:///home/deploy/dev/data/payload.db\";',
+          ].join('\n') + '\n';
+          if (!content.includes('DATABASE_URL')) {
             fs.writeFileSync(file, patch + content);
           }
           "
@@ -94,6 +111,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            set -e
             cd /home/deploy/dev
 
             echo "--- Pulling latest code from dev ---"
@@ -128,13 +146,26 @@ jobs:
             }
             "
 
+            echo "--- Symlinking persistent data directory ---"
+            mkdir -p /home/deploy/dev/data
+            rm -rf .next/standalone/data
+            ln -sfn /home/deploy/dev/data .next/standalone/data
+
             echo "--- Symlinking persistent media directory ---"
             mkdir -p /home/deploy/dev/public/media
             rm -rf .next/standalone/public/media
             ln -sfn /home/deploy/dev/public/media .next/standalone/public/media
 
+            echo "--- Running DB migrations ---"
+            mkdir -p /home/deploy/dev/data
+            DATABASE_URL="file:///home/deploy/dev/data/payload.db" python3 scripts/migrate-db.py
+
             echo "--- Restarting PM2 ---"
-            pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            NODE_BIN=$(which node)
+            echo "Using node: $NODE_BIN ($($NODE_BIN --version))"
+            pm2 startOrRestart ecosystem.config.js --only heartinmotionhk-dev --update-env --interpreter "$NODE_BIN"
 
             echo "--- Deploy complete ---"
             pm2 status

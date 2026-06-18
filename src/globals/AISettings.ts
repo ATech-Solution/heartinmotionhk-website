@@ -4,7 +4,9 @@ import { isAdmin } from '@/access/isAdmin'
 export const AISettings: GlobalConfig = {
   slug: 'ai-settings',
   label: 'AI Settings',
-  admin: { group: 'Settings' },
+  admin: {
+    group: 'Settings',
+  },
   access: {
     read: isAdmin,
     update: isAdmin,
@@ -13,10 +15,10 @@ export const AISettings: GlobalConfig = {
     {
       name: 'enabled',
       type: 'checkbox',
-      label: 'Enable AI Translation',
+      label: 'Enable AI Auto-Translation',
       defaultValue: true,
       admin: {
-        description: 'When disabled, the Translate button is hidden from all editors.',
+        description: 'When disabled, the translate button is hidden from all editors.',
       },
     },
     {
@@ -24,13 +26,13 @@ export const AISettings: GlobalConfig = {
       type: 'text',
       label: 'Anthropic API Key',
       admin: {
-        description: 'Your sk-ant-... key from console.anthropic.com. Stored in the database.',
+        description: 'Your Claude API key (sk-ant-...). Get one at console.anthropic.com.',
       },
     },
     {
       name: 'model',
       type: 'select',
-      label: 'Claude Model',
+      label: 'Model',
       defaultValue: 'claude-haiku-4-5-20251001',
       options: [
         {
@@ -42,6 +44,9 @@ export const AISettings: GlobalConfig = {
           value: 'claude-sonnet-4-6',
         },
       ],
+      admin: {
+        description: 'Haiku is recommended for most translation tasks.',
+      },
     },
   ],
 }
