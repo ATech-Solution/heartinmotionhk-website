@@ -1,28 +1,22 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { draftMode, cookies } from 'next/headers'
+import { draftMode } from 'next/headers'
 import { RenderBlocks } from '@/components/Blocks/RenderBlocks'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-// Render all dynamic pages on-demand — no static pre-build needed.
-// Next.js will serve these as SSR requests without requiring a rebuild.
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
-type Props = {
-  params: Promise<{ slug: string }>
-}
+type Props = { params: Promise<{ locale: string; slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const cookieStore = await cookies()
-  const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
+  const { locale, slug } = await params
   const payload = await getPayload({ config })
   const result = await payload.find({
     collection: 'pages',
     where: { slug: { equals: slug }, _status: { equals: 'published' } },
-    locale,
+    locale: locale as any,
     depth: 0,
     limit: 1,
   })
@@ -36,11 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DynamicPage({ params }: Props) {
-  const { slug } = await params
+  const { locale, slug } = await params
   const { isEnabled: isDraft } = await draftMode()
-  const cookieStore = await cookies()
-  const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
-
   const payload = await getPayload({ config })
   const result = await payload.find({
     collection: 'pages',
@@ -48,13 +39,11 @@ export default async function DynamicPage({ params }: Props) {
       slug: { equals: slug },
       ...(isDraft ? {} : { _status: { equals: 'published' } }),
     },
-    locale,
+    locale: locale as any,
     depth: 3,
     limit: 1,
   })
-
   const page = result.docs[0]
   if (!page) notFound()
-
   return <RenderBlocks blocks={(page.layout as any) ?? []} richTextContent={(page as any).content} />
 }

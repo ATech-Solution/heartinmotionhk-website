@@ -1,18 +1,21 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { draftMode, cookies } from 'next/headers'
+import { draftMode } from 'next/headers'
 import { RenderBlocks } from '@/components/Blocks/RenderBlocks'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const cookieStore = await cookies()
-  const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
+type Props = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
   const payload = await getPayload({ config })
   const result = await payload.find({
     collection: 'pages',
     where: { slug: { equals: 'services' }, _status: { equals: 'published' } },
-    locale, depth: 0, limit: 1,
+    locale: locale as any,
+    depth: 0,
+    limit: 1,
   })
   const doc = result.docs[0]
   return {
@@ -21,20 +24,18 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function ServicesPage() {
+export default async function ServicesPage({ params }: Props) {
+  const { locale } = await params
   const { isEnabled: isDraft } = await draftMode()
-  const cookieStore = await cookies()
-  const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
-
   const payload = await getPayload({ config })
   const result = await payload.find({
     collection: 'pages',
     where: { slug: { equals: 'services' }, ...(isDraft ? {} : { _status: { equals: 'published' } }) },
-    locale, depth: 3, limit: 1,
+    locale: locale as any,
+    depth: 3,
+    limit: 1,
   })
-
   const page = result.docs[0]
   if (!page) notFound()
-
   return <RenderBlocks blocks={(page.layout as any) ?? []} richTextContent={(page as any).content} />
 }

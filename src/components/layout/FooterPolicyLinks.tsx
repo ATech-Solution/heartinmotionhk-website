@@ -161,13 +161,13 @@ export function FooterPolicyLinks({ privacyPolicy, termsConditions }: FooterPoli
         onClick={() => setOpen('privacy')}
         className="block text-left text-[18px] text-black hover:font-bold font-normal"
       >
-        Privacy Policy
+        {privacyTitle}
       </button>
       <button
         onClick={() => setOpen('terms')}
         className="block text-left text-[18px] text-black hover:font-bold font-normal"
       >
-        Terms &amp; Conditions
+        {termsTitle}
       </button>
 
       {open === 'privacy' && (

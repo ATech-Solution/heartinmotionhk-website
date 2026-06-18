@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: 'Under Maintenance' }
 
 export default async function MaintenancePage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
+  const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-CN'
 
   let maintenanceEnabled = true // safe default: show the page if DB is unreachable
   let logo = null

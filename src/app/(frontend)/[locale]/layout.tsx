@@ -1,53 +1,53 @@
-import '../globals.css'
+import '../../globals.css'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { unstable_noStore as noStore } from 'next/cache'
 import { Caveat, Inter } from 'next/font/google'
 import { SiteHeader } from '@/components/layout/Header'
 import { SiteFooter } from '@/components/layout/Footer'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-const caveat = Caveat({
-  subsets: ['latin'],
-  variable: '--font-caveat',
-  display: 'swap',
-})
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+const caveat = Caveat({ subsets: ['latin'], variable: '--font-caveat', display: 'swap' })
 
 export const metadata: Metadata = {
   title: { default: 'Heart in Motion HK', template: '%s — Heart in Motion HK' },
   description: 'Step Forward with Your Heart',
 }
 
-export default async function FrontendLayout({
+const SUPPORTED_LOCALES = ['en', 'zh-CN'] as const
+type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
+
+export default async function LocaleLayout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params: Promise<{ locale: string }>
 }) {
   noStore()
-  const cookieStore = await cookies()
-  const locale = (cookieStore.get('NEXT_LOCALE')?.value ?? 'en') as 'en' | 'zh-HK'
-  const hasAdminToken = cookieStore.has('payload-token')
+  const { locale: rawLocale } = await params
+  const locale: SupportedLocale = (SUPPORTED_LOCALES as readonly string[]).includes(rawLocale)
+    ? (rawLocale as SupportedLocale)
+    : 'en'
 
+  if (!SUPPORTED_LOCALES.includes(rawLocale as SupportedLocale)) {
+    redirect(`/en`)
+  }
+
+  const cookieStore = await cookies()
+  const hasAdminToken = cookieStore.has('payload-token')
   const payload = await getPayload({ config })
 
-  // Maintenance mode — admin users (payload-token cookie) always bypass.
-  // NOTE: redirect() throws internally (NEXT_REDIRECT), so it must be called
-  // outside the try/catch or the error gets swallowed and the redirect never fires.
   if (!hasAdminToken) {
     let maintenanceEnabled = false
     try {
       const maintenance = await payload.findGlobal({ slug: 'maintenance-settings', locale })
       maintenanceEnabled = Boolean((maintenance as any)?.enabled)
     } catch {
-      // Fail-open: if the DB check fails, allow through
+      // fail-open
     }
     if (maintenanceEnabled) redirect('/maintenance')
   }
@@ -59,7 +59,7 @@ export default async function FrontendLayout({
   ])
 
   return (
-    <html lang={locale === 'zh-HK' ? 'zh-HK' : 'en'} className={`${inter.variable} ${caveat.variable}`}>
+    <html lang={locale === 'zh-CN' ? 'zh-Hans' : 'en'} className={`${inter.variable} ${caveat.variable}`}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>

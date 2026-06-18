@@ -116,7 +116,7 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
     'ai-settings': AiSettingsSelect<false> | AiSettingsSelect<true>;
   };
-  locale: 'en' | 'zh-HK';
+  locale: 'en' | 'zh-CN';
   user: User & {
     collection: 'users';
   };
@@ -595,6 +595,24 @@ export interface Page {
             subheading?: string | null;
             sideImage?: (number | null) | Media;
             /**
+             * Translatable labels for every field and button in the contact form.
+             */
+            formLabels?: {
+              fullName?: string | null;
+              email?: string | null;
+              phone?: string | null;
+              subject?: string | null;
+              message?: string | null;
+              submit?: string | null;
+              sending?: string | null;
+              successTitle?: string | null;
+              successMessage?: string | null;
+              errorMessage?: string | null;
+              validationRequired?: string | null;
+              validationEmail?: string | null;
+              validationPhone?: string | null;
+            };
+            /**
              * Control which viewports this block appears on.
              */
             visibility?: {
@@ -990,7 +1008,7 @@ export interface Export {
   format: 'csv' | 'json';
   limit?: number | null;
   sort?: string | null;
-  locale?: ('all' | 'en' | 'zh-HK') | null;
+  locale?: ('all' | 'en' | 'zh-CN') | null;
   drafts?: ('yes' | 'no') | null;
   selectionToUse?: ('currentSelection' | 'currentFilters' | 'all') | null;
   fields?: string[] | null;
@@ -1462,6 +1480,23 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               sideImage?: T;
+              formLabels?:
+                | T
+                | {
+                    fullName?: T;
+                    email?: T;
+                    phone?: T;
+                    subject?: T;
+                    message?: T;
+                    submit?: T;
+                    sending?: T;
+                    successTitle?: T;
+                    successMessage?: T;
+                    errorMessage?: T;
+                    validationRequired?: T;
+                    validationEmail?: T;
+                    validationPhone?: T;
+                  };
               visibility?:
                 | T
                 | {
@@ -1952,6 +1987,17 @@ export interface Header {
      */
     emailUrl?: string | null;
   };
+  /**
+   * Control visibility and labels of the language toggle buttons.
+   */
+  languageSwitcher?: {
+    /**
+     * Uncheck to hide the EN / 简中 toggle from the header.
+     */
+    show?: boolean | null;
+    enLabel?: string | null;
+    zhLabel?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2111,6 +2157,13 @@ export interface HeaderSelect<T extends boolean = true> {
         emailLabel?: T;
         emailUrl?: T;
       };
+  languageSwitcher?:
+    | T
+    | {
+        show?: T;
+        enLabel?: T;
+        zhLabel?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2175,7 +2228,7 @@ export interface TaskCreateCollectionExport {
     format: 'csv' | 'json';
     limit?: number | null;
     sort?: string | null;
-    locale?: ('all' | 'en' | 'zh-HK') | null;
+    locale?: ('all' | 'en' | 'zh-CN') | null;
     drafts?: ('yes' | 'no') | null;
     selectionToUse?: ('currentSelection' | 'currentFilters' | 'all') | null;
     fields?: string[] | null;

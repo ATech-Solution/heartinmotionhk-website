@@ -120,5 +120,42 @@ export const Header: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'languageSwitcher',
+      type: 'group',
+      label: 'Language Switcher',
+      admin: { description: 'Control visibility and labels of the language toggle buttons.' },
+      fields: [
+        {
+          name: 'show',
+          type: 'checkbox',
+          label: 'Show Language Switcher',
+          defaultValue: true,
+          admin: { description: 'Uncheck to hide the EN / 简中 toggle from the header.' },
+        },
+        {
+          name: 'enLabel',
+          type: 'text',
+          label: 'English Button Label',
+          defaultValue: 'EN',
+          admin: { condition: (_, s) => s?.show !== false },
+        },
+        {
+          name: 'zhLabel',
+          type: 'text',
+          label: 'Chinese Button Label',
+          defaultValue: '简中',
+          admin: { condition: (_, s) => s?.show !== false },
+        },
+      ],
+    },
+    {
+      name: 'aiTranslatePanel',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: { Field: '@/components/admin/AutoTranslatePanel' },
+      },
+    },
   ],
 }

@@ -34,14 +34,15 @@ interface HeaderProps {
     navItems?: NavItem[] | null
     ctaButtons?: CtaButton[] | null
     mobileCta?: MobileCta | null
+    languageSwitcher?: { show?: boolean | null; enLabel?: string | null; zhLabel?: string | null } | null
   } | null
   general?: any
   locale?: string
 }
 
-function getPagePath(slug?: string) {
-  if (!slug || slug === 'home') return '/'
-  return `/${slug}`
+function getPagePath(slug?: string, locale = 'en') {
+  if (!slug || slug === 'home') return `/${locale}`
+  return `/${locale}/${slug}`
 }
 
 export function SiteHeader({ header, general, locale }: HeaderProps) {
@@ -52,6 +53,9 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
   const navItems = header?.navItems ?? []
   const ctaButtons = header?.ctaButtons ?? []
   const mobileCta = header?.mobileCta
+  const showSwitcher = header?.languageSwitcher?.show !== false
+  const enLabel = header?.languageSwitcher?.enLabel || 'EN'
+  const zhLabel = header?.languageSwitcher?.zhLabel || '简中'
 
   const siteName = general?.siteName ?? null
   const siteTagline = general?.siteTagline ?? null
@@ -66,7 +70,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
       <div className="hidden lg:block bg-[#f5eded] h-[110px]">
         <div className="max-w-[1250px] mx-auto px-12 lg:px-12 xl:px-0 xl:px-0 h-full flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <Link href={`/${locale ?? 'en'}`} className="flex items-center gap-2.5 flex-shrink-0">
             {logoUrl ? (
               <Image
                 src={logoUrl}
@@ -90,7 +94,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
                 const href =
                   item.linkType === 'external'
                     ? (item.url ?? '#')
-                    : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined)
+                    : getPagePath(typeof item.page === 'object' ? item.page?.slug : undefined, locale ?? 'en')
                 const isActive = pathname === href
                 return (
                   <Link
@@ -108,9 +112,11 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
 
             {/* Locale switcher */}
             <div className="flex items-center gap-3">
-              <div>
-                <LocaleSwitcher currentLocale={locale ?? 'en'} />
-              </div>
+              {showSwitcher && (
+                <div>
+                  <LocaleSwitcher currentLocale={locale ?? 'en'} enLabel={enLabel} zhLabel={zhLabel} />
+                </div>
+              )}
               <div className="px-4 flex gap-3">
                 {ctaButtons.length > 0 ? (
                   ctaButtons.map((btn, i) => {
@@ -162,7 +168,7 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
 
       {/* Tablet header */}
       <div className="hidden md:flex lg:hidden bg-[#f5eded] h-[80px] items-center px-8 justify-between">
-        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+        <Link href={`/${locale ?? 'en'}`} className="flex items-center gap-2 flex-shrink-0">
           {logoUrl ? (
             <Image
               src={logoUrl}
@@ -200,9 +206,11 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <div>
-          <LocaleSwitcher currentLocale={locale ?? 'en'} />
-        </div>
+        {showSwitcher && (
+          <div>
+            <LocaleSwitcher currentLocale={locale ?? 'en'} enLabel={enLabel} zhLabel={zhLabel} />
+          </div>
+        )}
 
       </div>
 
@@ -281,9 +289,11 @@ export function SiteHeader({ header, general, locale }: HeaderProps) {
           })}
         </nav>
 
-        <div className="pt-2 border-t border-gray-100 w-[100px] mx-auto">
-          <LocaleSwitcher currentLocale={locale ?? 'en'} />
-        </div>
+        {showSwitcher && (
+          <div className="pt-2 border-t border-gray-100 w-[100px] mx-auto">
+            <LocaleSwitcher currentLocale={locale ?? 'en'} enLabel={enLabel} zhLabel={zhLabel} />
+          </div>
+        )}
       </div>
 
       {/* Mobile CTA bar — always visible below mobile navbar */}

@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         alternates: {
           languages: {
             en: `${baseUrl}${path}`,
-            'zh-HK': `${baseUrl}${path}?locale=zh-HK`,
+            'zh-CN': `${baseUrl}${path}?locale=zh-CN`,
           },
         },
       }

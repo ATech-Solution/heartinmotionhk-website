@@ -105,7 +105,7 @@ export default function AutoTranslateBulkAction() {
         fontWeight: 500,
       }}
     >
-      🌐 Translate → 繁中 ({total})
+      🌐 Translate → 简中 ({total})
     </button>
   )
 }

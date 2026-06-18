@@ -33,10 +33,14 @@ export default buildConfig({
   sharp,
 
   // ── Database ──────────────────────────────────────────
+  // push: false — prevents Drizzle from auto-pushing schema changes in dev mode.
+  // Without this, adding/renaming schema fields can DROP existing columns and
+  // lose all stored content. Always use `npm run migrate` for schema changes.
   db: sqliteAdapter({
     client: {
       url: process.env.DATABASE_URL || 'file:./data/payload.db',
     },
+    push: false,
   }),
 
   // ── Editor ────────────────────────────────────────────
@@ -46,7 +50,7 @@ export default buildConfig({
   localization: {
     locales: [
       { label: 'English', code: 'en' },
-      { label: '繁體中文 (HK)', code: 'zh-HK' },
+      { label: '简体中文', code: 'zh-CN' },
     ],
     defaultLocale: 'en',
     fallback: true,

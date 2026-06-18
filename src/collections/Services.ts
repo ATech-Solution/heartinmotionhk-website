@@ -49,5 +49,13 @@ export const Services: CollectionConfig = {
       defaultValue: 0,
       admin: { position: 'sidebar' },
     },
+    {
+      name: 'aiTranslatePanel',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: { Field: '@/components/admin/AutoTranslatePanel' },
+      },
+    },
   ],
 }

@@ -3,26 +3,29 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { translateWithClaude } from '@/lib/translateWithClaude'
 
-export const maxDuration = 60
+export const maxDuration = 300
+
+const STRIP_KEYS = ['id', '_id', '_status', 'createdAt', 'updatedAt', '__v']
 
 export async function POST(request: NextRequest) {
   const payload = await getPayload({ config: configPromise })
 
-  // Authenticate
   const { user } = await payload.auth({ headers: request.headers })
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json()
-  const { id, collection } = body
+  const { id, collection, globalSlug } = body as {
+    id?: string
+    collection?: string
+    globalSlug?: string
+  }
 
-  if (!id || !collection) {
+  const isGlobal = Boolean(globalSlug)
+  if (!isGlobal && (!id || !collection)) {
     return NextResponse.json({ error: 'Missing id or collection' }, { status: 400 })
   }
 
-  // Check AI settings
-  const aiSettings = await payload.findGlobal({ slug: 'ai-settings', overrideAccess: true })
+  const aiSettings = await payload.findGlobal({ slug: 'ai-settings' as any, overrideAccess: true })
   if (!aiSettings.enabled) {
     return NextResponse.json({ error: 'AI translation is disabled' }, { status: 403 })
   }
@@ -33,32 +36,56 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  const model = aiSettings.model ?? 'claude-haiku-4-5-20251001'
+
   try {
-    // Fetch English source document
+    if (isGlobal) {
+      const doc = await payload.findGlobal({
+        slug: globalSlug as any,
+        locale: 'en' as any,
+        depth: 0,
+        overrideAccess: true,
+      })
+
+      const { translated, count } = await translateWithClaude(
+        doc as Record<string, unknown>,
+        aiSettings.anthropicApiKey,
+        model,
+      )
+
+      for (const key of STRIP_KEYS) delete (translated as Record<string, unknown>)[key]
+
+      await payload.updateGlobal({
+        slug: globalSlug as any,
+        locale: 'zh-CN' as any,
+        data: translated as Record<string, unknown>,
+        overrideAccess: true,
+      })
+
+      return NextResponse.json({ success: true, fieldsTranslated: count })
+    }
+
+    // Collection document
     const doc = await payload.findByID({
-      collection,
-      id,
-      locale: 'en',
-      depth: 3,
+      collection: collection as any,
+      id: id!,
+      locale: 'en' as any,
+      depth: 0,
       overrideAccess: true,
     })
 
     const { translated, count } = await translateWithClaude(
       doc as Record<string, unknown>,
       aiSettings.anthropicApiKey,
-      aiSettings.model ?? 'claude-haiku-4-5-20251001',
+      model,
     )
 
-    // Strip internal Payload fields before saving
-    const STRIP = ['id', '_id', '_status', 'createdAt', 'updatedAt', '__v']
-    for (const key of STRIP) {
-      delete (translated as Record<string, unknown>)[key]
-    }
+    for (const key of STRIP_KEYS) delete (translated as Record<string, unknown>)[key]
 
     await payload.update({
-      collection,
-      id,
-      locale: 'zh-HK',
+      collection: collection as any,
+      id: id!,
+      locale: 'zh-CN' as any,
       data: translated as Record<string, unknown>,
       draft: true,
       overrideAccess: true,

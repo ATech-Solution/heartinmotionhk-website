@@ -4,24 +4,31 @@ import { useState } from 'react'
 import { useDocumentInfo } from '@payloadcms/ui'
 
 export default function AutoTranslatePanel() {
-  const { id, collectionSlug } = useDocumentInfo()
+  const { id, collectionSlug, globalSlug } = useDocumentInfo()
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
 
+  const isGlobal = Boolean(globalSlug)
+  const canTranslate = isGlobal || Boolean(id)
+
   async function handleTranslate() {
-    if (!id) return
+    if (!canTranslate) return
     setStatus('loading')
     setMessage('')
     try {
+      const body = isGlobal
+        ? { globalSlug }
+        : { id, collection: collectionSlug }
+
       const res = await fetch('/api/admin/auto-translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, collection: collectionSlug }),
+        body: JSON.stringify(body),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Translation failed')
       setStatus('success')
-      setMessage(`${data.fieldsTranslated} fields translated. Switch to 繁中 tab to review.`)
+      setMessage(`${data.fieldsTranslated} fields translated. Switch to 简中 tab to review.`)
       setTimeout(() => {
         setStatus('idle')
         setMessage('')
@@ -46,7 +53,7 @@ export default function AutoTranslatePanel() {
       <p style={{ fontSize: 13, fontWeight: 600, margin: '0 0 10px 0', color: '#1a3a6e' }}>
         🌐 AI Translation
       </p>
-      {!id ? (
+      {!canTranslate ? (
         <p style={{ fontSize: 12, color: '#6b7280', margin: 0 }}>
           Save the document first to enable translation.
         </p>
@@ -67,7 +74,7 @@ export default function AutoTranslatePanel() {
               width: '100%',
             }}
           >
-            {status === 'loading' ? '⏳ Translating…' : 'Translate to 繁體中文'}
+            {status === 'loading' ? '⏳ Translating…' : 'Translate to 简体中文'}
           </button>
           {message && (
             <p

@@ -64,7 +64,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
                 aria-label="Previous testimonial"
                 className="hidden md:flex flex-shrink-0 w-[44px] h-[44px] items-center justify-center hover:opacity-60 transition-opacity"
               >
-                <img src="icon/angle-right.svg" alt="" className="rotate-[180deg] hover:rotate-[180deg] w-[25px] h-[25px]" aria-hidden="true" />
+                <img src="/icon/angle-right.svg" alt="" className="rotate-[180deg] hover:rotate-[180deg] w-[25px] h-[25px]" aria-hidden="true" />
               </button>
             )}
 
@@ -104,7 +104,7 @@ export function TestimonialsBlockComponent({ heading, testimonials }: Testimonia
                 aria-label="Next testimonial"
                 className="hidden md:flex flex-shrink-0 w-[44px] h-[44px] items-center justify-center hover:opacity-60 transition-opacity"
               >
-                <img src="icon/angle-right.svg" alt="" className="w-[25px] h-[25px]" aria-hidden="true" />
+                <img src="/icon/angle-right.svg" alt="" className="w-[25px] h-[25px]" aria-hidden="true" />
               </button>
             )}
           </div>

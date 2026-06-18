@@ -23,6 +23,7 @@ import { GeneralSettings } from '@/globals/GeneralSettings'
 import { MaintenanceSettings } from '@/globals/MaintenanceSettings'
 import { Header } from '@/globals/Header'
 import { Footer } from '@/globals/Footer'
+import { AISettings } from '@/globals/AISettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -35,6 +36,7 @@ export default buildConfig({
     client: {
       url: process.env.DATABASE_URL || 'file:./data/payload.db',
     },
+    push: false,
   }),
 
   editor: lexicalEditor(),
@@ -42,14 +44,14 @@ export default buildConfig({
   localization: {
     locales: [
       { label: 'English', code: 'en' },
-      { label: '繁體中文 (HK)', code: 'zh-HK' },
+      { label: '简体中文', code: 'zh-CN' },
     ],
     defaultLocale: 'en',
     fallback: true,
   },
 
   collections: [Users, Pages, Media, Services, Testimonials],
-  globals: [GeneralSettings, MaintenanceSettings, Header, Footer],
+  globals: [GeneralSettings, MaintenanceSettings, Header, Footer, AISettings],
 
   plugins: [
     seoPlugin({
