@@ -2,9 +2,9 @@ module.exports = {
   apps: [
     {
       name: 'heartinmotionhk-dev',
-      script: './start.sh',
+      script: 'node',
+      args: '.next/standalone/server.js',
       cwd: '/home/deploy/dev',
-      interpreter: 'bash',
       env: {
         NODE_ENV: 'development',
         PORT: 3001,
@@ -16,9 +16,9 @@ module.exports = {
     },
     {
       name: 'heartinmotionhk-prod',
-      script: './start.sh',
+      script: 'node',
+      args: '.next/standalone/server.js',
       cwd: '/home/deploy/prod',
-      interpreter: 'bash',
       env: {
         NODE_ENV: 'production',
         PORT: 3000,
