@@ -85,11 +85,14 @@ jobs:
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          PAYLOAD_SECRET_PROD: ${{ secrets.PAYLOAD_SECRET_PROD }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          envs: PAYLOAD_SECRET_PROD
           script: |
             cd /home/deploy/prod
 
@@ -135,12 +138,16 @@ jobs:
             rm -rf .next/standalone/public/media
             ln -sfn /home/deploy/prod/public/media .next/standalone/public/media
 
-            echo "--- Running DB migrations ---"
-            DATABASE_URL="file:///home/deploy/prod/data/payload.db" python3 scripts/migrate-db.py
-
-            echo "--- Restarting PM2 ---"
+            echo "--- Running Payload migrations ---"
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            DATABASE_URL="file:///home/deploy/prod/data/payload.db" \
+            PAYLOAD_SECRET="$PAYLOAD_SECRET_PROD" \
+            PAYLOAD_CONFIG_PATH=src/payload.migrate.config.ts \
+            NODE_OPTIONS='--import tsx' \
+            npx payload migrate
+
+            echo "--- Restarting PM2 ---"
             NODE_BIN=$(which node)
             echo "Using node: $NODE_BIN ($($NODE_BIN --version))"
             pm2 startOrRestart ecosystem.config.js --only heartinmotionhk-prod --update-env --interpreter "$NODE_BIN"
