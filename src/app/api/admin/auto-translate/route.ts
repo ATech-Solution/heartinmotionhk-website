@@ -7,6 +7,14 @@ export const maxDuration = 300
 
 const STRIP_KEYS = ['id', '_id', '_status', 'createdAt', 'updatedAt', '__v']
 
+export async function GET(request: NextRequest) {
+  const payload = await getPayload({ config: configPromise })
+  const { user } = await payload.auth({ headers: request.headers })
+  if (!user) return NextResponse.json({ enabled: false })
+  const aiSettings = await payload.findGlobal({ slug: 'ai-settings' as any, overrideAccess: true })
+  return NextResponse.json({ enabled: Boolean(aiSettings.enabled) })
+}
+
 export async function POST(request: NextRequest) {
   const payload = await getPayload({ config: configPromise })
 

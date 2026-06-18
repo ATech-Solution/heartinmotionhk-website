@@ -159,6 +159,36 @@ export function applyTranslations(
 // Max fields per Claude call — keeps response well within 4096 tokens
 const CHUNK_SIZE = 30
 
+function repairJson(text: string): string {
+  // Replace literal control characters inside JSON string values.
+  // Walk char-by-char tracking string context so we only modify string contents.
+  let out = ''
+  let inString = false
+  let escaped = false
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i]!
+    if (escaped) {
+      out += ch
+      escaped = false
+    } else if (ch === '\\') {
+      out += ch
+      escaped = true
+    } else if (ch === '"') {
+      out += ch
+      inString = !inString
+    } else if (inString && ch === '\n') {
+      out += '\\n'
+    } else if (inString && ch === '\r') {
+      out += '\\r'
+    } else if (inString && ch === '\t') {
+      out += '\\t'
+    } else {
+      out += ch
+    }
+  }
+  return out
+}
+
 function extractJson(raw: string): Record<string, string> {
   // Strip markdown code fences
   let text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
@@ -170,7 +200,13 @@ function extractJson(raw: string): Record<string, string> {
     text = text.slice(start, end + 1)
   }
 
-  return JSON.parse(text)
+  // Try direct parse first
+  try {
+    return JSON.parse(text)
+  } catch {
+    // Repair literal newlines / control chars inside string values then retry
+    return JSON.parse(repairJson(text))
+  }
 }
 
 async function callClaude(

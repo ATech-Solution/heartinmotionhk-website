@@ -1,15 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDocumentInfo } from '@payloadcms/ui'
 
 export default function AutoTranslatePanel() {
   const { id, collectionSlug, globalSlug } = useDocumentInfo()
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
+  const [aiEnabled, setAiEnabled] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    fetch('/api/admin/auto-translate')
+      .then((r) => r.json())
+      .then((d) => setAiEnabled(Boolean(d.enabled)))
+      .catch(() => setAiEnabled(false))
+  }, [])
 
   const isGlobal = Boolean(globalSlug)
   const canTranslate = isGlobal || Boolean(id)
+
+  // Hidden while checking, and when disabled in AI Settings
+  if (aiEnabled === null || !aiEnabled) return null
 
   async function handleTranslate() {
     if (!canTranslate) return
