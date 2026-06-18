@@ -44,7 +44,6 @@ interface HeaderProps {
   general?: any
   locale?: string
   activeLocales?: Locale[]
-  showSwitcher?: boolean
 }
 
 function getPagePath(slug?: string, locale = 'en') {
@@ -52,7 +51,7 @@ function getPagePath(slug?: string, locale = 'en') {
   return `/${locale}/${slug}`
 }
 
-export function SiteHeader({ header, general, locale, activeLocales = [], showSwitcher = false }: HeaderProps) {
+export function SiteHeader({ header, general, locale, activeLocales = [] }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
 
