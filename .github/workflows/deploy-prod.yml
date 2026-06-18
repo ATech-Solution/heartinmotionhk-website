@@ -125,13 +125,17 @@ jobs:
             }
             "
 
+            echo "--- Symlinking persistent data directory ---"
+            mkdir -p /home/deploy/prod/data
+            rm -rf .next/standalone/data
+            ln -sfn /home/deploy/prod/data .next/standalone/data
+
             echo "--- Symlinking persistent media directory ---"
             mkdir -p /home/deploy/prod/public/media
             rm -rf .next/standalone/public/media
             ln -sfn /home/deploy/prod/public/media .next/standalone/public/media
 
             echo "--- Running DB migrations ---"
-            mkdir -p /home/deploy/prod/data
             DATABASE_URL="file:///home/deploy/prod/data/payload.db" python3 scripts/migrate-db.py
 
             echo "--- Restarting PM2 ---"
