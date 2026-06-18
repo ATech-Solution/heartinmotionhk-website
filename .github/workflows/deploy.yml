@@ -133,6 +133,15 @@ jobs:
             rm -rf .next/standalone/public/media
             ln -sfn /home/deploy/dev/public/media .next/standalone/public/media
 
+            echo "--- Running DB migrations ---"
+            mkdir -p data
+            PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
+              DATABASE_URL="file:./data/payload.db" \
+              PAYLOAD_CONFIG_PATH=src/payload.migrate.config.ts \
+              NODE_OPTIONS='--import tsx' \
+              npx payload migrate
+            echo "--- DB migrations complete ---"
+
             echo "--- Restarting PM2 ---"
             pm2 start ecosystem.config.js --only heartinmotionhk-dev || pm2 restart heartinmotionhk-dev --update-env
 
