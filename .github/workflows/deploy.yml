@@ -148,12 +148,9 @@ jobs:
 
             echo "--- Running DB migrations ---"
             mkdir -p data
-            # Run from the standalone directory so we use the same pre-compiled
-            # @libsql/client native binaries that the running app uses.
-            # (Freshly npm-installed binaries can mismatch the server's CPU/glibc.)
-            cp scripts/migrate-db.mjs .next/standalone/migrate-db.mjs
-            DATABASE_URL="file:///home/deploy/dev/data/payload.db" node .next/standalone/migrate-db.mjs
-            rm -f .next/standalone/migrate-db.mjs
+            # Python3 + stdlib sqlite3 are always available on Ubuntu.
+            # No npm, no tsx, no esbuild, no native Node binaries that can bus-error.
+            DATABASE_URL="file:./data/payload.db" python3 scripts/migrate-db.py
             echo "--- DB migrations complete ---"
 
             echo "--- Restarting PM2 ---"
