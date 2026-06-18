@@ -148,9 +148,7 @@ jobs:
 
             echo "--- Running DB migrations ---"
             mkdir -p data
-            export PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}"
-            export DATABASE_URL="file:./data/payload.db"
-            npm run migrate
+            DATABASE_URL="file:./data/payload.db" node scripts/migrate-db.mjs
             echo "--- DB migrations complete ---"
 
             echo "--- Restarting PM2 ---"
